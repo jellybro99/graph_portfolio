@@ -1,6 +1,12 @@
+import Graph from './Graph.tsx'
 
 function App() {
-  return <div>hi</div>;
+  return (
+    <div>
+      Stuff
+      <Graph />
+    </div>
+  )
 }
 
 export default App
