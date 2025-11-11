@@ -1,4 +1,4 @@
-export const data: Array<project> =
+export const projects: Array<Project> =
   [
     {
       name: "Graph Portfolio",
@@ -9,7 +9,7 @@ export const data: Array<project> =
     }
   ]
 
-export interface project {
+export interface Project {
   name: string,
   link: string,
   github: string,
