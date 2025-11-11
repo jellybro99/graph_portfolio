@@ -1,12 +1,14 @@
-import Graph from './Graph.tsx'
+import Graph from './Graph.tsx';
+import InfoHeader from './InfoHeader.tsx';
 
-function App() {
+export default function App() {
   return (
-    <div>
-      Stuff
-      <Graph />
+    <div className='flex flex-col'>
+      <InfoHeader />
+      <div className='border-2 border-black border-solid'>
+        <Graph />
+      </div>
     </div>
   )
 }
 
-export default App

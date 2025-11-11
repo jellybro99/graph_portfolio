@@ -13,18 +13,15 @@ function processProjects(projects: Array<Project>): GraphData {
     data.nodes.push({ id: index.toString(), name: project.name, val: 1 });
   })
 
-  //change the size based on lines of code in project?
-  //links based on what?
-
-
   return data;
 }
 
 export default function Graph() {
   let data = processProjects(projects);
   return (
-    // <ProjectCard {...data[0]} />
     <ForceGraph2d
+      width={100}
+      height={100}
       graphData={data}
     />
   )
