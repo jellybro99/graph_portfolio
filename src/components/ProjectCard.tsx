@@ -1,4 +1,4 @@
-import type { Project } from './assets/projects.tsx';
+import type { Project } from '../assets/projects.tsx';
 
 export default function ProjectCard(props: Project) {
 
