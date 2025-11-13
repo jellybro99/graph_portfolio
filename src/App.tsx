@@ -4,17 +4,22 @@ import ProjectList from './components/ProjectList.tsx';
 
 export default function App() {
   return (
-    <div className='flex flex-col min-h-screen w-full max-w-6xl'>
-      <header>
-        <InfoHeader />
-      </header>
-      <div className='flex md:flex-row flex-col'>
-        <section className='basis-auto w-full'>
-          <ProjectList />
-        </section>
-        <section className='basis-auto w-full'>
-          <Graph />
-        </section>
+    <div className='flex flex-col min-h-screen w-full'>
+      <div className='h-screen'>
+        <header>
+          <InfoHeader />
+        </header>
+        <div className='flex md:flex-row flex-col'>
+          <section className='basis-auto w-full'>
+            <ProjectList />
+          </section>
+          <section className='basis-auto w-full'>
+            <Graph />
+          </section>
+        </div>
+      </div>
+      <div className='h-screen'>
+        more stuff
       </div>
     </div>
   )
