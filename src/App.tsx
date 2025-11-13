@@ -9,7 +9,7 @@ export default function App() {
         <header>
           <InfoHeader />
         </header>
-        <div className='flex md:flex-row flex-col'>
+        <div className='flex flex-row'>
           <section className='basis-auto w-full'>
             <ProjectList />
           </section>
