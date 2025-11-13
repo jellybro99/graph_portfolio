@@ -4,8 +4,8 @@ import ProjectList from './components/ProjectList.tsx';
 
 export default function App() {
   return (
-    <div className='flex flex-col h-screen w-screen'>
-      <header className='h-12'>
+    <div className='flex flex-col min-h-screen w-full max-w-6xl'>
+      <header>
         <InfoHeader />
       </header>
       <div className='flex md:flex-row flex-col'>

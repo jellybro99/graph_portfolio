@@ -1,7 +1,7 @@
 
 export default function InfoHeader() {
   return (
-    <div className="flex justify-center">
+    <div className="h-12 flex justify-center">
       Header info
     </div>
   )
