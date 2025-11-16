@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #4D5061;
+  --color-accent: #698F3F;
+  --color-background: black;
+  --color-foreground: #30323D;
+}
+
 *,
 *::before,
 *::after {
