@@ -1,18 +1,20 @@
 export const projects: Array<Project> =
   [
     {
-      name: "Graph Portfolio",
+      title: "Graph Portfolio",
       link: "",
       github: "https://github.com/jellybro99/graph_portfolio",
       description: "",
-      images: []
+      images: [],
+      tags: []
     }
   ]
 
 export interface Project {
-  name: string,
+  title: string,
   link: string,
   github: string,
   description: string,
-  images: Array<string>
+  images: Array<string>,
+  tags: Array<string>
 }

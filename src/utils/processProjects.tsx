@@ -19,7 +19,7 @@ export function processProjects(projects: Array<Project>): GraphData {
   }
 
   projects.forEach((project, index) => {
-    data.nodes.push({ id: index.toString(), name: project.name, val: 1 });
+    data.nodes.push({ id: index.toString(), name: project.title, val: 1 });
   })
 
   return data;
