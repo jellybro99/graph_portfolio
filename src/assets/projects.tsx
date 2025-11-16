@@ -6,7 +6,31 @@ export const projects: Array<Project> =
       github: "https://github.com/jellybro99/graph_portfolio",
       description: "",
       images: [],
-      tags: []
+      tags: ["react", "tailwind"]
+    },
+    {
+      title: "WikiThee",
+      link: "",
+      github: "",
+      description: "",
+      images: [],
+      tags: ["nextjs", "react", "mongo", "bootstrap"]
+    },
+    {
+      title: "Just To-Do Something",
+      link: "https://jellybro99.github.io/TODO",
+      github: "https://github.com/jellybro99/TODO",
+      description: "",
+      images: [],
+      tags: ["javascript", "css"]
+    },
+    {
+      title: "Jellyboysplus",
+      link: "https://jellyboysplus.netlify.app/",
+      github: "https://github.com/jellybro99/shopping-cart",
+      description: "",
+      images: [],
+      tags: ["react", "css"]
     }
   ]
 
