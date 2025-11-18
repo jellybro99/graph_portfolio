@@ -4,7 +4,7 @@ export default function ProjectList() {
   return (
     <ul>
       {projects.map((project) => (
-        <li>{project.name}</li>
+        <li key={project.title}>{project.title}</li>
       ))}
     </ul>
   )
