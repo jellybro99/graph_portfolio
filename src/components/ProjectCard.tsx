@@ -4,7 +4,7 @@ export default function ProjectCard(props: Project) {
 
   return (
     <div>
-      {props.name}
+      {props.title}
     </div>
   )
 }

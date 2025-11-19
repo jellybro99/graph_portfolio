@@ -28,7 +28,6 @@ export default function Graph() {
         width={dimensions.width}
         height={dimensions.height}
         graphData={data}
-        onEngineStop={() => fgRef.current?.zoomToFit()}
       />
     </div>
   )
