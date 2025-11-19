@@ -7,5 +7,5 @@ export default function ProjectList() {
         <li key={project.title}>{project.title}</li>
       ))}
     </ul>
-  )
+  );
 }

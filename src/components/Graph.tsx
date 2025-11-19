@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from "react";
-import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d"
-import { projects } from '../assets/projects.tsx';
+import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d";
+import { projects } from "../assets/projects.tsx";
 import { processProjects } from "../utils/processProjects.tsx";
 
 export default function Graph() {
@@ -12,7 +12,7 @@ export default function Graph() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const observer = new ResizeObserver(entries => {
+    const observer = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
       setDimensions({ width, height });
     });
@@ -30,7 +30,5 @@ export default function Graph() {
         graphData={data}
       />
     </div>
-  )
+  );
 }
-
-
