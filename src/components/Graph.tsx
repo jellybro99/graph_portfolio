@@ -7,7 +7,7 @@ export default function Graph() {
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const data = useMemo(() => processProjects(projects), [projects]);
+  const data = useMemo(() => processProjects(projects), []);
 
   useEffect(() => {
     if (!containerRef.current) return;
