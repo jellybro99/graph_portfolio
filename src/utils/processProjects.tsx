@@ -2,7 +2,7 @@ import type { Project } from "../assets/projects.tsx";
 
 export interface GraphData {
   nodes: Array<{
-    id: string;
+    id: number;
     name: string;
     val: number;
   }>;
@@ -19,7 +19,7 @@ export function processProjects(projects: Array<Project>): GraphData {
   };
 
   projects.forEach((project, index) => {
-    data.nodes.push({ id: index.toString(), name: project.title, val: 1 });
+    data.nodes.push({ id: index, name: project.title, val: 1 });
   });
 
   return data;
