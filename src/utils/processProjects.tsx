@@ -7,8 +7,8 @@ export interface GraphData {
     val: number;
   }>;
   links: Array<{
-    source: string;
-    target: string;
+    source: number;
+    target: number;
   }>;
 }
 
@@ -18,9 +18,29 @@ export function processProjects(projects: Array<Project>): GraphData {
     links: [],
   };
 
+  const categories = new Map();
+
   projects.forEach((project, index) => {
-    data.nodes.push({ id: index, name: project.title, val: 1 });
+    data.nodes.push({ id: index, name: project.title, val: index });
+    project.tags.forEach((tag) => {
+      if (categories.has(tag)) {
+        categories.get(tag).push(index);
+      } else {
+        categories.set(tag, [index]);
+      }
+    })
   });
+
+  console.log(categories);
+
+  // for each node, add it to a list for each of its categories
+  // then for each node in each category, add a link in the array for it to every other node in the category.
+
+  //going to use bidirectional links because this not directional
+
+  data.links.push({ source: 1, target: 2 });
+  data.links.push({ source: 3, target: 0 });
+  data.links.push({ source: 0, target: 3 });
 
   return data;
 }
