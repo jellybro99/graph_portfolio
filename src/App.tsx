@@ -7,7 +7,7 @@ import ProjectCard from "@/components/ProjectCard";
 
 export default function App() {
   const [hovered, setHovered] = useState<number>(-1);
-  const [popup, setPopup] = useState<number>(1);
+  const [popupId, setPopupId] = useState<number>(1);
 
   return (
     <div className="min-h-screen w-full text-primary">
@@ -29,9 +29,12 @@ export default function App() {
             projects={projects}
           />
         </section>
-        {popup != -1 && (
+        {popupId != -1 && (
           <div className="absolute top-1/2 left-1/2,">
-            <ProjectCard project={projects[popup]} close={() => setPopup(-1)} />
+            <ProjectCard
+              project={projects[popupId]}
+              close={() => setPopupId(-1)}
+            />
           </div>
         )}
       </div>

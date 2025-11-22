@@ -14,3 +14,5 @@ export default function ProjectCard({
     </div>
   );
 }
+
+// I think ultimately it makes more sense to have the close located in the popup div
