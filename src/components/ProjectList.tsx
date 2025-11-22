@@ -1,4 +1,4 @@
-import { projects } from "../assets/projects.ts";
+import { projects } from "@/assets/projects";
 
 export default function ProjectList({
   hovered,

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d";
-import { projects } from "../assets/projects.ts";
-import { processProjects } from "../utils/processProjects.ts";
+import { projects } from "@/assets/projects";
+import { processProjects } from "@/utils/processProjects";
 
 export default function Graph({
   hovered,

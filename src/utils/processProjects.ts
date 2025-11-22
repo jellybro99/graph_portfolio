@@ -1,4 +1,4 @@
-import type { Project } from "../assets/projects.ts";
+import type { Project } from "@/assets/projects";
 
 export interface GraphData {
   nodes: Node[];

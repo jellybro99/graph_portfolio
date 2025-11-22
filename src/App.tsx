@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Graph from "./components/Graph.tsx";
-import InfoHeader from "./components/InfoHeader.tsx";
-import ProjectList from "./components/ProjectList.tsx";
+import Graph from "@/components/Graph";
+import InfoHeader from "@/components/InfoHeader";
+import ProjectList from "@/components/ProjectList";
 
 export default function App() {
   const [hovered, setHovered] = useState<number>(-1);
