@@ -7,30 +7,31 @@ import ProjectCard from "@/components/ProjectCard";
 
 export default function App() {
   const [hovered, setHovered] = useState<number>(-1);
-  const [popupId, setPopupId] = useState<number>(1);
+  const [popupId, setPopupId] = useState<number>(-1);
 
   return (
-    <div className="min-h-screen w-full text-primary">
-      <div className="h-screen grid grid-cols-2 gap-2 p-2 bg-background">
-        <header className="col-span-2 border border-primary bg-foreground">
+    <div className="min-h-screen w-full flex flex-col items-center">
+      <div className="h-screen w-2xl">
+        <header className="absolute">
           <InfoHeader />
         </header>
-        <section className="min-h-0 w-full border border-primary bg-foreground">
+        <section className="absolute top-1/3 opacity-80 text-sm">
           <ProjectList
             hovered={hovered}
             setHovered={setHovered}
             projects={projects}
           />
         </section>
-        <section className="min-h-0 w-full border border-primary bg-foreground">
+        <section className="w-full h-full">
           <Graph
             hovered={hovered}
             setHovered={setHovered}
             projects={projects}
+            setPopup={(nodeId: number) => setPopupId(nodeId)}
           />
         </section>
         {popupId != -1 && (
-          <div className="absolute top-1/2 left-1/2,">
+          <div className="fixed inset-0 flex items-center justify-center bg-foreground opacity-80">
             <ProjectCard
               project={projects[popupId]}
               close={() => setPopupId(-1)}
