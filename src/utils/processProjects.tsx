@@ -21,22 +21,26 @@ export function processProjects(projects: Project[]): GraphData {
   const categories = createCategories(projects);
   const links = createLinks(categories);
 
-  return { nodes, links }
+  return { nodes, links };
 }
 
 function createNodes(projects: Project[]): Array<Node> {
-  return projects.map((project, index) => ({ id: index, name: project.title, val: index }));
+  return projects.map((project, index) => ({
+    id: index,
+    name: project.title,
+    val: index,
+  }));
 }
 
 function createCategories(projects: Project[]): Map<string, number[]> {
-  const map = new Map<string, number[]>()
+  const map = new Map<string, number[]>();
 
   projects.forEach((project, index) => {
     project.tags.forEach((tag) => {
       if (!map.has(tag)) map.set(tag, []);
       map.get(tag)!.push(index);
-    })
-  })
+    });
+  });
 
   return map;
 }
