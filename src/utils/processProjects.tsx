@@ -1,46 +1,59 @@
 import type { Project } from "../assets/projects.tsx";
 
 export interface GraphData {
-  nodes: Array<{
-    id: number;
-    name: string;
-    val: number;
-  }>;
-  links: Array<{
-    source: number;
-    target: number;
-  }>;
+  nodes: Node[];
+  links: Link[];
 }
 
-export function processProjects(projects: Array<Project>): GraphData {
-  const data: GraphData = {
-    nodes: [],
-    links: [],
-  };
+interface Node {
+  id: number;
+  name: string;
+  val: number;
+}
 
-  const categories = new Map();
+interface Link {
+  source: number;
+  target: number;
+}
+
+export function processProjects(projects: Project[]): GraphData {
+  const nodes = createNodes(projects);
+  const categories = createCategories(projects);
+  const links = createLinks(categories);
+
+  return { nodes, links }
+}
+
+function createNodes(projects: Project[]): Array<Node> {
+  return projects.map((project, index) => ({ id: index, name: project.title, val: index }));
+}
+
+function createCategories(projects: Project[]): Map<string, number[]> {
+  const map = new Map<string, number[]>()
 
   projects.forEach((project, index) => {
-    data.nodes.push({ id: index, name: project.title, val: index });
     project.tags.forEach((tag) => {
-      if (categories.has(tag)) {
-        categories.get(tag).push(index);
-      } else {
-        categories.set(tag, [index]);
-      }
+      if (!map.has(tag)) map.set(tag, []);
+      map.get(tag)!.push(index);
     })
-  });
+  })
 
-  console.log(categories);
-
-  // for each node, add it to a list for each of its categories
-  // then for each node in each category, add a link in the array for it to every other node in the category.
-
-  //going to use bidirectional links because this not directional
-
-  data.links.push({ source: 1, target: 2 });
-  data.links.push({ source: 3, target: 0 });
-  data.links.push({ source: 0, target: 3 });
-
-  return data;
+  return map;
 }
+
+function createLinks(categories: Map<string, number[]>): Link[] {
+  const links = new Set<Link>();
+
+  for (const ids of categories.values()) {
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = 0; j < ids.length; j++) {
+        if (i != j) links.add({ source: ids[i], target: ids[j] });
+      }
+    }
+  }
+
+  return [...links];
+}
+
+// for each node, add it to a list for each of its categories
+// then for each node in each category, add a link in the array for it to every other node in the category.

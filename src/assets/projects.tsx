@@ -38,6 +38,6 @@ export interface Project {
   link: string;
   github: string;
   description: string;
-  images: Array<string>;
-  tags: Array<string>;
+  images: string[];
+  tags: string[];
 }
