@@ -3,9 +3,11 @@ import { projects } from "@/assets/projects";
 import Graph from "@/components/Graph";
 import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";
+import ProjectCard from "@/components/ProjectCard";
 
 export default function App() {
   const [hovered, setHovered] = useState<number>(-1);
+  const [popup, setPopup] = useState<number>(1);
 
   return (
     <div className="min-h-screen w-full text-primary">
@@ -14,11 +16,24 @@ export default function App() {
           <InfoHeader />
         </header>
         <section className="min-h-0 w-full border border-primary bg-foreground">
-          <ProjectList hovered={hovered} setHovered={setHovered} projects={projects} />
+          <ProjectList
+            hovered={hovered}
+            setHovered={setHovered}
+            projects={projects}
+          />
         </section>
         <section className="min-h-0 w-full border border-primary bg-foreground">
-          <Graph hovered={hovered} setHovered={setHovered} projects={projects} />
+          <Graph
+            hovered={hovered}
+            setHovered={setHovered}
+            projects={projects}
+          />
         </section>
+        {popup != -1 && (
+          <div className="absolute top-1/2 left-1/2,">
+            <ProjectCard project={projects[popup]} close={() => setPopup(-1)} />
+          </div>
+        )}
       </div>
       <div className="h-screen">more stuff</div>
     </div>
