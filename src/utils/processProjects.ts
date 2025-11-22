@@ -20,11 +20,12 @@ export function processProjects(projects: Project[]): GraphData {
   const nodes = createNodes(projects);
   const categories = createCategories(projects);
   const links = createLinks(categories);
+  //potentially change this to using a seperate node to represent categories
 
   return { nodes, links };
 }
 
-function createNodes(projects: Project[]): Array<Node> {
+export function createNodes(projects: Project[]): Array<Node> {
   return projects.map((project, index) => ({
     id: index,
     name: project.title,
@@ -32,7 +33,7 @@ function createNodes(projects: Project[]): Array<Node> {
   }));
 }
 
-function createCategories(projects: Project[]): Map<string, number[]> {
+export function createCategories(projects: Project[]): Map<string, number[]> {
   const map = new Map<string, number[]>();
 
   projects.forEach((project, index) => {
@@ -45,7 +46,7 @@ function createCategories(projects: Project[]): Map<string, number[]> {
   return map;
 }
 
-function createLinks(categories: Map<string, number[]>): Link[] {
+export function createLinks(categories: Map<string, number[]>): Link[] {
   const links = new Set<Link>();
 
   for (const ids of categories.values()) {
@@ -59,5 +60,3 @@ function createLinks(categories: Map<string, number[]>): Link[] {
   return [...links];
 }
 
-// for each node, add it to a list for each of its categories
-// then for each node in each category, add a link in the array for it to every other node in the category.
