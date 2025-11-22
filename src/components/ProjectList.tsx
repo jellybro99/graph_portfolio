@@ -1,11 +1,13 @@
-import { projects } from "@/assets/projects";
+import { type Project } from "@/assets/projects";
 
 export default function ProjectList({
   hovered,
   setHovered,
+  projects,
 }: {
   hovered: number;
   setHovered: (value: number) => void;
+  projects: Project[];
 }) {
   return (
     <ul>

@@ -1,14 +1,16 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d";
-import { projects } from "@/assets/projects";
 import { processProjects } from "@/utils/processProjects";
+import { type Project } from "@/assets/projects";
 
 export default function Graph({
   hovered,
   setHovered,
+  projects,
 }: {
   hovered: number;
   setHovered: (value: number) => void;
+  projects: Project[];
 }) {
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const containerRef = useRef(null);

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { projects } from "@/assets/projects";
 import Graph from "@/components/Graph";
 import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";
@@ -13,10 +14,10 @@ export default function App() {
           <InfoHeader />
         </header>
         <section className="min-h-0 w-full border border-primary bg-foreground">
-          <ProjectList hovered={hovered} setHovered={setHovered} />
+          <ProjectList hovered={hovered} setHovered={setHovered} projects={projects} />
         </section>
         <section className="min-h-0 w-full border border-primary bg-foreground">
-          <Graph hovered={hovered} setHovered={setHovered} />
+          <Graph hovered={hovered} setHovered={setHovered} projects={projects} />
         </section>
       </div>
       <div className="h-screen">more stuff</div>
