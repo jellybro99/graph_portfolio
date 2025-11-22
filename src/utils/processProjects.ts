@@ -1,4 +1,4 @@
-import type { Project } from "../assets/projects.tsx";
+import type { Project } from "../assets/projects.ts";
 
 export interface GraphData {
   nodes: Node[];
@@ -59,4 +59,3 @@ export function createLinks(categories: Map<string, number[]>): Link[] {
 
   return [...links];
 }
-
