@@ -4,19 +4,22 @@ export default function ProjectList({
   hovered,
   setHovered,
   projects,
+  setPopup,
 }: {
   hovered: number;
   setHovered: (value: number) => void;
   projects: Project[];
+  setPopup: (nodeId: number) => void;
 }) {
   return (
-    <ul>
+    <ul className="inline-block">
       {projects.map((project, index) => (
         <li
           key={index}
+          className={hovered == index ? "text-red-900 cursor-pointer" : ""}
           onMouseEnter={() => setHovered(index)}
           onMouseLeave={() => setHovered(-1)}
-          className={hovered == index ? "text-red-900" : ""}
+          onClick={() => setPopup(index)}
         >
           {project.title}
         </li>

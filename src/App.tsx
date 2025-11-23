@@ -4,6 +4,7 @@ import Graph from "@/components/Graph";
 import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";
 import ProjectCard from "@/components/ProjectCard";
+import Popup from "@/components/Popup";
 
 export default function App() {
   const [hovered, setHovered] = useState<number>(-1);
@@ -21,6 +22,7 @@ export default function App() {
             hovered={hovered}
             setHovered={setHovered}
             projects={projects}
+            setPopup={(nodeId) => setPopupId(nodeId)}
           />
         </div>
         <section className="absolute inset-0">
@@ -40,12 +42,9 @@ export default function App() {
 
       {/* popup */}
       {popupId != -1 && (
-        <div className="fixed z-50 inset-0 flex items-center justify-center bg-foreground opacity-80">
-          <ProjectCard
-            project={projects[popupId]}
-            close={() => setPopupId(-1)}
-          />
-        </div>
+        <Popup close={() => setPopupId(-1)}>
+          <ProjectCard project={projects[popupId]} />
+        </Popup>
       )}
     </div>
   );
