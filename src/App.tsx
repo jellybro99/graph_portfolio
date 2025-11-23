@@ -10,36 +10,43 @@ export default function App() {
   const [popupId, setPopupId] = useState<number>(-1);
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center">
-      <div className="h-screen w-2xl">
-        <header className="absolute">
+    <div className="min-h-screen w-full">
+      {/* page 1 */}
+      <div className="h-screen relative flex flex-col items-center">
+        <header className="max-w-3xl w-full z-10">
           <InfoHeader />
         </header>
-        <section className="absolute top-1/3 opacity-80 text-sm">
+        <div className="max-w-3xl w-full absolute top-1/4 z-10">
           <ProjectList
             hovered={hovered}
             setHovered={setHovered}
             projects={projects}
           />
-        </section>
-        <section className="w-full h-full">
+        </div>
+        <section className="absolute inset-0">
           <Graph
             hovered={hovered}
             setHovered={setHovered}
             projects={projects}
-            setPopup={(nodeId: number) => setPopupId(nodeId)}
+            setPopup={(nodeId) => setPopupId(nodeId)}
           />
         </section>
-        {popupId != -1 && (
-          <div className="fixed inset-0 flex items-center justify-center bg-foreground opacity-80">
-            <ProjectCard
-              project={projects[popupId]}
-              close={() => setPopupId(-1)}
-            />
-          </div>
-        )}
       </div>
-      <div className="h-screen">more stuff</div>
+
+      {/* page 2 */}
+      <div className="h-screen flex flex-col items-center">
+        <div className="max-w-3xl w-full h-full">more stuff</div>
+      </div>
+
+      {/* popup */}
+      {popupId != -1 && (
+        <div className="fixed z-50 inset-0 flex items-center justify-center bg-foreground opacity-80">
+          <ProjectCard
+            project={projects[popupId]}
+            close={() => setPopupId(-1)}
+          />
+        </div>
+      )}
     </div>
   );
 }
