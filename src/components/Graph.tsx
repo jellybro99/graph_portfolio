@@ -17,7 +17,7 @@ export default function Graph({
   const containerRef = useRef(null);
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const data = useMemo(() => processProjects(projects), []);
+  const data = useMemo(() => processProjects(projects), [projects]);
 
   useEffect(() => {
     if (fgRef.current) fgRef.current.zoom(3);

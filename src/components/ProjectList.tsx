@@ -12,7 +12,7 @@ export default function ProjectList({
   setPopup: (nodeId: number) => void;
 }) {
   return (
-    <ul className="inline-block">
+    <ul className="inline-block opacity-50">
       {projects.map((project, index) => (
         <li
           key={index}

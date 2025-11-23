@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export default function Popup({
   close,
   children,
@@ -5,6 +7,16 @@ export default function Popup({
   close: () => void;
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") close();
+    };
+
+    addEventListener("keydown", closeOnEscape);
+
+    return () => removeEventListener("keydown", closeOnEscape);
+  }, [close]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
