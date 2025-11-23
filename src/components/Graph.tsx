@@ -39,7 +39,10 @@ export default function Graph({
         ref={fgRef}
         graphData={data}
         onNodeHover={(node) => setHovered(node ? Number(node.id) : -1)}
-        onNodeClick={(node) => setPopup(Number(node.id))}
+        onNodeClick={(node) => {
+          setHovered(-1);
+          setPopup(Number(node.id));
+        }}
         nodeColor={(node) => (hovered === Number(node.id) ? "red" : "")} //TODO: set color using HTML and tailwind
         width={dimensions.width}
         height={dimensions.height}
