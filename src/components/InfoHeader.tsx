@@ -1,10 +1,14 @@
 export default function InfoHeader() {
   return (
     <div>
-      <ul className="flex items-center gap-4">
-        <h1>My Portfolio</h1>
+      <ul className="flex items-center gap-4 text-2xl">
+        <h1 className="hover:text-(--color-accent)">My Portfolio</h1>
         <li>
-          <a href="https://github.com/jellybro99" target="_blank">
+          <a
+            href="https://github.com/jellybro99"
+            target="_blank"
+            className="hover:text-(--color-accent)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -18,7 +22,11 @@ export default function InfoHeader() {
           </a>
         </li>
         <li>
-          <a href="https://www.linkedin.com/in/ben-galles/" target="_blank">
+          <a
+            href="https://www.linkedin.com/in/ben-galles/"
+            target="_blank"
+            className="hover:text-(--color-accent)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -32,7 +40,11 @@ export default function InfoHeader() {
           </a>
         </li>
         <li>
-          <a href="mailto:benluke1111" target="_blank">
+          <a
+            href="mailto:benluke1111"
+            target="_blank"
+            className="hover:text-(--color-accent)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

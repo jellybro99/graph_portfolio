@@ -16,7 +16,9 @@ export default function ProjectList({
       {projects.map((project, index) => (
         <li
           key={index}
-          className={hovered == index ? "text-red-900 cursor-pointer" : ""}
+          className={
+            hovered == index ? "text-(--color-accent) cursor-pointer" : ""
+          }
           onMouseEnter={() => setHovered(index)}
           onMouseLeave={() => setHovered(-1)}
           onClick={() => setPopup(index)}

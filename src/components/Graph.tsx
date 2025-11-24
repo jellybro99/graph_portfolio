@@ -43,7 +43,18 @@ export default function Graph({
           setHovered(-1);
           setPopup(Number(node.id));
         }}
-        nodeColor={(node) => (hovered === Number(node.id) ? "red" : "")} //TODO: set color using HTML and tailwind
+        nodeColor={(node) =>
+          hovered === Number(node.id)
+            ? getComputedStyle(document.documentElement)
+                .getPropertyValue("--color-accent")
+                .trim()
+            : "#087D97"
+        }
+        linkColor={() =>
+          getComputedStyle(document.documentElement)
+            .getPropertyValue("--color-text")
+            .trim()
+        }
         width={dimensions.width}
         height={dimensions.height}
         enableZoomInteraction={false}
