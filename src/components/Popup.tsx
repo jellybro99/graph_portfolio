@@ -2,9 +2,11 @@ import { useEffect } from "react";
 
 export default function Popup({
   close,
+  title,
   children,
 }: {
   close: () => void;
+  title: string;
   children: React.ReactNode;
 }) {
   useEffect(() => {
@@ -26,13 +28,16 @@ export default function Popup({
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
       {/* popup content */}
-      <div className="relative z-10 p-4 border-(--color-text) border-2 rounded-sm bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]">
-        <button
-          className="absolute top-0 right-0 hover:text-gray-500 -translate-y-2"
-          onClick={close}
-        >
-          x
-        </button>
+      <div className="relative z-10 p-2 border-(--color-text) border-2 rounded-sm bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]">
+        <div className="flex justify-between gap-4 pb-4">
+          <h2>{title}</h2>
+          <button
+            onClick={close}
+            className="text-3xl cursor-pointer hover:text-(--color-accent)"
+          >
+            x
+          </button>
+        </div>
         {children}
       </div>
     </div>

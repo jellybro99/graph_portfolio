@@ -44,7 +44,7 @@ export default function App() {
 
       {/* popup */}
       {popupId != -1 && (
-        <Popup close={() => setPopupId(-1)}>
+        <Popup close={() => setPopupId(-1)} title={projects[popupId].title}>
           <ProjectCard project={projects[popupId]} />
         </Popup>
       )}

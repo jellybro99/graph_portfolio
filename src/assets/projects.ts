@@ -1,9 +1,10 @@
 export const projects: Array<Project> = [
   {
     title: "Graph Portfolio",
-    link: "",
+    link: "https://jellybro99.github.io/graph_portfolio",
     github: "https://github.com/jellybro99/graph_portfolio",
-    description: "",
+    description:
+      "Portfolio project for showcasing my projects, built with React, Tailwind, and the force graph library.",
     images: [],
     tags: ["react", "tailwind"],
   },
@@ -19,7 +20,8 @@ export const projects: Array<Project> = [
     title: "Just To-Do Something",
     link: "https://jellybro99.github.io/TODO",
     github: "https://github.com/jellybro99/TODO",
-    description: "",
+    description:
+      "Simplistic no-nonsense task manager built with CSS, HTML, and JS.",
     images: [],
     tags: ["javascript", "css"],
   },
@@ -27,7 +29,8 @@ export const projects: Array<Project> = [
     title: "Jellyboysplus",
     link: "https://jellyboysplus.netlify.app/",
     github: "https://github.com/jellybro99/shopping-cart",
-    description: "",
+    description:
+      "Mockup e-commerce app using React + React router, and styled components.",
     images: [],
     tags: ["react", "css"],
   },
