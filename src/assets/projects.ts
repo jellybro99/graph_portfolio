@@ -1,5 +1,4 @@
-import jellyboysplus from "@/assets/images/jellyboysplus.png";
-import justTodoSomething from "@/assets/images/just-todo-something.png";
+import { jellyboysplus, justTodoSomething } from "./images/index";
 
 export const projects: Array<Project> = [
   {
