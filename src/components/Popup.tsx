@@ -6,7 +6,7 @@ export default function Popup({
   children,
 }: {
   close: () => void;
-  title: string;
+  title?: string;
   children: React.ReactNode;
 }) {
   useEffect(() => {
