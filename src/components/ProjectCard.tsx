@@ -1,9 +1,10 @@
 import type { Project } from "@/assets/projects";
+import ImageChanger from "@/components/ImageChanger";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="flex flex-col gap-4 max-w-96">
-      {/*IMAGES / CAROUSEL?*/}
+      <ImageChanger images={project.images} />
       <p>{project.description}</p>
       <ul className="flex justify-end gap-2">
         {project.github && (
@@ -42,11 +43,11 @@ export default function ProjectCard({ project }: { project: Project }) {
                 viewBox="0 0 16 16"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
                 />
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
                 />
               </svg>

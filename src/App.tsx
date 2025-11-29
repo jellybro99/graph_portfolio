@@ -5,7 +5,7 @@ import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";
 import ProjectCard from "@/components/ProjectCard";
 import Popup from "@/components/Popup";
-import usePrefersDarkMode from "./utils/usePrefersDarkMode";
+import usePrefersDarkMode from "@/utils/usePrefersDarkMode";
 
 export default function App() {
   const [hovered, setHovered] = useState<number>(-1);
@@ -36,6 +36,7 @@ export default function App() {
           />
         </section>
       </div>
+
       <hr className="border-0 border-b-2 border-(--color-text) opacity-2" />
 
       {/* page 2 */}

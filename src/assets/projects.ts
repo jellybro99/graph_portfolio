@@ -1,3 +1,6 @@
+import jellyboysplus from "@/assets/images/jellyboysplus.png";
+import justTodoSomething from "@/assets/images/just-todo-something.png";
+
 export const projects: Array<Project> = [
   {
     title: "Graph Portfolio",
@@ -22,7 +25,7 @@ export const projects: Array<Project> = [
     github: "https://github.com/jellybro99/TODO",
     description:
       "Simplistic no-nonsense task manager built with CSS, HTML, and JS.",
-    images: [],
+    images: [justTodoSomething],
     tags: ["javascript", "css"],
   },
   {
@@ -30,8 +33,8 @@ export const projects: Array<Project> = [
     link: "https://jellyboysplus.netlify.app/",
     github: "https://github.com/jellybro99/shopping-cart",
     description:
-      "Mockup e-commerce app using React + React router, and styled components.",
-    images: [],
+      "Mockup e-commerce app using React + React router and styled components.",
+    images: [jellyboysplus],
     tags: ["react", "css"],
   },
 ];
