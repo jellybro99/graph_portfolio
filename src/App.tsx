@@ -36,6 +36,7 @@ export default function App() {
           />
         </section>
       </div>
+      <hr className="border-0 border-b-2 border-(--color-text) opacity-2" />
 
       {/* page 2 */}
       <div className="h-screen flex flex-col items-center">
