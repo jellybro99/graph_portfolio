@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Popup from "./Popup";
+import Popup from "@/components/Popup";
 
 export default function ImageChanger({ images }: { images: string[] }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
