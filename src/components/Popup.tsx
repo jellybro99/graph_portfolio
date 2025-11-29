@@ -13,13 +13,18 @@ export default function Popup({
     const closeOnEscape = (event: KeyboardEvent): void => {
       if (event.key === "Escape") close();
     };
+    const noSpacebarScroll = (event: KeyboardEvent): void => {
+      if (event.key === "Space") event.preventDefault();
+    };
 
     document.body.style.overflow = "hidden";
     addEventListener("keydown", closeOnEscape);
+    addEventListener("keydown", noSpacebarScroll);
 
     return () => {
       document.body.style.overflow = "";
       removeEventListener("keydown", closeOnEscape);
+      removeEventListener("keydown", noSpacebarScroll);
     };
   }, [close]);
 
