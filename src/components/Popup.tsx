@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+const closePopupStack: Array<() => void> = [];
+
 export default function Popup({
   close,
   title,
@@ -10,21 +12,31 @@ export default function Popup({
   children: React.ReactNode;
 }) {
   useEffect(() => {
+    closePopupStack.push(close);
+
     const closeOnEscape = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") close();
-    };
-    const noSpacebarScroll = (event: KeyboardEvent): void => {
-      if (event.key === "Space") event.preventDefault();
+      if (event.key === "Escape") closePopupStack.pop()?.();
     };
 
-    document.body.style.overflow = "hidden";
-    addEventListener("keydown", closeOnEscape);
-    addEventListener("keydown", noSpacebarScroll);
+    const preventSpacebarScroll = (event: KeyboardEvent) => {
+      if (event.key === " ") event.preventDefault();
+    };
+
+    if (closePopupStack.length == 1) {
+      document.body.style.overflow = "hidden";
+      addEventListener("keydown", closeOnEscape);
+      addEventListener("keydown", preventSpacebarScroll);
+    }
 
     return () => {
-      document.body.style.overflow = "";
-      removeEventListener("keydown", closeOnEscape);
-      removeEventListener("keydown", noSpacebarScroll);
+      const index = closePopupStack.indexOf(close);
+      if (index !== -1) closePopupStack.splice(index, 1);
+
+      if (closePopupStack.length == 0) {
+        document.body.style.overflow = "";
+        removeEventListener("keydown", closeOnEscape);
+        removeEventListener("keydown", preventSpacebarScroll);
+      }
     };
   }, [close]);
 
