@@ -46,13 +46,15 @@ export default function Graph({
         nodeColor={(node) =>
           hovered === Number(node.id)
             ? getComputedStyle(document.documentElement)
-                .getPropertyValue("--color-accent")
+                .getPropertyValue("--color-node-hover")
                 .trim()
-            : "#087D97"
+            : getComputedStyle(document.documentElement)
+                .getPropertyValue("--color-node")
+                .trim()
         }
         linkColor={() =>
           getComputedStyle(document.documentElement)
-            .getPropertyValue("--color-text")
+            .getPropertyValue("--color-link")
             .trim()
         }
         width={dimensions.width}

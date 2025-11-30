@@ -4,12 +4,17 @@
   --color-background: white;
   --color-text: #272727;
   --color-accent: #67d061;
+  --color-link: #8a8a8a;
+  --color-node: #087d97;
+  --color-node-hover: #4bb346;
 }
 
 .dark {
   --color-background: #272727;
-  --color-text: white;
+  --color-text: #e3e2d2;
   --color-accent: #67d061;
+  --color-link: #c2c1b4;
+  --color-node-hover: #308542;
 }
 
 *,
