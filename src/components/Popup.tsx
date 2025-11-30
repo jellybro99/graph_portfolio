@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const closePopupStack: Array<() => void> = [];
 
@@ -13,6 +13,25 @@ export default function Popup({
   title?: string;
   children: React.ReactNode;
 }) {
+  const [shouldRender, setShouldRender] = useState<boolean>(isOpen);
+  const [isClosing, setIsClosing] = useState<boolean>(false);
+  const [renderedChildren, setRenderedChildren] =
+    useState<React.ReactNode>(children);
+
+  useEffect(() => {
+    let timerId: number | undefined = undefined;
+
+    if (isOpen) {
+      setRenderedChildren(children);
+      setShouldRender(true);
+      setIsClosing(false);
+    } else {
+      setIsClosing(true);
+      timerId = setTimeout(() => setShouldRender(false), 150);
+    }
+    return () => clearTimeout(timerId);
+  }, [isOpen, children]);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -44,28 +63,28 @@ export default function Popup({
     };
   }, [close, isOpen]);
 
-  if (!isOpen) return null;
-
-  return (
+  return !shouldRender ? null : (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
       {/* popup content */}
-      <div
-        className="relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
-        bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
-        max-w-[95vw] max-h-[90vh] overflow-auto animate-popin"
-      >
-        <div className="flex justify-between items-center gap-4 h-8">
-          <h2>{title}</h2>
-          <button
-            onClick={close}
-            className="text-3xl cursor-pointer hover:text-(--color-accent)"
-          >
-            x
-          </button>
+      <div>
+        <div
+          className={`relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
+         bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
+         max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
+        >
+          <div className="flex justify-between items-center gap-4 h-8">
+            <h2>{title}</h2>
+            <button
+              onClick={close}
+              className="text-3xl cursor-pointer hover:text-(--color-accent)"
+            >
+              x
+            </button>
+          </div>
+          {renderedChildren}
         </div>
-        {children}
       </div>
     </div>
   );
