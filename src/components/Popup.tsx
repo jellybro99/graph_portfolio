@@ -3,15 +3,19 @@ import { useEffect } from "react";
 const closePopupStack: Array<() => void> = [];
 
 export default function Popup({
+  isOpen,
   close,
   title,
   children,
 }: {
+  isOpen: boolean;
   close: () => void;
   title?: string;
   children: React.ReactNode;
 }) {
   useEffect(() => {
+    if (!isOpen) return;
+
     closePopupStack.push(close);
 
     const closeOnEscape = (event: KeyboardEvent): void => {
@@ -39,6 +43,8 @@ export default function Popup({
       }
     };
   }, [close]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">

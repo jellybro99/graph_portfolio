@@ -1,7 +1,13 @@
 import { useState } from "react";
 import Popup from "@/components/Popup";
 
-export default function ImageChanger({ images }: { images: string[] }) {
+export default function ImageChanger({
+  images,
+  title,
+}: {
+  images: string[];
+  title?: string;
+}) {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [fullScreenImage, setFullscreenImage] = useState<boolean>(false);
   const prev = () =>
@@ -25,15 +31,17 @@ export default function ImageChanger({ images }: { images: string[] }) {
           {">"}
         </button>
       )}
-      {fullScreenImage && (
-        <Popup close={() => setFullscreenImage(false)}>
-          <img
-            src={images[imageIndex]}
-            className="cursor-zoom-out"
-            onClick={() => setFullscreenImage(false)}
-          />
-        </Popup>
-      )}
+      <Popup
+        isOpen={fullScreenImage}
+        close={() => setFullscreenImage(false)}
+        title={title}
+      >
+        <img
+          src={images[imageIndex]}
+          className="cursor-zoom-out"
+          onClick={() => setFullscreenImage(false)}
+        />
+      </Popup>
     </div>
   );
 }
