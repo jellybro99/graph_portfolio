@@ -18,7 +18,7 @@ export default function ImageChanger({ images }: { images: string[] }) {
       <img
         src={images[imageIndex]}
         onClick={() => setFullscreenImage(true)}
-        className="cursor-pointer border-2 border-(--color-background) hover:border-(--color-accent)"
+        className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
       {images.length > 1 && (
         <button className="cursor-pointer" onClick={next}>
@@ -27,7 +27,11 @@ export default function ImageChanger({ images }: { images: string[] }) {
       )}
       {fullScreenImage && (
         <Popup close={() => setFullscreenImage(false)}>
-          <img src={images[imageIndex]} />
+          <img
+            src={images[imageIndex]}
+            className="cursor-zoom-out"
+            onClick={() => setFullscreenImage(false)}
+          />
         </Popup>
       )}
     </div>

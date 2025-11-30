@@ -3,7 +3,7 @@ import ImageChanger from "@/components/ImageChanger";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="flex flex-col gap-4 max-w-96">
+    <div className="flex flex-col gap-4 max-w-xl">
       <ImageChanger images={project.images} />
       <p>{project.description}</p>
       <ul className="flex justify-end gap-2">

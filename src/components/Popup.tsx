@@ -45,8 +45,12 @@ export default function Popup({
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
       {/* popup content */}
-      <div className="relative z-10 p-2 border-(--color-text) border-2 rounded-sm bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]">
-        <div className="flex justify-between gap-4 pb-4">
+      <div
+        className="relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
+        bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
+        max-w-[95vw] max-h-[90vh] overflow-auto"
+      >
+        <div className="flex justify-between items-center gap-4 h-8">
           <h2>{title}</h2>
           <button
             onClick={close}
