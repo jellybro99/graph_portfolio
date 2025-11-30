@@ -1,4 +1,8 @@
-import { jellyboysplus, justTodoSomething } from "./images/index";
+import {
+  jellyboysplus,
+  justTodoSomething,
+  graphPortfolio,
+} from "./images/index";
 
 export const projects: Array<Project> = [
   {
@@ -7,7 +11,7 @@ export const projects: Array<Project> = [
     github: "https://github.com/jellybro99/graph_portfolio",
     description:
       "Portfolio project for showcasing my projects, built with React, Tailwind, and the force graph library.",
-    images: [],
+    images: [graphPortfolio],
     tags: ["react", "tailwind"],
   },
   {
