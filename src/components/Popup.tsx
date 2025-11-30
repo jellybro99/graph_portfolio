@@ -42,7 +42,7 @@ export default function Popup({
         removeEventListener("keydown", preventSpacebarScroll);
       }
     };
-  }, [close]);
+  }, [close, isOpen]);
 
   if (!isOpen) return null;
 
