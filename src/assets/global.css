@@ -17,6 +17,21 @@
   --color-node-hover: #308542;
 }
 
+@keyframes popin {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-popin {
+  animation: popin 150ms ease-out;
+}
+
 *,
 *::before,
 *::after {
