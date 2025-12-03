@@ -19,7 +19,7 @@ export default function Popup({
     useState<React.ReactNode>(children);
 
   useEffect(() => {
-    let timerId: number | undefined = undefined;
+    let timerId: number | NodeJS.Timeout | undefined = undefined;
 
     if (isOpen) {
       setRenderedChildren(children);
