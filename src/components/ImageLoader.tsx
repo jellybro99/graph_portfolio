@@ -14,9 +14,9 @@ export default function ProgressiveImage({
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="relative">
+    <>
       {!loaded && (
-        <img src={placeholder} className="absolute w-full aspect-video" />
+        <img src={placeholder} className="relative w-full aspect-video" />
       )}
       <img
         src={src}
@@ -29,6 +29,6 @@ export default function ProgressiveImage({
           " transition-opacity duration-500"
         }
       />
-    </div>
+    </>
   );
 }
