@@ -1,6 +1,8 @@
-import rawBlurPreviewsData from "./blurPreviewsData.json" with { type: "json" };
-const blurPreviewsData: Uint8Array[][] = rawBlurPreviewsData;
-
+import rawBlurPreviews from "./blurPreviewsData.json" with { type: "json" };
+const blurPreviews: Uint8Array[][] = rawBlurPreviews.map(
+  (project: number[][]) =>
+    project.map((image: number[]) => new Uint8Array(image)),
+);
 export const projects: Array<Project> = [
   {
     title: "Graph Portfolio",
@@ -9,7 +11,7 @@ export const projects: Array<Project> = [
     description:
       "Portfolio project for showcasing my projects, built with React, Tailwind, and the force graph library.",
     images: ["graph-portfolio.png"],
-    blurPreviews: blurPreviewsData[0],
+    blurPreviews: blurPreviews[0],
     tags: ["react", "tailwind"],
   },
   {
@@ -18,7 +20,7 @@ export const projects: Array<Project> = [
     github: "",
     description: "",
     images: [],
-    blurPreviews: blurPreviewsData[1],
+    blurPreviews: blurPreviews[1],
     tags: ["nextjs", "react", "mongo", "bootstrap"],
   },
   {
@@ -28,7 +30,7 @@ export const projects: Array<Project> = [
     description:
       "Simplistic no-nonsense task manager built with CSS, HTML, and JS.",
     images: ["just-todo-something.png"],
-    blurPreviews: blurPreviewsData[2],
+    blurPreviews: blurPreviews[2],
     tags: ["javascript", "css"],
   },
   {
@@ -38,7 +40,7 @@ export const projects: Array<Project> = [
     description:
       "Mockup e-commerce app using React + React router and styled components.",
     images: ["jellyboysplus.png"],
-    blurPreviews: blurPreviewsData[3],
+    blurPreviews: blurPreviews[3],
     tags: ["react", "css"],
   },
 ];
