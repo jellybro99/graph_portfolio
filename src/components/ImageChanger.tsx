@@ -1,5 +1,6 @@
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import Popup from "@/components/Popup";
+import ImageLoader from "@/components/ImageLoader";
 
 export default function ImageChanger({
   images,
@@ -23,13 +24,12 @@ export default function ImageChanger({
           {"<"}
         </button>
       )}
-      <Suspense fallback={<img src={blurPreviews[imageIndex]} />}>
-        <img
-          src={images[imageIndex]}
-          onClick={() => setFullscreenImage(true)}
-          className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
-        />
-      </Suspense>
+      <ImageLoader
+        src={images[imageIndex]}
+        onClick={() => setFullscreenImage(true)}
+        placeholder={blurPreviews[imageIndex]}
+        className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
+      />
       {images.length > 1 && (
         <button className="cursor-pointer" onClick={next}>
           {">"}
@@ -40,13 +40,12 @@ export default function ImageChanger({
         close={() => setFullscreenImage(false)}
         title={title}
       >
-        <Suspense fallback={<img src={blurPreviews[imageIndex]} />}>
-          <img
-            src={images[imageIndex]}
-            className="cursor-zoom-out"
-            onClick={() => setFullscreenImage(false)}
-          />
-        </Suspense>
+        <ImageLoader
+          src={images[imageIndex]}
+          placeholder={blurPreviews[imageIndex]}
+          onClick={() => setFullscreenImage(false)}
+          className="cursor-zoom-out"
+        />
       </Popup>
     </div>
   );
