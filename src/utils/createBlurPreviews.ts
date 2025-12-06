@@ -4,7 +4,7 @@ import fs from "fs";
 import sharp from "sharp";
 import { projects } from "../assets/projects";
 
-async function thumbhashImage(img: string): Promise<ArrayLike<number>> {
+async function thumbhashImage(img: string): Promise<Uint8Array> {
   const imageSource = path.join("./src/assets/images", img);
 
   const imageData = sharp(imageSource);
@@ -24,7 +24,7 @@ const blurPreviews = [];
 
 for (const project of projects) {
   const previews = await Promise.all(
-    project.images.map((img) => thumbhashImage(img)),
+    project.images.map(async (img) => Array.from(await thumbhashImage(img))),
   );
   blurPreviews.push(previews);
 }

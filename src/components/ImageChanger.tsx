@@ -8,7 +8,7 @@ export default function ImageChanger({
   title,
 }: {
   images: string[];
-  blurPreviews: ArrayLike<number>[];
+  blurPreviews: Uint8Array[];
   title?: string;
 }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
@@ -43,11 +43,15 @@ export default function ImageChanger({
         close={() => setFullscreenImage(false)}
         title={title}
       >
-        <img
-          src={images[imageIndex]}
-          className="cursor-zoom-out"
-          onClick={() => setFullscreenImage(false)}
-        />
+        <Suspense
+          fallback={<img src={thumbHashToDataURL(blurPreviews[imageIndex])} />}
+        >
+          <img
+            src={images[imageIndex]}
+            className="cursor-zoom-out"
+            onClick={() => setFullscreenImage(false)}
+          />
+        </Suspense>
       </Popup>
     </div>
   );

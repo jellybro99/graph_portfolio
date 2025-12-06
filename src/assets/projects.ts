@@ -1,5 +1,5 @@
 import rawBlurPreviewsData from "./blurPreviewsData.json" with { type: "json" };
-const blurPreviewsData: ArrayLike<number>[][] = rawBlurPreviewsData;
+const blurPreviewsData: Uint8Array[][] = rawBlurPreviewsData;
 
 export const projects: Array<Project> = [
   {
@@ -49,6 +49,6 @@ export interface Project {
   github: string;
   description: string;
   images: string[];
-  blurPreviews: ArrayLike<number>[];
+  blurPreviews: Uint8Array[];
   tags: string[];
 }
