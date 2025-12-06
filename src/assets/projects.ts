@@ -1,9 +1,4 @@
-import {
-  jellyboysplus,
-  justTodoSomething,
-  graphPortfolio,
-} from "./images/index";
-import rawBlurPreviewsData from "./blurPreviewsData.json";
+import rawBlurPreviewsData from "./blurPreviewsData.json" with { type: "json" };
 const blurPreviewsData: ArrayLike<number>[][] = rawBlurPreviewsData;
 
 export const projects: Array<Project> = [
@@ -13,7 +8,7 @@ export const projects: Array<Project> = [
     github: "https://github.com/jellybro99/graph_portfolio",
     description:
       "Portfolio project for showcasing my projects, built with React, Tailwind, and the force graph library.",
-    images: [graphPortfolio],
+    images: ["graph-portfolio.png"],
     blurPreviews: blurPreviewsData[0],
     tags: ["react", "tailwind"],
   },
@@ -32,7 +27,7 @@ export const projects: Array<Project> = [
     github: "https://github.com/jellybro99/TODO",
     description:
       "Simplistic no-nonsense task manager built with CSS, HTML, and JS.",
-    images: [justTodoSomething],
+    images: ["just-todo-something.png"],
     blurPreviews: blurPreviewsData[2],
     tags: ["javascript", "css"],
   },
@@ -42,7 +37,7 @@ export const projects: Array<Project> = [
     github: "https://github.com/jel]lybro99/shopping-cart",
     description:
       "Mockup e-commerce app using React + React router and styled components.",
-    images: [jellyboysplus],
+    images: ["jellyboysplus.png"],
     blurPreviews: blurPreviewsData[3],
     tags: ["react", "css"],
   },

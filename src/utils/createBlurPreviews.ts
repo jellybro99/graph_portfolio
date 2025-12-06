@@ -1,6 +1,6 @@
 import * as thumbhash from "thumbhash";
 import sharp from "sharp";
-import { projects } from "../assets/projects";
+import { projects } from "../assets/projects.ts";
 
 async function thumbhashImage(imageSource: string): Promise<ArrayLike<number>> {
   console.log(imageSource);

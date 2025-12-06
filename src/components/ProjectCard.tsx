@@ -1,12 +1,13 @@
 import type { Project } from "@/assets/projects";
 import ImageChanger from "@/components/ImageChanger";
+import resolveImage from "@/utils/resolveImage";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="flex flex-col gap-4 max-w-xl">
       {project.images.length > 0 && (
         <ImageChanger
-          images={project.images}
+          images={project.images.map(resolveImage)}
           blurPreviews={project.blurPreviews}
           title={project.title}
         />
