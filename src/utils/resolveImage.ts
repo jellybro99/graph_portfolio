@@ -1,4 +1,3 @@
-
 const imageModules = import.meta.glob("../assets/images/*", {
   eager: true,
 }) as Record<string, { default: string }>;
@@ -6,4 +5,3 @@ const imageModules = import.meta.glob("../assets/images/*", {
 export default function resolveImages(fileName: string): string {
   return imageModules[`../assets/images/${fileName}`].default;
 }
-
