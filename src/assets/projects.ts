@@ -1,8 +1,10 @@
+import { thumbHashToDataURL } from "thumbhash";
 import rawBlurPreviews from "./blurPreviewsData.json" with { type: "json" };
-const blurPreviews: Uint8Array[][] = rawBlurPreviews.map(
-  (project: number[][]) =>
-    project.map((image: number[]) => new Uint8Array(image)),
+
+const blurPreviews: string[][] = rawBlurPreviews.map((project: number[][]) =>
+  project.map((image) => thumbHashToDataURL(image)),
 );
+
 export const projects: Array<Project> = [
   {
     title: "Graph Portfolio",
@@ -51,6 +53,6 @@ export interface Project {
   github: string;
   description: string;
   images: string[];
-  blurPreviews: Uint8Array[];
+  blurPreviews: string[];
   tags: string[];
 }

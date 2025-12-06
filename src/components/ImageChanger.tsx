@@ -1,5 +1,4 @@
 import { Suspense, useState } from "react";
-import { thumbHashToDataURL } from "thumbhash";
 import Popup from "@/components/Popup";
 
 export default function ImageChanger({
@@ -8,7 +7,7 @@ export default function ImageChanger({
   title,
 }: {
   images: string[];
-  blurPreviews: Uint8Array[];
+  blurPreviews: string[];
   title?: string;
 }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
@@ -24,9 +23,7 @@ export default function ImageChanger({
           {"<"}
         </button>
       )}
-      <Suspense
-        fallback={<img src={thumbHashToDataURL(blurPreviews[imageIndex])} />}
-      >
+      <Suspense fallback={<img src={blurPreviews[imageIndex]} />}>
         <img
           src={images[imageIndex]}
           onClick={() => setFullscreenImage(true)}
@@ -43,9 +40,7 @@ export default function ImageChanger({
         close={() => setFullscreenImage(false)}
         title={title}
       >
-        <Suspense
-          fallback={<img src={thumbHashToDataURL(blurPreviews[imageIndex])} />}
-        >
+        <Suspense fallback={<img src={blurPreviews[imageIndex]} />}>
           <img
             src={images[imageIndex]}
             className="cursor-zoom-out"
