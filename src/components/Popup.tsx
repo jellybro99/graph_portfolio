@@ -17,12 +17,14 @@ export default function Popup({
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const [renderedChildren, setRenderedChildren] =
     useState<React.ReactNode>(children);
+  const [renderedTitle, setRenderedTitle] = useState<string | undefined>(title);
 
   useEffect(() => {
     let timerId: number | NodeJS.Timeout | undefined = undefined;
 
     if (isOpen) {
       setRenderedChildren(children);
+      setRenderedTitle(title);
       setShouldRender(true);
       setIsClosing(false);
     } else {
@@ -30,7 +32,7 @@ export default function Popup({
       timerId = setTimeout(() => setShouldRender(false), 150);
     }
     return () => clearTimeout(timerId);
-  }, [isOpen, children]);
+  }, [isOpen, children, title]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -67,7 +69,6 @@ export default function Popup({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
-      {/* popup content */}
       <div>
         <div
           className={`relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
@@ -75,7 +76,7 @@ export default function Popup({
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
         >
           <div className="flex justify-between items-center gap-4 h-8">
-            <h2>{title}</h2>
+            <h2>{renderedTitle}</h2>
             <button
               onClick={close}
               className="text-3xl cursor-pointer hover:text-(--color-accent)"
