@@ -18,7 +18,7 @@ export default function ImageChanger({
   const next = () => setImageIndex((imageIndex + 1) % images.length);
 
   return (
-    <div className="flex relative">
+    <div className="flex">
       {images.length > 1 && (
         <button className="cursor-pointer" onClick={prev}>
           {"<"}

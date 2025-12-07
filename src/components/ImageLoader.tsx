@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ProgressiveImage({
+export default function ImageLoader({
   src,
   placeholder,
   onClick,
@@ -9,26 +9,31 @@ export default function ProgressiveImage({
   src: string;
   placeholder: string;
   onClick: () => void;
-  className: string;
+  className?: string;
 }) {
-  const [loaded, setLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <>
-      {!loaded && (
-        <img src={placeholder} className="relative w-full aspect-video" />
-      )}
+    <div className="relative w-full">
+      <img
+        src={placeholder}
+        className={
+          "absolute inset-0 w-full transition-opacity duration-300 pointer-events-none " +
+          (isLoaded ? "opacity-0" : "opacity-100")
+        }
+        aria-hidden
+      />
+
       <img
         src={src}
         onClick={onClick}
-        onLoad={() => setLoaded(true)}
+        onLoad={() => setIsLoaded(true)}
         className={
-          className +
-          " " +
-          (loaded ? "opacity-100" : "opacity-0") +
-          " transition-opacity duration-500"
+          "w-full transition-opacity duration-300 " +
+          (isLoaded ? "opacity-100" : "opacity-0") +
+          (className ? " " + className : "")
         }
       />
-    </>
+    </div>
   );
 }
