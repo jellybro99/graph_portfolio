@@ -14,7 +14,7 @@ export default function ImageLoader({
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full aspect-video">
       <img
         src={placeholder}
         className={
