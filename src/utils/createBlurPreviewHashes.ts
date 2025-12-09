@@ -2,9 +2,9 @@ import * as thumbhash from "thumbhash";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
-import { images } from "../assets/projects";
+import { projectsImages } from "../assets/projects";
 
-async function thumbhashImage(img: string): Promise<Uint8Array> {
+async function generateThumbhash(img: string): Promise<Uint8Array> {
   const imageSource = path.join("./src/assets/images", img);
 
   const imageData = sharp(imageSource);
@@ -20,16 +20,16 @@ async function thumbhashImage(img: string): Promise<Uint8Array> {
   return thumbhash.rgbaToThumbHash(info.width, info.height, data);
 }
 
-const blurPreviews = [];
+const previewHashes = [];
 
-for (const projectImages of images) {
-  const previews = await Promise.all(
+for (const projectImages of projectsImages) {
+  const projectHashes = await Promise.all(
     projectImages.map(async (img: string) =>
-      Array.from(await thumbhashImage(img)),
+      Array.from(await generateThumbhash(img)),
     ),
   );
-  blurPreviews.push(previews);
+  previewHashes.push(projectHashes);
 }
 
-const outputPath = "./src/assets/blurPreviewsData.json";
-fs.writeFileSync(outputPath, JSON.stringify(blurPreviews));
+const outputPath = "./src/assets/blurPreviewHashes.json";
+fs.writeFileSync(outputPath, JSON.stringify(previewHashes));

@@ -1,11 +1,11 @@
 import { thumbHashToDataURL } from "thumbhash";
-import rawBlurPreviews from "./blurPreviewsData.json" with { type: "json" };
+import blurPreviewHashes from "./blurPreviewHashes.json" with { type: "json" };
 
-const blurPreviews: string[][] = rawBlurPreviews.map((project: number[][]) =>
-  project.map((image) => thumbHashToDataURL(image)),
+const projectsPreviews: string[][] = blurPreviewHashes.map(
+  (project: number[][]) => project.map((image) => thumbHashToDataURL(image)),
 );
 
-export const images: string[][] = [
+export const projectsImages: string[][] = [
   ["graph-portfolio.png"],
   [],
   ["just-todo-something.png"],
@@ -50,8 +50,8 @@ export const projects: Project[] = projectsBase.map(
   (project, index): Project => {
     return {
       ...project,
-      images: images[index],
-      blurPreviews: blurPreviews[index],
+      images: projectsImages[index],
+      blurPreviews: projectsPreviews[index],
     };
   },
 );
