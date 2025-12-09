@@ -2,7 +2,7 @@ import * as thumbhash from "thumbhash";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
-import { projects } from "../assets/projects";
+import { images } from "../assets/projects";
 
 async function thumbhashImage(img: string): Promise<Uint8Array> {
   const imageSource = path.join("./src/assets/images", img);
@@ -22,9 +22,11 @@ async function thumbhashImage(img: string): Promise<Uint8Array> {
 
 const blurPreviews = [];
 
-for (const project of projects) {
+for (const projectImages of images) {
   const previews = await Promise.all(
-    project.images.map(async (img) => Array.from(await thumbhashImage(img))),
+    projectImages.map(async (img: string) =>
+      Array.from(await thumbhashImage(img)),
+    ),
   );
   blurPreviews.push(previews);
 }
