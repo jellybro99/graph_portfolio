@@ -5,15 +5,20 @@ const blurPreviews: string[][] = rawBlurPreviews.map((project: number[][]) =>
   project.map((image) => thumbHashToDataURL(image)),
 );
 
-export const projects: Array<Project> = [
+export const images: string[][] = [
+  ["graph-portfolio.png"],
+  [],
+  ["just-todo-something.png"],
+  ["jellyboysplus.png"],
+];
+
+const projectsBase = [
   {
     title: "Graph Portfolio",
     link: "https://jellybro99.github.io/graph_portfolio",
     github: "https://github.com/jellybro99/graph_portfolio",
     description:
       "Portfolio project for showcasing my projects, built with React, Tailwind, and the force graph library.",
-    images: ["graph-portfolio.png"],
-    blurPreviews: blurPreviews[0],
     tags: ["react", "tailwind"],
   },
   {
@@ -21,8 +26,6 @@ export const projects: Array<Project> = [
     link: "",
     github: "",
     description: "",
-    images: [],
-    blurPreviews: blurPreviews[1],
     tags: ["nextjs", "react", "mongo", "bootstrap"],
   },
   {
@@ -31,8 +34,6 @@ export const projects: Array<Project> = [
     github: "https://github.com/jellybro99/TODO",
     description:
       "Simplistic no-nonsense task manager built with CSS, HTML, and JS.",
-    images: ["just-todo-something.png"],
-    blurPreviews: blurPreviews[2],
     tags: ["javascript", "css"],
   },
   {
@@ -41,11 +42,19 @@ export const projects: Array<Project> = [
     github: "https://github.com/jel]lybro99/shopping-cart",
     description:
       "Mockup e-commerce app using React + React router and styled components.",
-    images: ["jellyboysplus.png"],
-    blurPreviews: blurPreviews[3],
     tags: ["react", "css"],
   },
 ];
+
+export const projects: Project[] = projectsBase.map(
+  (project, index): Project => {
+    return {
+      ...project,
+      images: images[index],
+      blurPreviews: blurPreviews[index],
+    };
+  },
+);
 
 export interface Project {
   title: string;
