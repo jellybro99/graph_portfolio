@@ -39,7 +39,7 @@ const projectsBase = [
   {
     title: "Jellyboysplus",
     link: "https://jellyboysplus.netlify.app/",
-    github: "https://github.com/jel]lybro99/shopping-cart",
+    github: "https://github.com/jellybro99/shopping-cart",
     description:
       "Mockup e-commerce app using React + React router and styled components.",
     tags: ["react", "css"],
