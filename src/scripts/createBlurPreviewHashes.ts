@@ -2,7 +2,7 @@ import * as thumbhash from "thumbhash";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
-import { projectsImages } from "../assets/projects";
+import { projectsImages } from "@/assets/projects";
 
 async function generateThumbhash(img: string): Promise<Uint8Array> {
   const imageSource = path.join("./src/assets/images", img);

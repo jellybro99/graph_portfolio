@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "scripts": "tsx ./src/utils/createBlurPreviewHashes.ts",
+    "scripts": "tsx ./src/scripts/*.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write \"src\"",
