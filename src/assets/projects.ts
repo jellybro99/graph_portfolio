@@ -1,5 +1,6 @@
 import { thumbHashToDataURL } from "thumbhash";
 import blurPreviewHashes from "./blurPreviewHashes.json" with { type: "json" };
+import rawProjectsData from "./rawProjectsData.json" with { type: "json" };
 
 const projectsPreviews: string[][] = blurPreviewHashes.map(
   (project: number[][]) => project.map((image) => thumbHashToDataURL(image)),
@@ -12,41 +13,7 @@ export const projectsImages: string[][] = [
   ["jellyboysplus.png"],
 ];
 
-const projectsBase = [
-  {
-    title: "Graph Portfolio",
-    link: "https://jellybro99.github.io/graph_portfolio",
-    github: "https://github.com/jellybro99/graph_portfolio",
-    description:
-      "Portfolio project for showcasing my projects, built with React, Tailwind, and the force graph library.",
-    tags: ["react", "tailwind"],
-  },
-  {
-    title: "WikiThee",
-    link: "",
-    github: "",
-    description: "",
-    tags: ["nextjs", "react", "mongo", "bootstrap"],
-  },
-  {
-    title: "Just To-Do Something",
-    link: "https://jellybro99.github.io/TODO",
-    github: "https://github.com/jellybro99/TODO",
-    description:
-      "Simplistic no-nonsense task manager built with CSS, HTML, and JS.",
-    tags: ["javascript", "css"],
-  },
-  {
-    title: "Jellyboysplus",
-    link: "https://jellyboysplus.netlify.app/",
-    github: "https://github.com/jellybro99/shopping-cart",
-    description:
-      "Mockup e-commerce app using React + React router and styled components.",
-    tags: ["react", "css"],
-  },
-];
-
-export const projects: Project[] = projectsBase.map(
+export const projects: Project[] = rawProjectsData.map(
   (project, index): Project => {
     return {
       ...project,
