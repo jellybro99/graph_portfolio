@@ -17,3 +17,7 @@ export async function generateThumbhash(img: string): Promise<Uint8Array> {
     .toBuffer({ resolveWithObject: true });
   return thumbhash.rgbaToThumbHash(info.width, info.height, data);
 }
+
+export async function getThumbhashDataURL(img: string): Promise<string> {
+  return thumbhash.thumbHashToDataURL(await generateThumbhash(img));
+}
