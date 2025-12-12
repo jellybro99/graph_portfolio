@@ -1,4 +1,4 @@
-import { getThumbhashDataURL } from "@/utils/createBlurPreviewHashes";
+import { getThumbhashDataURL } from "@/utils/generateThumbhashes";
 import type { RawProject, Project } from "@/assets/types";
 
 export async function processProjects(
@@ -6,13 +6,11 @@ export async function processProjects(
 ): Promise<Project[]> {
   return Promise.all(
     projects.map(async (project: RawProject): Promise<Project> => {
-      const blurPreviews = await Promise.all(
-        project.images.map(async (img: string) => getThumbhashDataURL(img)),
-      );
-
       return {
         ...project,
-        blurPreviews,
+        blurredImages: await Promise.all(
+          project.images.map(async (img: string) => getThumbhashDataURL(img)),
+        ),
       };
     }),
   );

@@ -4,11 +4,11 @@ import ImageLoader from "@/components/ImageLoader";
 
 export default function ImageChanger({
   images,
-  blurPreviews,
+  blurredImages,
   title,
 }: {
   images: string[];
-  blurPreviews: string[];
+  blurredImages: string[];
   title?: string;
 }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
@@ -27,7 +27,7 @@ export default function ImageChanger({
       <ImageLoader
         src={images[imageIndex]}
         onClick={() => setFullscreenImage(true)}
-        placeholder={blurPreviews[imageIndex]}
+        placeholder={blurredImages[imageIndex]}
         className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
       {images.length > 1 && (
@@ -42,7 +42,7 @@ export default function ImageChanger({
       >
         <ImageLoader
           src={images[imageIndex]}
-          placeholder={blurPreviews[imageIndex]}
+          placeholder={blurredImages[imageIndex]}
           onClick={() => setFullscreenImage(false)}
           className="cursor-zoom-out"
         />

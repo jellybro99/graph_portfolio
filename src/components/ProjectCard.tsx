@@ -8,7 +8,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       {project.images.length > 0 && (
         <ImageChanger
           images={project.images.map(resolveImage)}
-          blurPreviews={project.blurPreviews}
+          blurredImages={project.blurredImages}
           title={project.title}
         />
       )}

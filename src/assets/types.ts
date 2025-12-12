@@ -20,7 +20,7 @@ export interface Project {
   github: string;
   description: string;
   images: string[];
-  blurPreviews: string[];
+  blurredImages: string[];
   tags: string[];
 }
 
