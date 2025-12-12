@@ -1,4 +1,4 @@
-import type { Project } from "@/assets/projects";
+import type { Project } from "@/assets/types";
 import ImageChanger from "@/components/ImageChanger";
 import resolveImage from "@/utils/resolveImage";
 

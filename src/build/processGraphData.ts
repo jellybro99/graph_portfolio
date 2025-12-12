@@ -1,22 +1,6 @@
-import type { Project } from "@/assets/projects";
+import type { Node, Link, GraphData, RawProject } from "@/assets/types";
 
-export interface GraphData {
-  nodes: Node[];
-  links: Link[];
-}
-
-interface Node {
-  id: number;
-  name: string;
-  val: number;
-}
-
-interface Link {
-  source: number;
-  target: number;
-}
-
-export function processProjects(projects: Project[]): GraphData {
+export function processGraphData(projects: RawProject[]): GraphData {
   const nodes = createNodes(projects);
   const categories = createCategories(projects);
   const links = createLinks(categories);
@@ -25,7 +9,7 @@ export function processProjects(projects: Project[]): GraphData {
   return { nodes, links };
 }
 
-export function createNodes(projects: Project[]): Array<Node> {
+function createNodes(projects: RawProject[]): Array<Node> {
   return projects.map((project, index) => ({
     id: index,
     name: project.title,
@@ -33,7 +17,7 @@ export function createNodes(projects: Project[]): Array<Node> {
   }));
 }
 
-export function createCategories(projects: Project[]): Map<string, number[]> {
+function createCategories(projects: RawProject[]): Map<string, number[]> {
   const map = new Map<string, number[]>();
 
   projects.forEach((project, index) => {
@@ -46,7 +30,7 @@ export function createCategories(projects: Project[]): Map<string, number[]> {
   return map;
 }
 
-export function createLinks(categories: Map<string, number[]>): Link[] {
+function createLinks(categories: Map<string, number[]>): Link[] {
   const links = new Set<Link>();
 
   for (const ids of categories.values()) {

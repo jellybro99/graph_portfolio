@@ -1,4 +1,4 @@
-import { type Project } from "@/assets/projects";
+import { type Project } from "@/assets/types";
 
 export default function ProjectList({
   hovered,

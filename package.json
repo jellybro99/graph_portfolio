@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "scripts": "tsx ./src/scripts/*.ts",
+    "prebuild": "tsx ./src/build/build.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write \"src\"",

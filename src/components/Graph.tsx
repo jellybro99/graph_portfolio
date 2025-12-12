@@ -1,23 +1,19 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect } from "react";
 import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d";
-import { processProjects } from "@/utils/processProjects";
-import { type Project } from "@/assets/projects";
+import graphData from "@/assets/processedGraphData.json" with { type: "json" };
 
 export default function Graph({
   hovered,
   setHovered,
-  projects,
   setPopup,
 }: {
   hovered: number;
   setHovered: (value: number) => void;
-  projects: Project[];
   setPopup: (popupId: number) => void;
 }) {
   const containerRef = useRef(null);
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const data = useMemo(() => processProjects(projects), [projects]);
 
   useEffect(() => {
     if (fgRef.current) fgRef.current.zoom(3);
@@ -37,7 +33,7 @@ export default function Graph({
     <div ref={containerRef} className="h-full w-full">
       <ForceGraph2d
         ref={fgRef}
-        graphData={data}
+        graphData={graphData}
         onNodeHover={(node) => setHovered(node ? Number(node.id) : -1)}
         onNodeClick={(node) => {
           setHovered(-1);

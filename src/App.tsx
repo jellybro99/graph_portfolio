@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { projects } from "@/assets/projects";
+import projects from "@/assets/processedProjectsData.json";
 import Graph from "@/components/Graph";
 import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";
@@ -31,7 +31,6 @@ export default function App() {
           <Graph
             hovered={hovered}
             setHovered={setHovered}
-            projects={projects}
             setPopup={(nodeId) => setPopupId(nodeId)}
           />
         </section>

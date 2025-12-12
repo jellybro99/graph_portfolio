@@ -1,6 +1,4 @@
-import { projects } from "../assets/projects.ts";
-
-async function getNumGitHubCommits(
+export async function getNumGitHubCommits(
   username: string,
   repo: string,
 ): Promise<number> {
@@ -21,8 +19,7 @@ async function getNumGitHubCommits(
   return parseInt(numCommits);
 }
 
-for (const project of projects) {
-  const routeParts = project.github.split("/");
-  const numCommits = await getNumGitHubCommits(routeParts[3], routeParts[4]);
-  console.log(numCommits);
+export async function getNumGitHubCommitsFromURL(url: string): Promise<number> {
+  const routeParts = url.split("/");
+  return await getNumGitHubCommits(routeParts[3], routeParts[4]);
 }
