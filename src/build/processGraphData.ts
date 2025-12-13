@@ -1,10 +1,18 @@
 import type { Node, Link, GraphData, RawProject } from "@/assets/types";
+import { getNumGitHubCommitsFromURL } from "@/utils/getNumGitHubCommits";
 
-export function processGraphData(projects: RawProject[]): GraphData {
+export async function processGraphData(
+  projects: RawProject[],
+): Promise<GraphData> {
   const nodes = createNodes(projects);
   const categories = createCategories(projects);
   const links = createLinks(categories);
   //potentially change this to using a seperate node to represent categories
+
+  await sizeNodes(
+    projects.map((project) => project.github),
+    nodes,
+  );
 
   return { nodes, links };
 }
@@ -13,7 +21,7 @@ function createNodes(projects: RawProject[]): Array<Node> {
   return projects.map((project, index) => ({
     id: index,
     name: project.title,
-    val: index,
+    val: 1,
   }));
 }
 
@@ -42,4 +50,18 @@ function createLinks(categories: Map<string, number[]>): Link[] {
   }
 
   return [...links];
+}
+
+async function sizeNodes(githubRepos: string[], nodes: Node[]): Promise<void> {
+  const commits = await Promise.all(
+    githubRepos.map((url) => getNumGitHubCommitsFromURL(url)),
+  );
+
+  const maxNodeSize = 5;
+  const maxCommits = Math.max(1, ...commits);
+  const scalar = maxNodeSize / maxCommits;
+
+  nodes.forEach((node, index) => {
+    node.val = Math.max(commits[index] * scalar, 1);
+  });
 }

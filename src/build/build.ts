@@ -8,7 +8,7 @@ const processedProjectsPath = "./src/assets/processedProjectsData.json";
 
 writeFileSync(processedProjectsPath, JSON.stringify(processedProjects));
 
-const processedGraphData = processGraphData(rawProjectsData);
+const processedGraphData = await processGraphData(rawProjectsData);
 const processedGraphDataPath = "./src/assets/processedGraphData.json";
 
 writeFileSync(processedGraphDataPath, JSON.stringify(processedGraphData));
