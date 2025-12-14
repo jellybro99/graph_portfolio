@@ -1,16 +1,11 @@
 import type { Project } from "@/assets/types";
 import ImageChanger from "@/components/ImageChanger";
-import resolveImage from "@/utils/resolveImage";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="flex flex-col gap-4 max-w-xl">
       {project.images.length > 0 && (
-        <ImageChanger
-          images={project.images.map(resolveImage)}
-          blurredImages={project.blurredImages}
-          title={project.title}
-        />
+        <ImageChanger images={project.images} title={project.title} />
       )}
       <p>{project.description}</p>
       <ul className="flex justify-end gap-2">

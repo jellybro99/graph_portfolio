@@ -19,9 +19,14 @@ export interface Project {
   link: string;
   github: string;
   description: string;
-  images: string[];
-  blurredImages: string[];
+  images: Image[];
   tags: string[];
+}
+
+export interface Image {
+  original: string;
+  blurred: string;
+  aspectRatio: number;
 }
 
 export interface RawProject {
