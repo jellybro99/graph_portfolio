@@ -2,7 +2,6 @@ import { useState } from "react";
 import type { Image } from "@/assets/types";
 import Popup from "@/components/Popup";
 import ImageLoader from "@/components/ImageLoader";
-import resolveImage from "@/utils/resolveImage";
 
 export default function ImageChanger({
   images,
@@ -25,9 +24,8 @@ export default function ImageChanger({
         </button>
       )}
       <ImageLoader
-        src={resolveImage(images[imageIndex].original)}
+        image={images[imageIndex]}
         onClick={() => setFullscreenImage(true)}
-        placeholder={images[imageIndex].blurred}
         className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
       {images.length > 1 && (
@@ -41,8 +39,7 @@ export default function ImageChanger({
         title={title}
       >
         <ImageLoader
-          src={resolveImage(images[imageIndex].original)}
-          placeholder={images[imageIndex].blurred}
+          image={images[imageIndex]}
           onClick={() => setFullscreenImage(false)}
           className="cursor-zoom-out"
         />

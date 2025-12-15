@@ -26,7 +26,8 @@ export interface Project {
 export interface Image {
   original: string;
   blurred: string;
-  aspectRatio: number;
+  height: number;
+  width: number;
 }
 
 export interface RawProject {

@@ -2,8 +2,8 @@ import * as thumbhash from "thumbhash";
 import path from "path";
 import sharp from "sharp";
 
-export async function generateThumbhash(img: string): Promise<Uint8Array> {
-  const imageSource = path.join("./src/assets/images", img);
+export async function generateThumbhash(image: string): Promise<Uint8Array> {
+  const imageSource = path.join("src", "assets", "images", image);
 
   const imageData = sharp(imageSource);
   const { data, info } = await imageData
@@ -18,6 +18,18 @@ export async function generateThumbhash(img: string): Promise<Uint8Array> {
   return thumbhash.rgbaToThumbHash(info.width, info.height, data);
 }
 
-export async function getThumbhashDataURL(img: string): Promise<string> {
-  return thumbhash.thumbHashToDataURL(await generateThumbhash(img));
+export async function getThumbhashDataURL(image: string): Promise<string> {
+  return thumbhash.thumbHashToDataURL(await generateThumbhash(image));
+}
+
+export async function getImageSize(
+  image: string,
+): Promise<{ height: number; width: number }> {
+  const imageSource = path.join("src", "assets", "images", image);
+
+  const imageData = await sharp(imageSource).metadata();
+  return {
+    height: imageData.height,
+    width: imageData.width,
+  };
 }

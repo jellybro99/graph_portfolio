@@ -1,13 +1,13 @@
 import { useState } from "react";
+import type { Image } from "@/assets/types";
+import resolveImage from "@/utils/resolveImage";
 
 export default function ImageLoader({
-  src,
-  placeholder,
+  image,
   onClick,
   className,
 }: {
-  src: string;
-  placeholder: string;
+  image: Image;
   onClick: () => void;
   className?: string;
 }) {
@@ -16,7 +16,7 @@ export default function ImageLoader({
   return (
     <div className="relative w-full aspect-video">
       <img
-        src={placeholder}
+        src={image.blurred}
         className={
           "absolute inset-0 w-full transition-opacity duration-300 pointer-events-none " +
           (isLoaded ? "opacity-0" : "opacity-100")
@@ -25,7 +25,7 @@ export default function ImageLoader({
       />
 
       <img
-        src={src}
+        src={resolveImage(image.original)}
         onClick={onClick}
         onLoad={() => setIsLoaded(true)}
         className={

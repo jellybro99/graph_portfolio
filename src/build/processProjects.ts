@@ -1,4 +1,4 @@
-import { getThumbhashDataURL } from "@/utils/generateThumbhashes";
+import { getThumbhashDataURL, getImageSize } from "@/utils/generateThumbhashes";
 import type { RawProject, Project, Image } from "@/assets/types";
 
 export async function processProjects(
@@ -24,6 +24,6 @@ async function processImage(image: string): Promise<Image> {
   return {
     original: image,
     blurred: await getThumbhashDataURL(image),
-    aspectRatio: 1,
+    ...(await getImageSize(image)),
   };
 }
