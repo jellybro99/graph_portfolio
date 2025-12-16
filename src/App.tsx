@@ -1,5 +1,5 @@
 import { useState } from "react";
-import projects from "@/assets/processedProjectsData.json";
+import projects from "@/assets/processedProjects.json";
 import Graph from "@/components/Graph";
 import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";

@@ -26,4 +26,4 @@ dist-ssr
 
 # Prebuild assets
 src/assets/processedGraphData.json
-src/assets/processedProjectsData.json
+src/assets/processedProjects.json
