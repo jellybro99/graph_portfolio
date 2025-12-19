@@ -8,11 +8,13 @@ export async function processGraphData(
   const categories = createCategories(projects);
   const links = createLinks(categories);
   //potentially change this to using a seperate node to represent categories
+  //
 
-  await sizeNodes(
-    projects.map((project) => project.github),
-    nodes,
+  const commits = await Promise.all(
+    projects.map((project) => getNumGitHubCommitsFromURL(project.github)),
   );
+
+  await sizeNodes(commits, nodes);
 
   return { nodes, links };
 }
@@ -52,16 +54,12 @@ function createLinks(categories: Map<string, number[]>): Link[] {
   return [...links];
 }
 
-async function sizeNodes(githubRepos: string[], nodes: Node[]): Promise<void> {
-  const commits = await Promise.all(
-    githubRepos.map((url) => getNumGitHubCommitsFromURL(url)),
-  );
-
+async function sizeNodes(rawSizes: number[], nodes: Node[]): Promise<void> {
   const maxNodeSize = 5;
-  const maxCommits = Math.max(1, ...commits);
+  const maxCommits = Math.max(1, ...rawSizes);
   const scalar = maxNodeSize / maxCommits;
 
   nodes.forEach((node, index) => {
-    node.val = Math.max(commits[index] * scalar, 1);
+    node.val = Math.max(rawSizes[index] * scalar, 1);
   });
 }
