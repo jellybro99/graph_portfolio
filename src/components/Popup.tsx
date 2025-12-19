@@ -71,7 +71,7 @@ export default function Popup({
 
       <div>
         <div
-          className={`relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
+          className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
          bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
         >

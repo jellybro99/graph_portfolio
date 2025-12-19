@@ -12,9 +12,10 @@ export default function ImageLoader({
   className?: string;
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const aspectRatio = image.width / image.height;
 
   return (
-    <div className="relative w-full aspect-video">
+    <div className="relative" style={{ aspectRatio }}>
       <img
         src={image.blurred}
         className={
