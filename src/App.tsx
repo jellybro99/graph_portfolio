@@ -5,6 +5,7 @@ import InfoHeader from "@/components/InfoHeader";
 import ProjectList from "@/components/ProjectList";
 import ProjectCard from "@/components/ProjectCard";
 import Popup from "@/components/Popup";
+import AboutPage from "@/components/AboutPage";
 import usePrefersDarkMode from "@/utils/usePrefersDarkMode";
 
 export default function App() {
@@ -29,7 +30,9 @@ export default function App() {
       </div>
 
       <div className="h-screen flex flex-col items-center">
-        <div className="max-w-5xl w-full h-full">more stuff</div>
+        <div className="max-w-5xl w-full h-full">
+          <AboutPage />
+        </div>
       </div>
 
       <Graph
