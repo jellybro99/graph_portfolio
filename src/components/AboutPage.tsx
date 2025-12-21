@@ -9,9 +9,9 @@ export default function AboutPage() {
     window.matchMedia("(pointer: coarse)").matches;
 
   return (
-    <div className="flex flex-col items-center md:items-start overflow">
-      <h1 className="text-center md:text-left text-2xl">More Stuff</h1>
-      <p className="max-w-xl text-center md:text-left">
+    <div className="flex flex-col items-center overflow">
+      <h1 className="text-center text-2xl">More Stuff</h1>
+      <p className="max-w-xl text-center">
         This project is inspired by obsidian, a note-taking software which lets
         you link related notes and view them together as a graph. Here is my
         beloved:
@@ -21,7 +21,7 @@ export default function AboutPage() {
         onClick={() => setIsPopupOpen(true)}
         className="max-h-96 cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
-      <p className="text-center md:text-left">This project includes:</p>
+      <p className="text-center">This project includes:</p>
       <ul className="list-disc pl-4 max-w-xl">
         <li>
           A prebuild step for creating blurred base64 images and processing
