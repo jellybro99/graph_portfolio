@@ -11,19 +11,20 @@ export default function Graph({
   setHovered: (value: number) => void;
   setPopup: (popupId: number) => void;
 }) {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (fgRef.current) fgRef.current.zoom(3);
-
     if (!containerRef.current) return;
 
     const observer = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
       setDimensions({ width, height });
     });
+
+    const canvas = containerRef.current.querySelector("canvas");
+    if (canvas) canvas.style.touchAction = "pan-y";
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
