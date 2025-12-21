@@ -19,7 +19,7 @@ export default function App() {
         <header className="max-w-5xl w-full z-10">
           <InfoHeader />
         </header>
-        <div className="max-w-5xl w-full absolute top-1/4 z-10">
+        <div className="max-w-5xl w-full absolute top-10 text-center md:text-left z-10">
           <ProjectList
             hovered={hovered}
             setHovered={setHovered}
