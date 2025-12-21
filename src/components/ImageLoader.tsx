@@ -15,7 +15,7 @@ export default function ImageLoader({
   const aspectRatio = image.width / image.height;
 
   return (
-    <div className="relative" style={{ aspectRatio }}>
+    <div className="relative w-full h-full" style={{ aspectRatio }}>
       <img
         src={image.blurred}
         className={
