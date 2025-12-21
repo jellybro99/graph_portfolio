@@ -14,6 +14,9 @@ export default function Graph({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(pointer: coarse)").matches;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -40,6 +43,7 @@ export default function Graph({
           setHovered(-1);
           setPopup(Number(node.id));
         }}
+        nodeLabel={isMobile ? () => null : (node) => node.name}
         nodeColor={(node) =>
           hovered === Number(node.id)
             ? getComputedStyle(document.documentElement)

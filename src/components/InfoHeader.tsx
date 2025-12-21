@@ -1,7 +1,7 @@
 export default function InfoHeader() {
   return (
     <div>
-      <ul className="flex items-center gap-4 text-2xl">
+      <ul className="flex justify-center md:justify-start items-center gap-4 text-2xl">
         <h1 className="hover:text-(--color-accent)">My Portfolio</h1>
         <li>
           <a

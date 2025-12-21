@@ -15,6 +15,9 @@ export default function ImageChanger({
   const prev = () =>
     setImageIndex((imageIndex + images.length - 1) % images.length);
   const next = () => setImageIndex((imageIndex + 1) % images.length);
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(pointer: coarse)").matches;
 
   return (
     <div className="flex flex-1 min-h-0 justify-center relative">
@@ -39,17 +42,19 @@ export default function ImageChanger({
           {">"}
         </button>
       )}
-      <Popup
-        isOpen={fullScreenImage}
-        close={() => setFullscreenImage(false)}
-        title={title}
-      >
-        <ImageLoader
-          image={images[imageIndex]}
-          onClick={() => setFullscreenImage(false)}
-          className="cursor-zoom-out"
-        />
-      </Popup>
+      {!isMobile && (
+        <Popup
+          isOpen={fullScreenImage}
+          close={() => setFullscreenImage(false)}
+          title={title}
+        >
+          <ImageLoader
+            image={images[imageIndex]}
+            onClick={() => setFullscreenImage(false)}
+            className="cursor-zoom-out"
+          />
+        </Popup>
+      )}
     </div>
   );
 }
