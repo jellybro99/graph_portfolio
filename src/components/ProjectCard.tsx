@@ -3,7 +3,7 @@ import ImageChanger from "@/components/ImageChanger";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="flex flex-col gap-4 max-w-xl flex-1 min-h-0">
+    <div className="flex flex-col gap-4 max-w-xl flex-1 min-h-0 max-h-96">
       {project.images.length > 0 && (
         <ImageChanger images={project.images} title={project.title} />
       )}

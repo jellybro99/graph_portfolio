@@ -20,7 +20,8 @@ export default function ImageLoader({
         src={image.blurred}
         className={
           "absolute inset-0 w-full transition-opacity duration-300 pointer-events-none " +
-          (isLoaded ? "opacity-0" : "opacity-100")
+          (isLoaded ? "opacity-0" : "opacity-100") +
+          (className ? " " + className : "")
         }
         aria-hidden
       />

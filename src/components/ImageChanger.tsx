@@ -17,9 +17,12 @@ export default function ImageChanger({
   const next = () => setImageIndex((imageIndex + 1) % images.length);
 
   return (
-    <div className="flex flex-1 min-h-0 justify-center">
+    <div className="flex flex-1 min-h-0 justify-center relative">
       {images.length > 1 && (
-        <button className="cursor-pointer" onClick={prev}>
+        <button
+          className="cursor-pointer absolute top-1/2 left-0"
+          onClick={prev}
+        >
           {"<"}
         </button>
       )}
@@ -29,7 +32,10 @@ export default function ImageChanger({
         className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
       {images.length > 1 && (
-        <button className="cursor-pointer" onClick={next}>
+        <button
+          className="cursor-pointer absolute top-1/2 right-0"
+          onClick={next}
+        >
           {">"}
         </button>
       )}
