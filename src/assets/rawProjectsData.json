@@ -11,7 +11,7 @@
     "title": "WikiThee",
     "link": "",
     "github": "",
-    "description": "",
+    "description": "This is my senior project from college. My group created a wikipedia themed social media. It was build with NextJS, React/TS, and MongDB",
     "tags": ["nextjs", "react", "mongo", "bootstrap"],
     "images": []
   },

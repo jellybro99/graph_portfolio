@@ -21,20 +21,20 @@ export default function Graph({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const canvas = containerRef.current.querySelector("canvas");
+    if (canvas) canvas.style.touchAction = "pan-y";
+
     const observer = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
       setDimensions({ width, height });
     });
-
-    const canvas = containerRef.current.querySelector("canvas");
-    if (canvas) canvas.style.touchAction = "pan-y";
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={containerRef} className="h-full w-full">
+    <div ref={containerRef} className="absolute inset-0">
       <ForceGraph2d
         ref={fgRef}
         graphData={graphData}

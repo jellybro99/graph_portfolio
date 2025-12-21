@@ -14,7 +14,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full bg-(--color-background) text-(--color-text)">
-      {/* page 1 */}
       <div className="h-screen relative flex flex-col items-center">
         <header className="max-w-5xl w-full z-10">
           <InfoHeader />
@@ -27,23 +26,18 @@ export default function App() {
             setPopup={(nodeId) => setPopupId(nodeId)}
           />
         </div>
-        <section className="absolute inset-0">
-          <Graph
-            hovered={hovered}
-            setHovered={setHovered}
-            setPopup={(nodeId) => setPopupId(nodeId)}
-          />
-        </section>
       </div>
 
-      <hr className="border-0 border-b-2 border-(--color-text) opacity-2" />
-
-      {/* page 2 */}
       <div className="h-screen flex flex-col items-center">
         <div className="max-w-5xl w-full h-full">more stuff</div>
       </div>
 
-      {/* popup */}
+      <Graph
+        hovered={hovered}
+        setHovered={setHovered}
+        setPopup={(nodeId) => setPopupId(nodeId)}
+      />
+
       <Popup
         isOpen={popupId != -1}
         close={() => setPopupId(-1)}
