@@ -14,7 +14,7 @@ export default function App() {
   usePrefersDarkMode();
 
   return (
-    <div className="min-h-screen w-full bg-(--color-background) text-(--color-text)">
+    <div className="min-h-screen w-full overflow-hidden bg-(--color-background) text-(--color-text)">
       <div className="h-screen relative flex flex-col items-center">
         <header className="max-w-5xl w-full z-10">
           <InfoHeader />

@@ -9,7 +9,7 @@ export default function AboutPage() {
     window.matchMedia("(pointer: coarse)").matches;
 
   return (
-    <div className="flex flex-col items-center md:items-stretch">
+    <div className="flex flex-col items-center md:items-start overflow">
       <h1 className="text-center md:text-left text-2xl">More Stuff</h1>
       <p className="max-w-xl text-center md:text-left">
         This project is inspired by obsidian, a note-taking software which lets
@@ -19,7 +19,7 @@ export default function AboutPage() {
       <img
         src={obsidianGraph}
         onClick={() => setIsPopupOpen(true)}
-        className="self-center h-96 cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
+        className="max-h-96 cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
       <p className="text-center md:text-left">This project includes:</p>
       <ul className="list-disc pl-4 max-w-xl">
