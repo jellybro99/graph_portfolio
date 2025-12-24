@@ -30,7 +30,7 @@ export default function App() {
       </div>
 
       <div className="h-screen flex flex-col items-center">
-        <div className="max-w-5xl w-full h-full">
+        <div className="max-w-5xl h-full">
           <AboutPage />
         </div>
       </div>
