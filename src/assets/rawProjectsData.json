@@ -32,7 +32,7 @@
     "images": ["jellyboysplus.png"]
   },
   {
-    "title": "sha256 CLI",
+    "title": "Sha256 CLI",
     "link": "",
     "github": "https://github.com/jellybro99/sha256_cli",
     "description": "Go implementation of sha256 with a CLI. Made to help me learn go.",
