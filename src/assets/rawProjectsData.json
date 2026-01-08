@@ -34,7 +34,7 @@
   {
     "title": "Sha256 CLI",
     "link": "",
-    "github": "https://github.com/jellybro99/sha256_cli",
+    "github": "https://github.com/jellybro99/sha",
     "description": "Go implementation of sha256 with a CLI. Made to help me learn go.",
     "tags": ["go", "cli"],
     "images": ["sha256_cli.png"]
