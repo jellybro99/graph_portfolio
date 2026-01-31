@@ -19,13 +19,15 @@ export default function App() {
         <header className="max-w-5xl w-full z-10">
           <InfoHeader />
         </header>
-        <div className="max-w-5xl w-full absolute top-10 text-center md:text-left z-10">
-          <ProjectList
-            hovered={hovered}
-            setHovered={setHovered}
-            projects={projects}
-            setPopup={(nodeId) => setPopupId(nodeId)}
-          />
+        <div className="max-w-5xl w-full absolute top-10 text-center md:text-left z-10 pointer-events-none">
+          <div className="inline-block pointer-events-auto">
+            <ProjectList
+              hovered={hovered}
+              setHovered={setHovered}
+              projects={projects}
+              setPopup={(nodeId) => setPopupId(nodeId)}
+            />
+          </div>
         </div>
       </div>
 
