@@ -1,3 +1,33 @@
+export function parseCommitCountFromLinkHeader(
+  link: string | null,
+): number | null {
+  if (!link) return null;
+
+  const lastLink = link
+    .split(",")
+    .map((part) => part.trim())
+    .find((part) => /rel="last"/.test(part));
+  if (!lastLink) return null;
+
+  const urlMatch = lastLink.match(/<([^>]+)>/);
+  if (!urlMatch) return null;
+
+  let url: URL;
+  try {
+    url = new URL(urlMatch[1]);
+  } catch {
+    return null;
+  }
+
+  const page = url.searchParams.get("page");
+  if (!page) return null;
+
+  const numCommits = Number(page);
+  if (!Number.isInteger(numCommits) || numCommits < 0) return null;
+
+  return numCommits;
+}
+
 export async function getNumGitHubCommits(
   username: string,
   repo: string,
@@ -6,17 +36,16 @@ export async function getNumGitHubCommits(
   const response = await fetch(route);
 
   const link = response.headers.get("link");
-  if (!link) return 0;
+  const numCommits = parseCommitCountFromLinkHeader(link);
 
-  const lastPage = link.split(",")[1];
-  const urlMatch = lastPage.match(/<([^>]+)>/);
-  if (!urlMatch) return 0;
+  if (numCommits === null) {
+    console.warn(
+      `Could not determine commit count for ${username}/${repo}: unparseable GitHub Link header (${link ?? "missing"}). Node size for this project will default to 0.`,
+    );
+    return 0;
+  }
 
-  const url = new URL(urlMatch[1]);
-  const numCommits = url.searchParams.get("page");
-  if (!numCommits) return 0;
-
-  return parseInt(numCommits);
+  return numCommits;
 }
 
 export async function getNumGitHubCommitsFromURL(url: string): Promise<number> {
