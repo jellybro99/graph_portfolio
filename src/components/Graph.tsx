@@ -32,6 +32,47 @@ export default function Graph({
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const canvas = containerRef.current?.querySelector("canvas");
+    if (canvas) canvas.style.cursor = hovered !== -1 ? "pointer" : "default";
+
+    const tooltip =
+      containerRef.current?.querySelector<HTMLElement>(".float-tooltip-kap");
+    if (tooltip && hovered === -1) tooltip.style.display = "none";
+  }, [hovered]);
+
+  const hoveredRef = useRef(hovered);
+  useEffect(() => {
+    hoveredRef.current = hovered;
+  }, [hovered]);
+
+  // A popup overlay blocks pointer events reaching the graph while open, so
+  // force-graph's tooltip content goes stale. Once the overlay unmounts,
+  // the browser fires a "mouseover" on the now-exposed container even
+  // though the cursor never moved, and the next real "mousemove" re-shows
+  // that stale content at the new cursor position for a frame before
+  // force-graph's own render loop catches up and clears it. Suppress both.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const suppressStaleTooltip = () => {
+      if (hoveredRef.current !== -1) return;
+      const tooltip =
+        container.querySelector<HTMLElement>(".float-tooltip-kap");
+      if (tooltip) tooltip.style.display = "none";
+      const canvas = container.querySelector("canvas");
+      if (canvas) canvas.style.cursor = "default";
+    };
+
+    container.addEventListener("mouseover", suppressStaleTooltip);
+    container.addEventListener("mousemove", suppressStaleTooltip);
+    return () => {
+      container.removeEventListener("mouseover", suppressStaleTooltip);
+      container.removeEventListener("mousemove", suppressStaleTooltip);
+    };
+  }, []);
+
   return (
     <div ref={containerRef} className="absolute inset-0">
       <ForceGraph2d
