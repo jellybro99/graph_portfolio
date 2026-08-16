@@ -20,19 +20,23 @@ export default function Popup({
   const [renderedTitle, setRenderedTitle] = useState<string | undefined>(title);
 
   useEffect(() => {
-    let timerId: number | NodeJS.Timeout | undefined = undefined;
-
     if (isOpen) {
       setRenderedChildren(children);
       setRenderedTitle(title);
+    }
+  }, [isOpen, children, title]);
+
+  useEffect(() => {
+    if (isOpen) {
       setShouldRender(true);
       setIsClosing(false);
-    } else {
-      setIsClosing(true);
-      timerId = setTimeout(() => setShouldRender(false), 150);
+      return;
     }
+
+    setIsClosing(true);
+    const timerId = setTimeout(() => setShouldRender(false), 150);
     return () => clearTimeout(timerId);
-  }, [isOpen, children, title]);
+  }, [isOpen]);
 
   const closeRef = useRef(close);
   closeRef.current = close;
