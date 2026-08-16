@@ -7,3 +7,10 @@ This is a project to showcase my developments and how they are related to each o
 ## About the project
 
 This is a react app styled with tailwind. It uses the [ForceGraph2d](https://github.com/vasturiano/react-force-graph/tree/master) library to create a map of all my personal projects along with how they relate to each other through things like programming languages.
+
+### Adding a project
+
+Projects live in `src/assets/rawProjectsData.json` and are processed with `npm run build`.
+
+- `src/assets/processedProjects.json` adds ids, thumbhash blur placeholder images and their dimensions
+- `src/assets/processedGraphData.json` creates the graphs nodes/edges as well as its sizing from GitHub commit counts
