@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d";
 import graphData from "@/assets/processedGraphData.json" with { type: "json" };
 import useIsMobile from "@/utils/useIsMobile";
+import useGraphThemeColors from "@/utils/useGraphThemeColors";
 
 export default function Graph({
   hovered,
@@ -16,6 +17,7 @@ export default function Graph({
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const isMobile = useIsMobile();
+  const themeColors = useGraphThemeColors();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -85,19 +87,9 @@ export default function Graph({
         }}
         nodeLabel={isMobile ? () => null : (node) => node.name}
         nodeColor={(node) =>
-          hovered === Number(node.id)
-            ? getComputedStyle(document.documentElement)
-                .getPropertyValue("--color-node-hover")
-                .trim()
-            : getComputedStyle(document.documentElement)
-                .getPropertyValue("--color-node")
-                .trim()
+          hovered === Number(node.id) ? themeColors.nodeHover : themeColors.node
         }
-        linkColor={() =>
-          getComputedStyle(document.documentElement)
-            .getPropertyValue("--color-link")
-            .trim()
-        }
+        linkColor={() => themeColors.link}
         width={dimensions.width}
         height={dimensions.height}
         enableZoomInteraction={false}
