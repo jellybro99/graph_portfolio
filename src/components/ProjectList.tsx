@@ -13,15 +13,15 @@ export default function ProjectList({
 }) {
   return (
     <ul className="inline-block opacity-50">
-      {projects.map((project, index) => (
+      {projects.map((project) => (
         <li
-          key={index}
+          key={project.id}
           className={
-            hovered == index ? "text-(--color-accent) cursor-pointer" : ""
+            hovered == project.id ? "text-(--color-accent) cursor-pointer" : ""
           }
-          onMouseEnter={() => setHovered(index)}
+          onMouseEnter={() => setHovered(project.id)}
           onMouseLeave={() => setHovered(-1)}
-          onClick={() => setPopup(index)}
+          onClick={() => setPopup(project.id)}
         >
           {project.title}
         </li>

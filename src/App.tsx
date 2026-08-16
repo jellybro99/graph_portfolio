@@ -13,6 +13,8 @@ export default function App() {
   const [popupId, setPopupId] = useState<number>(-1);
   usePrefersDarkMode();
 
+  const popupProject = projects.find((project) => project.id === popupId);
+
   return (
     <div className="min-h-screen w-full min-w-80 p-4 overflow-hidden bg-(--color-background) text-(--color-text)">
       <div className="h-screen relative flex flex-col items-center">
@@ -46,9 +48,9 @@ export default function App() {
       <Popup
         isOpen={popupId != -1}
         close={() => setPopupId(-1)}
-        title={projects[popupId]?.title}
+        title={popupProject?.title}
       >
-        <ProjectCard project={projects[popupId]} />
+        {popupProject && <ProjectCard project={popupProject} />}
       </Popup>
     </div>
   );

@@ -20,8 +20,8 @@ export async function processGraphData(
 }
 
 function createNodes(projects: RawProject[]): Array<Node> {
-  return projects.map((project, index) => ({
-    id: index,
+  return projects.map((project) => ({
+    id: project.id,
     name: project.title,
     val: 1,
   }));
@@ -30,10 +30,10 @@ function createNodes(projects: RawProject[]): Array<Node> {
 function createCategories(projects: RawProject[]): Map<string, number[]> {
   const map = new Map<string, number[]>();
 
-  projects.forEach((project, index) => {
+  projects.forEach((project) => {
     project.tags.forEach((tag) => {
       if (!map.has(tag)) map.set(tag, []);
-      map.get(tag)!.push(index);
+      map.get(tag)!.push(project.id);
     });
   });
 

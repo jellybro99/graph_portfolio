@@ -1,10 +1,17 @@
 import { writeFileSync } from "fs";
 import path from "path";
 import rawProjectsData from "@/assets/rawProjectsData.json";
+import type { RawProject } from "@/assets/types";
 import { processProjects } from "./processProjects";
 import { processGraphData } from "./processGraphData";
 
-const processedProjects = await processProjects(rawProjectsData);
+// id assigned once here so both build outputs stay keyed to the same project.
+const projects: RawProject[] = rawProjectsData.map((project, id) => ({
+  ...project,
+  id,
+}));
+
+const processedProjects = await processProjects(projects);
 const processedProjectsPath = path.join(
   "./",
   "src",
@@ -14,7 +21,7 @@ const processedProjectsPath = path.join(
 
 writeFileSync(processedProjectsPath, JSON.stringify(processedProjects));
 
-const processedGraphData = await processGraphData(rawProjectsData);
+const processedGraphData = await processGraphData(projects);
 const processedGraphDataPath = path.join(
   "./",
   "src",

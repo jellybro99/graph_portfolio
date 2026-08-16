@@ -15,6 +15,7 @@ export interface GraphData {
 }
 
 export interface Project {
+  id: number;
   title: string;
   link: string;
   github: string;
@@ -31,6 +32,7 @@ export interface Image {
 }
 
 export interface RawProject {
+  id: number;
   title: string;
   link: string;
   github: string;
