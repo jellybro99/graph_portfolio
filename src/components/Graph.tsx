@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import ForceGraph2d, { type ForceGraphMethods } from "react-force-graph-2d";
 import graphData from "@/assets/processedGraphData.json" with { type: "json" };
+import useIsMobile from "@/utils/useIsMobile";
 
 export default function Graph({
   hovered,
@@ -14,9 +15,7 @@ export default function Graph({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const isMobile =
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: coarse)").matches;
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!containerRef.current) return;

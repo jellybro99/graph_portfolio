@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Image } from "@/assets/types";
 import Popup from "@/components/Popup";
 import ImageLoader from "@/components/ImageLoader";
+import useIsMobile from "@/utils/useIsMobile";
 
 export default function ImageChanger({
   images,
@@ -15,9 +16,7 @@ export default function ImageChanger({
   const prev = () =>
     setImageIndex((imageIndex + images.length - 1) % images.length);
   const next = () => setImageIndex((imageIndex + 1) % images.length);
-  const isMobile =
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: coarse)").matches;
+  const isMobile = useIsMobile();
 
   return (
     <div className="flex flex-1 min-h-0 justify-center relative">

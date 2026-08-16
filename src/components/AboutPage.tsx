@@ -1,12 +1,11 @@
 import { useState } from "react";
 import obsidianGraph from "@/assets/images/obsidian-graph.png";
 import Popup from "@/components/Popup";
+import useIsMobile from "@/utils/useIsMobile";
 
 export default function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-  const isMobile =
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: coarse)").matches;
+  const isMobile = useIsMobile();
 
   return (
     <div className="h-full max-w-xl pt-4 flex flex-col items-center justify-around overflow-hidden">
