@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const closePopupStack: Array<() => void> = [];
+const openPopups: Array<React.RefObject<() => void>> = [];
 
 export default function Popup({
   isOpen,
@@ -34,36 +34,39 @@ export default function Popup({
     return () => clearTimeout(timerId);
   }, [isOpen, children, title]);
 
+  const closeRef = useRef(close);
+  closeRef.current = close;
+
   useEffect(() => {
     if (!isOpen) return;
 
-    closePopupStack.push(close);
+    openPopups.push(closeRef);
 
     const closeOnEscape = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") closePopupStack.pop()?.();
+      if (event.key === "Escape") openPopups.pop()?.current();
     };
 
     const preventSpacebarScroll = (event: KeyboardEvent) => {
       if (event.key === " ") event.preventDefault();
     };
 
-    if (closePopupStack.length == 1) {
+    if (openPopups.length == 1) {
       document.body.style.overflow = "hidden";
       addEventListener("keydown", closeOnEscape);
       addEventListener("keydown", preventSpacebarScroll);
     }
 
     return () => {
-      const index = closePopupStack.indexOf(close);
-      if (index !== -1) closePopupStack.splice(index, 1);
+      const index = openPopups.indexOf(closeRef);
+      if (index !== -1) openPopups.splice(index, 1);
 
-      if (closePopupStack.length == 0) {
+      if (openPopups.length == 0) {
         document.body.style.overflow = "";
         removeEventListener("keydown", closeOnEscape);
         removeEventListener("keydown", preventSpacebarScroll);
       }
     };
-  }, [close, isOpen]);
+  }, [isOpen]);
 
   return !shouldRender ? null : (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
