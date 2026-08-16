@@ -32,6 +32,14 @@
     "images": ["jellyboysplus.png"]
   },
   {
+    "title": "Musical Zettelkasten",
+    "link": "https://jellybro99.github.io/musical_zettelkasten",
+    "github": "https://github.com/jellybro99/musical_zettelkasten",
+    "description": "Web-based DAW inspired by the Zettelkasten note taking method. Built with React and Typescript.",
+    "tags": ["react", "typescript", "claude"],
+    "images": ["musical-zettelkasten.png"]
+  },
+  {
     "title": "Sha256 CLI",
     "link": "",
     "github": "https://github.com/jellybro99/sha",
