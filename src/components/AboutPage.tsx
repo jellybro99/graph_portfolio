@@ -1,11 +1,9 @@
 import { useState } from "react";
 import obsidianGraph from "@/assets/images/obsidian-graph.png";
 import Popup from "@/components/Popup";
-import useIsMobile from "@/utils/useIsMobile";
 
 export default function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-  const isMobile = useIsMobile();
 
   return (
     <div className="h-full max-w-xl pt-4 flex flex-col items-center justify-around overflow-hidden">
@@ -38,19 +36,18 @@ export default function AboutPage() {
         </ul>
       </div>
 
-      {!isMobile && (
-        <Popup
-          title="Obsidian Graph"
-          isOpen={isPopupOpen}
-          close={() => setIsPopupOpen(false)}
-        >
-          <img
-            src={obsidianGraph}
-            onClick={() => setIsPopupOpen(false)}
-            className="cursor-zoom-out border-2 border-(--color-text) hover:border-(--color-accent)"
-          />
-        </Popup>
-      )}
+      <Popup
+        title="Obsidian Graph"
+        isOpen={isPopupOpen}
+        close={() => setIsPopupOpen(false)}
+        suppressOnMobile
+      >
+        <img
+          src={obsidianGraph}
+          onClick={() => setIsPopupOpen(false)}
+          className="cursor-zoom-out border-2 border-(--color-text) hover:border-(--color-accent)"
+        />
+      </Popup>
     </div>
   );
 }

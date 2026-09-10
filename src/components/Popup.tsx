@@ -1,76 +1,65 @@
 import { useState, useEffect, useRef } from "react";
-
-const openPopups: Array<React.RefObject<() => void>> = [];
+import { usePopupStack } from "@/utils/usePopupStack";
+import useIsMobile from "@/utils/useIsMobile";
 
 export default function Popup({
   isOpen,
   close,
   title,
   children,
+  suppressOnMobile = false,
 }: {
   isOpen: boolean;
   close: () => void;
   title?: string;
   children: React.ReactNode;
+  suppressOnMobile?: boolean;
 }) {
-  const [shouldRender, setShouldRender] = useState<boolean>(isOpen);
+  const isMobile = useIsMobile();
+  const suppressed = suppressOnMobile && isMobile;
+  const open = isOpen && !suppressed;
+
+  const [shouldRender, setShouldRender] = useState<boolean>(open);
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const [renderedChildren, setRenderedChildren] =
     useState<React.ReactNode>(children);
   const [renderedTitle, setRenderedTitle] = useState<string | undefined>(title);
 
+  const closeRef = useRef(close);
+  closeRef.current = close;
+
+  const { register, unregister } = usePopupStack();
+
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       setRenderedChildren(children);
       setRenderedTitle(title);
     }
-  }, [isOpen, children, title]);
+  }, [open, children, title]);
+
+  // Suppressed mid-open (e.g. viewport crosses the mobile breakpoint) —
+  // force-close through the normal close() path so the caller's state and
+  // the close animation stay in sync.
+  useEffect(() => {
+    if (suppressed && isOpen) closeRef.current();
+  }, [suppressed, isOpen]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       setShouldRender(true);
       setIsClosing(false);
       return;
     }
-
     setIsClosing(true);
     const timerId = setTimeout(() => setShouldRender(false), 150);
     return () => clearTimeout(timerId);
-  }, [isOpen]);
-
-  const closeRef = useRef(close);
-  closeRef.current = close;
+  }, [open]);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    openPopups.push(closeRef);
-
-    const closeOnEscape = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") openPopups.pop()?.current();
-    };
-
-    const preventSpacebarScroll = (event: KeyboardEvent) => {
-      if (event.key === " ") event.preventDefault();
-    };
-
-    if (openPopups.length == 1) {
-      document.body.style.overflow = "hidden";
-      addEventListener("keydown", closeOnEscape);
-      addEventListener("keydown", preventSpacebarScroll);
-    }
-
-    return () => {
-      const index = openPopups.indexOf(closeRef);
-      if (index !== -1) openPopups.splice(index, 1);
-
-      if (openPopups.length == 0) {
-        document.body.style.overflow = "";
-        removeEventListener("keydown", closeOnEscape);
-        removeEventListener("keydown", preventSpacebarScroll);
-      }
-    };
-  }, [isOpen]);
+    if (!open) return;
+    register(closeRef);
+    return () => unregister(closeRef);
+  }, [open, register, unregister]);
 
   return !shouldRender ? null : (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -78,7 +67,7 @@ export default function Popup({
 
       <div>
         <div
-          className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm 
+          className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm
          bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
         >

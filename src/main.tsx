@@ -1,11 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "@/App";
+import { PopupStackProvider } from "@/components/PopupStackProvider";
 
 import "./assets/global.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <PopupStackProvider>
+      <App />
+    </PopupStackProvider>
   </StrictMode>,
 );
