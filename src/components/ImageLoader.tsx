@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Image } from "@/assets/types";
 import resolveImage from "@/utils/resolveImage";
 
@@ -11,10 +11,10 @@ export default function ImageLoader({
   onClick: () => void;
   className?: string;
 }) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const src = resolveImage(image.original);
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const isLoaded = loadedSrc === src;
   const aspectRatio = image.width / image.height;
-
-  useEffect(() => setIsLoaded(false), [image]);
 
   return (
     <div className="relative w-full h-full" style={{ aspectRatio }}>
@@ -29,9 +29,9 @@ export default function ImageLoader({
       />
 
       <img
-        src={resolveImage(image.original)}
+        src={src}
         onClick={onClick}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => setLoadedSrc(src)}
         className={
           "w-full transition-opacity duration-300 " +
           (isLoaded ? "opacity-100" : "opacity-0") +
