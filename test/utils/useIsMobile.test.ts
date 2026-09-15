@@ -3,7 +3,7 @@ import { renderHook, act } from "@testing-library/react";
 import useIsMobile from "../../src/utils/useIsMobile";
 
 describe("useIsMobile", () => {
-  let originalMatchMedia: MediaQueryList;
+  let originalMatchMedia: typeof window.matchMedia;
 
   beforeEach(() => {
     originalMatchMedia = window.matchMedia;
@@ -55,7 +55,7 @@ describe("useIsMobile", () => {
       () =>
         ({
           matches: false,
-          addEventListener: vi.fn((event, listener) => {
+          addEventListener: vi.fn((_event, listener) => {
             changeHandler = listener as (event: MediaQueryListEvent) => void;
           }),
           removeEventListener: vi.fn(),
@@ -81,7 +81,7 @@ describe("useIsMobile", () => {
       () =>
         ({
           matches: true,
-          addEventListener: vi.fn((event, listener) => {
+          addEventListener: vi.fn((_event, listener) => {
             changeHandler = listener as (event: MediaQueryListEvent) => void;
           }),
           removeEventListener: vi.fn(),

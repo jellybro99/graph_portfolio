@@ -59,7 +59,7 @@ describe("usePrefersDarkMode", () => {
       () =>
         ({
           matches: false,
-          addEventListener: vi.fn((event, listener) => {
+          addEventListener: vi.fn((_event, listener) => {
             changeHandler = listener as (event: MediaQueryListEvent) => void;
           }),
           removeEventListener: vi.fn(),
@@ -86,7 +86,7 @@ describe("usePrefersDarkMode", () => {
       () =>
         ({
           matches: true,
-          addEventListener: vi.fn((event, listener) => {
+          addEventListener: vi.fn((_event, listener) => {
             changeHandler = listener as (event: MediaQueryListEvent) => void;
           }),
           removeEventListener: vi.fn(),
