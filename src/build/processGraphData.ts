@@ -40,18 +40,30 @@ function createCategories(projects: RawProject[]): Map<string, number[]> {
   return map;
 }
 
-function createLinks(categories: Map<string, number[]>): Link[] {
-  const links = new Set<Link>();
+// A Set of the pair key, not of the Link objects: Set compares objects by
+// reference, so `new Set<Link>()` would keep every duplicate. Ids arrive in
+// tag-encounter order and a pair can be visited once per shared tag, so the key
+// is canonical for the unordered pair and the emitted direction matches it.
+export function createLinks(categories: Map<string, number[]>): Link[] {
+  const links: Link[] = [];
+  const seenPairs = new Set<string>();
 
   for (const ids of categories.values()) {
     for (let i = 0; i < ids.length; i++) {
-      for (let j = 0; j < ids.length; j++) {
-        if (i != j) links.add({ source: ids[i], target: ids[j] });
+      for (let j = i + 1; j < ids.length; j++) {
+        const source = Math.min(ids[i], ids[j]);
+        const target = Math.max(ids[i], ids[j]);
+        const key = `${source}->${target}`;
+
+        if (seenPairs.has(key)) continue;
+
+        seenPairs.add(key);
+        links.push({ source, target });
       }
     }
   }
 
-  return [...links];
+  return links;
 }
 
 async function sizeNodes(rawSizes: number[], nodes: Node[]): Promise<void> {
