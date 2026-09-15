@@ -14,10 +14,17 @@ export default function App() {
   const [listHover, setListHover] = useState<number>(-1);
   const [overGraph, setOverGraph] = useState(false);
   const [overList, setOverList] = useState(false);
+  const [focusHover, setFocusHover] = useState<number>(-1);
   const [popupId, setPopupId] = useState<number>(-1);
   useApplyDarkModeClass();
 
-  const hovered = resolveHovered(overGraph, graphHover, overList, listHover);
+  const hovered = resolveHovered(
+    overGraph,
+    graphHover,
+    overList,
+    listHover,
+    focusHover,
+  );
 
   const popupProject = projects.find((project) => project.id === popupId);
 
@@ -45,6 +52,7 @@ export default function App() {
               setOverList={setOverList}
               projects={projects}
               setPopup={openPopup}
+              setFocusHover={setFocusHover}
             />
           </div>
         </div>

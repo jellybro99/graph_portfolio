@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, fireEvent, cleanup, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import App from "../src/App";
 import { PopupStackProvider } from "../src/components/PopupStackProvider";
 import projects from "./fixtures/processedProjects.json";
@@ -146,5 +147,83 @@ describe("App hover wiring", () => {
 
     expect(app.getByRole("heading", { name: beta.title })).toBeTruthy();
     expect(app.getByText(beta.description)).toBeTruthy();
+  });
+
+  it("highlights the focused row and its node while no pointer is engaged", async () => {
+    const user = userEvent.setup();
+    const app = renderApp();
+    const row = app.getByRole("button", { name: alpha.title });
+
+    // InfoHeader's three links come first in the tab order.
+    await user.tab();
+    await user.tab();
+    await user.tab();
+    expect(document.activeElement).not.toBe(row);
+
+    await user.tab();
+
+    expect(document.activeElement).toBe(row);
+    expect(app.highlighted(alpha.title)).toBe(true);
+    expect(app.props().hovered).toBe(alpha.id);
+  });
+
+  it("opens the focused row's popup with Enter", async () => {
+    const user = userEvent.setup();
+    const app = renderApp();
+
+    act(() => app.getByRole("button", { name: beta.title }).focus());
+    await user.keyboard("{Enter}");
+
+    expect(app.getByRole("heading", { name: beta.title })).toBeTruthy();
+    expect(app.getByText(beta.description)).toBeTruthy();
+  });
+
+  it("keeps the hovered row's highlight while a different row holds focus", () => {
+    const app = renderApp();
+
+    act(() => app.getByRole("button", { name: alpha.title }).focus());
+    expect(app.highlighted(alpha.title)).toBe(true);
+
+    app.enterList();
+    fireEvent.mouseEnter(app.row(beta.title));
+
+    expect(app.highlighted(beta.title)).toBe(true);
+    expect(app.highlighted(alpha.title)).toBe(false);
+    expect(app.props().hovered).toBe(beta.id);
+  });
+
+  it("keeps the graph's node highlight while a row holds focus", () => {
+    const app = renderApp();
+
+    act(() => app.getByRole("button", { name: alpha.title }).focus());
+    app.graphEnter();
+    app.graphHover(beta.id);
+
+    expect(app.highlighted(beta.title)).toBe(true);
+    expect(app.highlighted(alpha.title)).toBe(false);
+    expect(app.props().hovered).toBe(beta.id);
+  });
+
+  it("does not strand the highlight when a click moves focus into the popup", async () => {
+    const user = userEvent.setup();
+    const app = renderApp();
+    const row = app.getByRole("button", { name: alpha.title });
+
+    // A button takes focus when it is clicked, so the focus source holds this
+    // row afterwards; Popup moves focus to its close button on open, which
+    // blurs the row and releases it. Without that, focusHover would keep the
+    // row highlighted after the pointer leaves the list.
+    await user.click(row);
+    expect(document.activeElement).toBe(
+      app.getByRole("button", { name: "Close" }),
+    );
+
+    // The captured button: the popup repeats "Alpha" in its heading, so a
+    // text query for the row would no longer be unique.
+    fireEvent.mouseLeave(row);
+    fireEvent.mouseLeave(app.list);
+
+    expect(row.className).not.toContain(ACCENT);
+    expect(app.props().hovered).toBe(-1);
   });
 });

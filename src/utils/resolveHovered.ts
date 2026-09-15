@@ -7,12 +7,24 @@
 // id would shadow the list forever. Model pointer containment instead of
 // last-writer precedence; the list overlays the canvas, so it wins when the
 // pointer is inside both.
+//
+// Keyboard focus is a third, independent source. A focused row has to
+// highlight its node, but it must not be modelled as pointer containment:
+// sharing a flag with `overList` would let a Tab away clear the mouse
+// highlight while the pointer is still over the list. It is therefore derived
+// last, so it only takes effect where the pointer sources above returned -1
+// and a mouse user's highlight is unchanged by focus moving around the page.
+// Optional for a caller that tracks only the pointer (Graph's own test wires
+// the derivation that way): omitting it derives exactly what the pointer-only
+// version returned.
 export default function resolveHovered(
   overGraph: boolean,
   graphHover: number,
   overList: boolean,
   listHover: number,
+  focusHover = -1,
 ) {
   if (overList) return listHover;
-  return overGraph ? graphHover : -1;
+  if (overGraph) return graphHover;
+  return focusHover;
 }
