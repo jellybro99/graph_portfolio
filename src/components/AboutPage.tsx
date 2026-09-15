@@ -9,7 +9,7 @@ export default memo(function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   return (
-    <div className="h-full max-w-xl pt-4 flex flex-col items-center justify-around">
+    <div className="min-h-full max-w-xl pt-4 flex flex-col items-center justify-around">
       <h1 className="text-center text-2xl">About this project</h1>
       <p className="text-center">
         This project is inspired by obsidian, a note-taking software which lets
