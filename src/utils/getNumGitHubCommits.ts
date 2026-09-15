@@ -35,6 +35,13 @@ export async function getNumGitHubCommits(
   const route = `https://api.github.com/repos/${username}/${repo}/commits?per_page=1&page=1`;
   const response = await fetch(route);
 
+  if (!response.ok) {
+    console.warn(
+      `Could not determine commit count for ${username}/${repo}: GitHub responded with status ${response.status}. Node size for this project will default to 0.`,
+    );
+    return 0;
+  }
+
   const link = response.headers.get("link");
   const numCommits = parseCommitCountFromLinkHeader(link);
 
@@ -49,6 +56,8 @@ export async function getNumGitHubCommits(
 }
 
 export async function getNumGitHubCommitsFromURL(url: string): Promise<number> {
+  if (!url) return 0;
+
   const routeParts = url.split("/");
   return await getNumGitHubCommits(routeParts[3], routeParts[4]);
 }

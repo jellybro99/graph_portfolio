@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import {
   parseCommitCountFromLinkHeader,
   getNumGitHubCommits,
+  getNumGitHubCommitsFromURL,
 } from "@/utils/getNumGitHubCommits";
 
 describe("parseCommitCountFromLinkHeader", () => {
@@ -78,6 +79,8 @@ describe("getNumGitHubCommits", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
         headers: { get: () => link },
       }),
     );
@@ -105,5 +108,35 @@ describe("getNumGitHubCommits", () => {
 
     await expect(getNumGitHubCommits("x", "y")).resolves.toBe(0);
     expect(warnSpy).toHaveBeenCalledOnce();
+  });
+
+  it("warns with the response status and defaults to 0 when the response is not ok", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        headers: { get: () => null },
+      }),
+    );
+
+    await expect(getNumGitHubCommits("x", "y")).resolves.toBe(0);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("403"));
+  });
+});
+
+describe("getNumGitHubCommitsFromURL", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("returns 0 without calling fetch when the url is empty", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getNumGitHubCommitsFromURL("")).resolves.toBe(0);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
