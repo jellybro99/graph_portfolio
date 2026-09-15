@@ -139,4 +139,38 @@ describe("getNumGitHubCommitsFromURL", () => {
     await expect(getNumGitHubCommitsFromURL("")).resolves.toBe(0);
     expect(fetchMock).not.toHaveBeenCalled();
   });
+
+  it.each([
+    ["a url with no repo segment", "https://github.com/foo"],
+    ["a url with an empty repo segment", "https://github.com/foo/"],
+    ["a bare repo name", "foo"],
+  ])("returns 0 without calling fetch for %s", async (_description, url) => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      headers: { get: () => null },
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getNumGitHubCommitsFromURL(url)).resolves.toBe(0);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("requests the repo's commits when both segments are present", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      headers: {
+        get: () =>
+          '<https://api.github.com/repos/foo/bar/commits?per_page=1&page=5>; rel="last"',
+      },
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      getNumGitHubCommitsFromURL("https://github.com/foo/bar"),
+    ).resolves.toBe(5);
+    expect(fetchMock.mock.calls[0][0]).toContain("repos/foo/bar/commits");
+  });
 });

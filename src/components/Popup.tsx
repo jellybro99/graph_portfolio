@@ -12,9 +12,7 @@ export default function Popup({
   title?: string;
   children: React.ReactNode;
 }) {
-  const open = isOpen;
-
-  const [shouldRender, setShouldRender] = useState<boolean>(open);
+  const [shouldRender, setShouldRender] = useState<boolean>(isOpen);
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const [renderedChildren, setRenderedChildren] =
     useState<React.ReactNode>(children);
@@ -26,14 +24,14 @@ export default function Popup({
   const { register, unregister } = usePopupStack();
 
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       setRenderedChildren(children);
       setRenderedTitle(title);
     }
-  }, [open, children, title]);
+  }, [isOpen, children, title]);
 
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       setShouldRender(true);
       setIsClosing(false);
       return;
@@ -41,13 +39,13 @@ export default function Popup({
     setIsClosing(true);
     const timerId = setTimeout(() => setShouldRender(false), 150);
     return () => clearTimeout(timerId);
-  }, [open]);
+  }, [isOpen]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!isOpen) return;
     register(closeRef);
     return () => unregister(closeRef);
-  }, [open, register, unregister]);
+  }, [isOpen, register, unregister]);
 
   return !shouldRender ? null : (
     <div className="fixed inset-0 z-50 flex items-center justify-center">

@@ -59,5 +59,9 @@ export async function getNumGitHubCommitsFromURL(url: string): Promise<number> {
   if (!url) return 0;
 
   const routeParts = url.split("/");
-  return await getNumGitHubCommits(routeParts[3], routeParts[4]);
+  const username = routeParts[3];
+  const repo = routeParts[4];
+  if (!username || !repo) return 0;
+
+  return await getNumGitHubCommits(username, repo);
 }
