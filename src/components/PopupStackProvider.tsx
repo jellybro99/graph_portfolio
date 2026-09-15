@@ -7,6 +7,17 @@ export function PopupStackProvider({
   children: React.ReactNode;
 }) {
   const stackRef = useRef<CloseRef[]>([]);
+  const savedOverflowRef = useRef<string | null>(null);
+
+  // The provider can unmount while popups are still registered, so release the
+  // scroll lock from here too instead of relying on every popup's cleanup.
+  useEffect(() => {
+    return () => {
+      if (savedOverflowRef.current === null) return;
+      document.body.style.overflow = savedOverflowRef.current;
+      savedOverflowRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -28,14 +39,22 @@ export function PopupStackProvider({
   }, []);
 
   const register = useCallback((closeRef: CloseRef) => {
+    if (stackRef.current.length === 0) {
+      savedOverflowRef.current = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    }
     stackRef.current.push(closeRef);
-    if (stackRef.current.length === 1) document.body.style.overflow = "hidden";
   }, []);
 
   const unregister = useCallback((closeRef: CloseRef) => {
     const index = stackRef.current.indexOf(closeRef);
     if (index !== -1) stackRef.current.splice(index, 1);
-    if (stackRef.current.length === 0) document.body.style.overflow = "";
+
+    const savedOverflow = savedOverflowRef.current;
+    if (stackRef.current.length > 0 || savedOverflow === null) return;
+
+    document.body.style.overflow = savedOverflow;
+    savedOverflowRef.current = null;
   }, []);
 
   return (
