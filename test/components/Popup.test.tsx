@@ -1,4 +1,5 @@
 import { describe, it, beforeEach, afterEach, vi, expect } from "vitest";
+import { Suspense, startTransition, useState } from "react";
 import { render, cleanup, act } from "@testing-library/react";
 import Popup from "../../src/components/Popup";
 import { PopupStackProvider } from "../../src/components/PopupStackProvider";
@@ -85,6 +86,57 @@ describe("Popup close stack", () => {
     expect(closeOuter).not.toHaveBeenCalled();
   });
 
+  it("calls the close prop that was committed, not one from a render React discarded", async () => {
+    // A transition render that suspends is thrown away without being committed.
+    // Popup registers a ref holding its close callback, so writing that ref
+    // during render would leave the stack pointing at a callback from the
+    // discarded render - Escape would then call a close nobody committed to.
+    const committedClose = vi.fn();
+    const discardedClose = vi.fn();
+    let requestSuspend: ((suspend: boolean) => void) | null = null;
+
+    const neverResolves = () => new Promise<void>(() => {});
+
+    function Suspender({ suspend }: { suspend: boolean }) {
+      if (suspend) throw neverResolves();
+      return null;
+    }
+
+    function Wrapper() {
+      const [suspend, setSuspend] = useState(false);
+      requestSuspend = setSuspend;
+      return (
+        <PopupStackProvider>
+          <Popup
+            isOpen
+            close={suspend ? discardedClose : committedClose}
+            title="Project"
+          >
+            content
+          </Popup>
+          <Suspense fallback={null}>
+            <Suspender suspend={suspend} />
+          </Suspense>
+        </PopupStackProvider>
+      );
+    }
+
+    render(<Wrapper />);
+    expect(document.body.textContent).toContain("content");
+
+    await act(async () => {
+      startTransition(() => requestSuspend?.(true));
+    });
+
+    // The suspended render was discarded, so the popup still shows.
+    expect(document.body.textContent).toContain("content");
+
+    pressEscape();
+
+    expect(committedClose).toHaveBeenCalledTimes(1);
+    expect(discardedClose).not.toHaveBeenCalled();
+  });
+
   it("closes the innermost popup first when nested inside another popup's content (matches App: a project popup containing ImageChanger's own fullscreen popup)", () => {
     const closeOuter = vi.fn();
     const closeInner = vi.fn();
@@ -111,6 +163,55 @@ describe("Popup close stack", () => {
 
     expect(closeInner).toHaveBeenCalledTimes(1);
     expect(closeOuter).not.toHaveBeenCalled();
+  });
+});
+
+describe("Popup content", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("shows the newly opened project's title and content after being reopened", () => {
+    function Wrapper({
+      isOpen,
+      title,
+      content,
+    }: {
+      isOpen: boolean;
+      title: string;
+      content: string;
+    }) {
+      return (
+        <PopupStackProvider>
+          <Popup isOpen={isOpen} close={vi.fn()} title={title}>
+            {content}
+          </Popup>
+        </PopupStackProvider>
+      );
+    }
+
+    const { rerender } = render(
+      <Wrapper isOpen={true} title="First" content="first body" />,
+    );
+    expect(document.body.textContent).toContain("First");
+    expect(document.body.textContent).toContain("first body");
+
+    rerender(<Wrapper isOpen={false} title="First" content="first body" />);
+    act(() => {
+      vi.advanceTimersByTime(150);
+    });
+    expect(document.body.textContent).not.toContain("first body");
+
+    rerender(<Wrapper isOpen={true} title="Second" content="second body" />);
+
+    expect(document.body.textContent).toContain("Second");
+    expect(document.body.textContent).toContain("second body");
+    expect(document.body.textContent).not.toContain("First");
+    expect(document.body.textContent).not.toContain("first body");
   });
 });
 

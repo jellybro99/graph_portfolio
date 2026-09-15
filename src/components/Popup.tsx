@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { usePopupStack } from "@/utils/usePopupStack";
 
 export default function Popup({
@@ -19,7 +19,14 @@ export default function Popup({
   const [renderedTitle, setRenderedTitle] = useState<string | undefined>(title);
 
   const closeRef = useRef(close);
-  closeRef.current = close;
+
+  // Written in a layout effect, not during render: the popup stack calls
+  // whatever closeRef.current holds, and a render that React discards
+  // (StrictMode's double render, a suspended transition) would otherwise
+  // leave the stack pointing at a callback that was never committed.
+  useLayoutEffect(() => {
+    closeRef.current = close;
+  }, [close]);
 
   const { register, unregister } = usePopupStack();
 
