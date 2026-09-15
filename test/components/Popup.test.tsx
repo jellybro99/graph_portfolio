@@ -226,6 +226,20 @@ describe("Popup DOM placement", () => {
       expect(dialog.parentElement).toBe(document.body);
     }
   });
+
+  it("carries its own text color class, since portalling to document.body means it can no longer inherit color from an app-level wrapper", () => {
+    render(
+      <PopupStackProvider>
+        <Popup isOpen close={vi.fn()} title="Zoom">
+          content
+        </Popup>
+      </PopupStackProvider>,
+    );
+
+    expect(screen.getByRole("dialog").className).toContain(
+      "text-(--color-text)",
+    );
+  });
 });
 
 describe("Popup content", () => {
