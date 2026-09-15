@@ -12,10 +12,12 @@ import resolveHovered from "@/utils/resolveHovered";
 export default function App() {
   const [graphHover, setGraphHover] = useState<number>(-1);
   const [listHover, setListHover] = useState<number>(-1);
+  const [overGraph, setOverGraph] = useState(false);
+  const [overList, setOverList] = useState(false);
   const [popupId, setPopupId] = useState<number>(-1);
   usePrefersDarkMode();
 
-  const hovered = resolveHovered(graphHover, listHover);
+  const hovered = resolveHovered(overGraph, graphHover, overList, listHover);
 
   const popupProject = projects.find((project) => project.id === popupId);
 
@@ -30,6 +32,7 @@ export default function App() {
             <ProjectList
               hovered={hovered}
               setHovered={setListHover}
+              setOverList={setOverList}
               projects={projects}
               setPopup={(nodeId) => setPopupId(nodeId)}
             />
@@ -46,6 +49,7 @@ export default function App() {
       <Graph
         hovered={hovered}
         setHovered={setGraphHover}
+        setOverGraph={setOverGraph}
         setPopup={(nodeId) => setPopupId(nodeId)}
       />
 

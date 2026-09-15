@@ -7,10 +7,12 @@ import useGraphThemeColors from "@/utils/useGraphThemeColors";
 export default function Graph({
   hovered,
   setHovered,
+  setOverGraph,
   setPopup,
 }: {
   hovered: number;
   setHovered: (value: number) => void;
+  setOverGraph: (value: boolean) => void;
   setPopup: (popupId: number) => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -76,7 +78,12 @@ export default function Graph({
   }, []);
 
   return (
-    <div ref={containerRef} className="absolute inset-0">
+    <div
+      ref={containerRef}
+      className="absolute inset-0"
+      onMouseEnter={() => setOverGraph(true)}
+      onMouseLeave={() => setOverGraph(false)}
+    >
       <ForceGraph2d
         ref={fgRef}
         graphData={graphData}
