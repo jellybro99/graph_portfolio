@@ -12,6 +12,13 @@ export default function ImageChanger({
 }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [fullScreenImage, setFullscreenImage] = useState<boolean>(false);
+  // imageIndex is not reset when the images prop is replaced under a mounted
+  // ImageChanger (Popup swaps its content during its 150ms popout, and React
+  // reuses this instance), so the index can point past the end of the new
+  // array. Guard at read time - the alternative, syncing state to the prop,
+  // loops or fights React.
+  const image = images[Math.min(imageIndex, images.length - 1)];
+
   const prev = () =>
     setImageIndex((imageIndex + images.length - 1) % images.length);
   const next = () => setImageIndex((imageIndex + 1) % images.length);
@@ -27,7 +34,7 @@ export default function ImageChanger({
         </button>
       )}
       <ImageLoader
-        image={images[imageIndex]}
+        image={image}
         onClick={() => setFullscreenImage(true)}
         className="cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
@@ -45,7 +52,7 @@ export default function ImageChanger({
         title={title}
       >
         <ImageLoader
-          image={images[imageIndex]}
+          image={image}
           onClick={() => setFullscreenImage(false)}
           className="cursor-zoom-out"
         />
