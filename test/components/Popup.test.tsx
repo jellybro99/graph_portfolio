@@ -325,6 +325,27 @@ describe("Popup accessibility", () => {
     expect(screen.queryByRole("dialog", { name: "" })).toBe(dialog);
   });
 
+  it("leaves a whitespace-only title unassociated instead of naming the dialog blank", () => {
+    render(
+      <PopupStackProvider>
+        <Popup isOpen close={vi.fn()} title="   ">
+          content
+        </Popup>
+      </PopupStackProvider>,
+    );
+
+    // The heading keeps rendering the raw title, whose accessible name
+    // normalizes to "": associating the dialog with it would announce a name
+    // that is present but blank, which is what the untitled case avoids too.
+    // The attribute is the only thing that can tell the two apart here: a
+    // dialog takes its name from aria-labelledby and never from its contents,
+    // so getByRole("dialog", { name: "" }) resolves whether or not the blank
+    // heading is associated and cannot fail.
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.getAttribute("aria-labelledby")).toBeNull();
+    expect(screen.getByRole("heading").textContent).toBe("   ");
+  });
+
   it("moves focus to the close button when it opens", () => {
     render(popup(true));
 

@@ -76,8 +76,10 @@ export default function Popup({
       // renderedTitle is undefined when the optional title prop is omitted, and
       // the heading below then renders empty: labelling the dialog with it
       // would announce a name that is present but blank, which is worse than
-      // no name at all. Such a dialog stays deliberately unnamed.
-      aria-labelledby={renderedTitle ? titleId : undefined}
+      // no name at all. A whitespace-only title normalizes to that same blank
+      // name, so the check trims before associating. Such a dialog stays
+      // deliberately unnamed; the heading still renders the raw title.
+      aria-labelledby={renderedTitle?.trim() ? titleId : undefined}
     >
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
