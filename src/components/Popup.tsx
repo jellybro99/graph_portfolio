@@ -83,7 +83,7 @@ export default function Popup({
           // staying out of the tab order so a Tab from it lands on the first
           // control inside rather than skipping past the dialog.
           tabIndex={-1}
-          className="fixed inset-0 z-50 flex items-center justify-center"
+          className="fixed inset-0 z-50 flex items-center justify-center text-(--color-text)"
           role="dialog"
           aria-modal="true"
           // renderedTitle is undefined when the optional title prop is omitted, and
