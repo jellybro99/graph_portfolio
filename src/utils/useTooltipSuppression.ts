@@ -23,16 +23,18 @@ export default function useTooltipSuppression(
   // that stale content at the new cursor position for a frame before
   // force-graph's own render loop catches up and clears it. Suppress both.
   //
-  // This only works because of when the two sets of listeners are registered.
-  // float-tooltip binds its own "mousemove"/"mouseover" handlers to this same
-  // container from force-graph's init, which react-kapsule runs in a layout
-  // effect during the commit phase (`useEffectOnce(..., useLayoutEffect)` in
-  // react-kapsule); this hook registers from a passive effect, which React runs
-  // after the commit phase. Both are on the same element, so ours is added
-  // second and runs second in the same dispatch: we get the last word on the
-  // tooltip's inline styles. A force-graph version that bound its listeners
-  // from an async init instead would leave ours running *first*, and the stale
-  // tooltip would win silently.
+  // This only works because of where the two sets of listeners sit in the DOM.
+  // float-tooltip appends the tooltip and binds its "mousemove"/"mouseover"
+  // handlers to the container it is handed, and force-graph hands it a
+  // `div.force-graph-container` that it creates *inside* react-kapsule's
+  // wrapper (force-graph.js:12383-12386, `state.tooltip = new Tooltip(container)`
+  // at :12528; float-tooltip.js:1798,1809,1823). This hook attaches to the React
+  // div those wrappers live in, i.e. their *ancestor*. The two sets are on
+  // different elements, and ours runs second because the event bubbles up from
+  // descendant to ancestor - a structural guarantee of DOM propagation, not a
+  // registration-order race. What would break it is either library calling
+  // `stopPropagation` (neither does today), or force-graph reparenting the
+  // tooltip outside this container.
   //
   // The inline `display: none` set here survives until the next pointer event:
   // force-graph only feeds the tooltip inside `if (obj !== state.hoverObj)`
