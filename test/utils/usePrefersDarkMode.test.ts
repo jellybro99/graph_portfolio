@@ -124,7 +124,7 @@ describe("usePrefersDarkMode", () => {
     unmount();
   });
 
-  it("does not call removeEventListener on unmount", () => {
+  it("removes the change listener on unmount", () => {
     const removeEventListener = vi.fn();
     vi.spyOn(globalThis, "matchMedia").mockImplementation(
       () =>

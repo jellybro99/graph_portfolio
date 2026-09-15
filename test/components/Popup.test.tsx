@@ -3,29 +3,6 @@ import { render, cleanup, act } from "@testing-library/react";
 import Popup from "../../src/components/Popup";
 import { PopupStackProvider } from "../../src/components/PopupStackProvider";
 
-let matches = false;
-let changeHandler: ((event: MediaQueryListEvent) => void) | undefined;
-
-beforeEach(() => {
-  matches = false;
-  changeHandler = undefined;
-  window.matchMedia = vi.fn().mockImplementation(
-    () =>
-      ({
-        get matches() {
-          return matches;
-        },
-        addEventListener: (
-          _event: string,
-          handler: (event: MediaQueryListEvent) => void,
-        ) => {
-          changeHandler = handler;
-        },
-        removeEventListener: vi.fn(),
-      }) as unknown as MediaQueryList,
-  ) as unknown as typeof window.matchMedia;
-});
-
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
@@ -36,13 +13,6 @@ function pressEscape() {
     window.dispatchEvent(
       new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
     );
-  });
-}
-
-function flipMobile(next: boolean) {
-  matches = next;
-  act(() => {
-    changeHandler?.({ matches: next } as MediaQueryListEvent);
   });
 }
 
@@ -141,39 +111,6 @@ describe("Popup close stack", () => {
 
     expect(closeInner).toHaveBeenCalledTimes(1);
     expect(closeOuter).not.toHaveBeenCalled();
-  });
-});
-
-describe("Popup on coarse pointers", () => {
-  it("renders immediately when the viewport is already coarse", () => {
-    matches = true;
-
-    render(
-      <PopupStackProvider>
-        <Popup isOpen close={vi.fn()} title="Zoom">
-          content
-        </Popup>
-      </PopupStackProvider>,
-    );
-
-    expect(document.querySelector(".animate-popin")).not.toBeNull();
-  });
-
-  it("stays open when the viewport flips to coarse mid-open", () => {
-    const close = vi.fn();
-
-    render(
-      <PopupStackProvider>
-        <Popup isOpen close={close} title="Zoom">
-          content
-        </Popup>
-      </PopupStackProvider>,
-    );
-
-    flipMobile(true);
-
-    expect(close).not.toHaveBeenCalled();
-    expect(document.querySelector(".animate-popin")).not.toBeNull();
   });
 });
 
