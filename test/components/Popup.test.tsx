@@ -1,6 +1,7 @@
 import { describe, it, beforeEach, afterEach, vi, expect } from "vitest";
 import { Suspense, startTransition, useState } from "react";
 import { render, cleanup, act, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Popup from "../../src/components/Popup";
 import { PopupStackProvider } from "../../src/components/PopupStackProvider";
 
@@ -346,20 +347,44 @@ describe("Popup accessibility", () => {
     expect(screen.getByRole("heading").textContent).toBe("   ");
   });
 
-  it("moves focus to the close button when it opens", () => {
+  it("moves focus to the dialog itself when it opens, not to a control", () => {
     render(popup(true));
 
-    expect(document.activeElement).toBe(closeButton());
+    // The container, not the close button: a control that receives focus on
+    // open is ringed whenever the user agent calls the programmatic focus
+    // keyboard-initiated, which is exactly what Chromium does here. jsdom
+    // cannot settle whether a ring is painted, so this pins the only thing
+    // that is under our control - which element ends up focused. It fails
+    // under the previous behaviour, which focused the close button.
+    expect(document.activeElement).toBe(screen.getByRole("dialog"));
   });
 
-  it("moves focus to the close button when it reopens", () => {
-    // On a reopen the button is not mounted yet on the commit that flips isOpen
-    // back to true, so focus has to land after the render that mounts it.
+  it("moves focus to the dialog itself when it reopens", () => {
+    // On a reopen the container is not mounted yet on the commit that flips
+    // isOpen back to true, so focus has to land after the render that mounts
+    // it. The identity check fails both under the old close-button target and
+    // if the focus move is dropped entirely, which leaves body focused.
     const { rerender } = render(popup(false));
     expect(document.activeElement).toBe(document.body);
 
     rerender(popup(true));
 
+    expect(document.activeElement).toBe(screen.getByRole("dialog"));
+  });
+
+  it("reaches the close button with one Tab from the focused dialog", async () => {
+    const user = userEvent.setup();
+    render(popup(true));
+    expect(document.activeElement).toBe(screen.getByRole("dialog"));
+
+    await user.tab();
+
+    // Pins the tab order the initial focus relies on: a Tab from the container
+    // enters the dialog's own controls rather than continuing behind it, and
+    // Close is the first of them. Fails if a focusable element is added inside
+    // the dialog ahead of the close button. The starting assertion above is
+    // what keeps this test honest: from body, a Tab would reach the close
+    // button too.
     expect(document.activeElement).toBe(closeButton());
   });
 });

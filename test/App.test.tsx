@@ -210,13 +210,13 @@ describe("App hover wiring", () => {
     const row = app.getByRole("button", { name: alpha.title });
 
     // A button takes focus when it is clicked, so the focus source holds this
-    // row afterwards; Popup moves focus to its close button on open, which
-    // blurs the row and releases it. Without that, focusHover would keep the
-    // row highlighted after the pointer leaves the list.
+    // row afterwards; Popup moves focus into its dialog on open, which blurs
+    // the row and releases it. Without that, focusHover would keep the row
+    // highlighted after the pointer leaves the list. The target is the dialog
+    // container, not a control inside it: focusing nothing would leave the row
+    // focused and fail here just the same.
     await user.click(row);
-    expect(document.activeElement).toBe(
-      app.getByRole("button", { name: "Close" }),
-    );
+    expect(document.activeElement).toBe(app.getByRole("dialog"));
 
     // The captured button: the popup repeats "Alpha" in its heading, so a
     // text query for the row would no longer be unique.

@@ -103,6 +103,15 @@ h6 {
   outline-offset: 2px;
 }
 
+/* The dialog container is focused programmatically on open. It is not an
+   interactive control, so it gets no indicator; a ring here would outline the
+   whole viewport. Two rules have to lose to this one: the plain :focus-visible
+   indicator above is outranked on specificity, and Tailwind emits its
+   utilities in a cascade layer, which an unlayered rule like this one beats. */
+[role="dialog"]:focus-visible {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

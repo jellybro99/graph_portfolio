@@ -19,7 +19,7 @@ export default function Popup({
   const [renderedTitle, setRenderedTitle] = useState<string | undefined>(title);
 
   const closeRef = useRef(close);
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
 
   // Ties role="dialog" to the heading that is actually on screen, so the
   // dialog's accessible name is the visible title rather than a duplicate
@@ -61,15 +61,25 @@ export default function Popup({
   }, [isOpen, register, unregister]);
 
   // Initial focus on open, so a keyboard user lands inside the dialog instead
-  // of tabbing through the page behind it. shouldRender is a dependency because
-  // on a reopen the button is not mounted yet when the isOpen effect runs: only
-  // the commit that mounts it can focus it. A full focus trap is out of scope.
+  // of tabbing through the page behind it. It goes to the dialog container, not
+  // the close button: no interactive control receives focus on open, so none
+  // can show a focus ring however the user agent classifies a programmatic
+  // focus, and the container's aria-labelledby makes a screen reader announce
+  // the dialog's name. Close is one Tab away. shouldRender is a dependency
+  // because on a reopen the container is not mounted yet when the isOpen effect
+  // runs: only the commit that mounts it can focus it. A full focus trap is out
+  // of scope.
   useEffect(() => {
-    if (isOpen && shouldRender) closeButtonRef.current?.focus();
+    if (isOpen && shouldRender) dialogRef.current?.focus();
   }, [isOpen, shouldRender]);
 
   return !shouldRender ? null : (
     <div
+      ref={dialogRef}
+      // -1: focusable programmatically as the dialog's landing point, while
+      // staying out of the tab order so a Tab from it lands on the first
+      // control inside rather than skipping past the dialog.
+      tabIndex={-1}
       className="fixed inset-0 z-50 flex items-center justify-center"
       role="dialog"
       aria-modal="true"
@@ -92,7 +102,6 @@ export default function Popup({
           <div className="flex justify-between items-center gap-4 h-8">
             <h2 id={titleId}>{renderedTitle}</h2>
             <button
-              ref={closeButtonRef}
               aria-label="Close"
               onClick={close}
               className="text-3xl cursor-pointer hover:text-(--color-accent)"
