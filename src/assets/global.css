@@ -93,6 +93,15 @@ h6 {
 #__next {
   isolation: isolate;
 }
+/* One deliberate focus indicator for the whole app, instead of the user
+   agent ring on some controls and none on others. :focus-visible rather than
+   :focus so a control focused by pointer - the close button Popup focuses
+   when it opens - stays unringed, while a keyboard user still gets an
+   indicator built from the same accent token as the hover states. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
