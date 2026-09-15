@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import projects from "@/assets/processedProjects.json";
 import Graph from "@/components/Graph";
 import InfoHeader from "@/components/InfoHeader";
@@ -21,6 +21,16 @@ export default function App() {
 
   const popupProject = projects.find((project) => project.id === popupId);
 
+  // Hover changes re-render App many times a second, and anything rebuilt on
+  // those renders re-renders with it. Keep the handlers and the popup's child
+  // element stable so the churn stops at the list that highlights from it.
+  const openPopup = useCallback((nodeId: number) => setPopupId(nodeId), []);
+  const closePopup = useCallback(() => setPopupId(-1), []);
+  const popupContent = useMemo(
+    () => (popupProject ? <ProjectCard project={popupProject} /> : null),
+    [popupProject],
+  );
+
   return (
     <div className="min-h-screen w-full min-w-80 p-4 overflow-hidden bg-(--color-background) text-(--color-text)">
       <div className="h-screen relative flex flex-col items-center">
@@ -34,7 +44,7 @@ export default function App() {
               setHovered={setListHover}
               setOverList={setOverList}
               projects={projects}
-              setPopup={(nodeId) => setPopupId(nodeId)}
+              setPopup={openPopup}
             />
           </div>
         </div>
@@ -50,15 +60,15 @@ export default function App() {
         hovered={hovered}
         setHovered={setGraphHover}
         setOverGraph={setOverGraph}
-        setPopup={(nodeId) => setPopupId(nodeId)}
+        setPopup={openPopup}
       />
 
       <Popup
         isOpen={popupId != -1}
-        close={() => setPopupId(-1)}
+        close={closePopup}
         title={popupProject?.title}
       >
-        {popupProject && <ProjectCard project={popupProject} />}
+        {popupContent}
       </Popup>
     </div>
   );

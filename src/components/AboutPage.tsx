@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import obsidianGraph from "@/assets/images/obsidian-graph.png";
 import Popup from "@/components/Popup";
 
-export default function AboutPage() {
+// App re-renders on every graph and list hover change and renders the about
+// section unconditionally; nothing it renders depends on that hover state, so
+// memo keeps the graph's overlay popup out of those renders.
+export default memo(function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   return (
@@ -49,4 +52,4 @@ export default function AboutPage() {
       </Popup>
     </div>
   );
-}
+});

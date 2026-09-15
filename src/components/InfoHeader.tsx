@@ -1,4 +1,8 @@
-export default function InfoHeader() {
+import { memo } from "react";
+
+// App re-renders on every graph and list hover change and renders this header
+// unconditionally; it takes no props, so memo makes those renders free.
+export default memo(function InfoHeader() {
   return (
     <div>
       <ul className="flex justify-center md:justify-start items-center gap-4 text-2xl">
@@ -61,4 +65,4 @@ export default function InfoHeader() {
       </ul>
     </div>
   );
-}
+});
