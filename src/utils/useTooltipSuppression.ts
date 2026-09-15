@@ -22,6 +22,22 @@ export default function useTooltipSuppression(
   // though the cursor never moved, and the next real "mousemove" re-shows
   // that stale content at the new cursor position for a frame before
   // force-graph's own render loop catches up and clears it. Suppress both.
+  //
+  // This only works because of when the two sets of listeners are registered.
+  // float-tooltip binds its own "mousemove"/"mouseover" handlers to this same
+  // container from force-graph's init, which react-kapsule runs in a layout
+  // effect during the commit phase (`useEffectOnce(..., useLayoutEffect)` in
+  // react-kapsule); this hook registers from a passive effect, which React runs
+  // after the commit phase. Both are on the same element, so ours is added
+  // second and runs second in the same dispatch: we get the last word on the
+  // tooltip's inline styles. A force-graph version that bound its listeners
+  // from an async init instead would leave ours running *first*, and the stale
+  // tooltip would win silently.
+  //
+  // The inline `display: none` set here survives until the next pointer event:
+  // force-graph only feeds the tooltip inside `if (obj !== state.hoverObj)`
+  // (force-graph.js:12651), so the tooltip is not re-asserted per frame and
+  // force-graph's render loop does not race us back to a visible tooltip.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
