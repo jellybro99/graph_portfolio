@@ -19,6 +19,7 @@ export default function Popup({
   const [renderedTitle, setRenderedTitle] = useState<string | undefined>(title);
 
   const closeRef = useRef(close);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Written in a layout effect, not during render: the popup stack calls
   // whatever closeRef.current holds, and a render that React discards
@@ -54,8 +55,20 @@ export default function Popup({
     return () => unregister(closeRef);
   }, [isOpen, register, unregister]);
 
+  // Initial focus on open, so a keyboard user lands inside the dialog instead
+  // of tabbing through the page behind it. shouldRender is a dependency because
+  // on a reopen the button is not mounted yet when the isOpen effect runs: only
+  // the commit that mounts it can focus it. A full focus trap is out of scope.
+  useEffect(() => {
+    if (isOpen && shouldRender) closeButtonRef.current?.focus();
+  }, [isOpen, shouldRender]);
+
   return !shouldRender ? null : (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+    >
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
       <div>
@@ -67,6 +80,8 @@ export default function Popup({
           <div className="flex justify-between items-center gap-4 h-8">
             <h2>{renderedTitle}</h2>
             <button
+              ref={closeButtonRef}
+              aria-label="Close"
               onClick={close}
               className="text-3xl cursor-pointer hover:text-(--color-accent)"
             >

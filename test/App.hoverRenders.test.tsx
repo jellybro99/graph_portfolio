@@ -122,7 +122,7 @@ vi.mock("@/components/Popup", async (importOriginal) => {
 
 const [alpha, beta] = projects;
 
-// jsdom has no matchMedia; App reads it through usePrefersDarkMode.
+// jsdom has no matchMedia; App reads it through useApplyDarkModeClass.
 let originalMatchMedia: typeof window.matchMedia;
 
 beforeEach(() => {

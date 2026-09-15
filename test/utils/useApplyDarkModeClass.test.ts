@@ -1,8 +1,8 @@
 import { describe, it, beforeEach, afterEach, vi, expect } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import usePrefersDarkMode from "../../src/utils/usePrefersDarkMode";
+import useApplyDarkModeClass from "../../src/utils/useApplyDarkModeClass";
 
-describe("usePrefersDarkMode", () => {
+describe("useApplyDarkModeClass", () => {
   let originalMatchMedia: typeof window.matchMedia;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe("usePrefersDarkMode", () => {
         }) as unknown as MediaQueryList,
     );
 
-    const { unmount } = renderHook(() => usePrefersDarkMode());
+    const { unmount } = renderHook(() => useApplyDarkModeClass());
 
     expect(document.documentElement.classList.contains("dark")).toBe(true);
 
@@ -46,7 +46,7 @@ describe("usePrefersDarkMode", () => {
         }) as unknown as MediaQueryList,
     );
 
-    const { unmount } = renderHook(() => usePrefersDarkMode());
+    const { unmount } = renderHook(() => useApplyDarkModeClass());
 
     expect(document.documentElement.classList.contains("dark")).toBe(false);
 
@@ -66,7 +66,7 @@ describe("usePrefersDarkMode", () => {
         }) as unknown as MediaQueryList,
     );
 
-    const { unmount } = renderHook(() => usePrefersDarkMode());
+    const { unmount } = renderHook(() => useApplyDarkModeClass());
 
     // Initial light mode must not apply the dark class.
     expect(document.documentElement.classList.contains("dark")).toBe(false);
@@ -93,7 +93,7 @@ describe("usePrefersDarkMode", () => {
         }) as unknown as MediaQueryList,
     );
 
-    const { unmount } = renderHook(() => usePrefersDarkMode());
+    const { unmount } = renderHook(() => useApplyDarkModeClass());
 
     // Initial dark mode must apply the dark class.
     expect(document.documentElement.classList.contains("dark")).toBe(true);
@@ -117,7 +117,7 @@ describe("usePrefersDarkMode", () => {
         }) as unknown as MediaQueryList,
     );
 
-    const { unmount } = renderHook(() => usePrefersDarkMode());
+    const { unmount } = renderHook(() => useApplyDarkModeClass());
 
     expect(matchMediaSpy).toHaveBeenCalledWith("(prefers-color-scheme: dark)");
 
@@ -135,7 +135,7 @@ describe("usePrefersDarkMode", () => {
         }) as unknown as MediaQueryList,
     );
 
-    const { unmount } = renderHook(() => usePrefersDarkMode());
+    const { unmount } = renderHook(() => useApplyDarkModeClass());
 
     // Initial addEventListener should be called
     expect(removeEventListener).not.toHaveBeenCalled();

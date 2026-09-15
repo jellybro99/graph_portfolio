@@ -28,7 +28,7 @@ vi.mock("@/components/Graph", () => ({
 const [alpha, beta] = projects;
 const ACCENT = "text-(--color-accent)";
 
-// jsdom has no matchMedia; App reads it through usePrefersDarkMode.
+// jsdom has no matchMedia; App reads it through useApplyDarkModeClass.
 let originalMatchMedia: typeof window.matchMedia;
 
 beforeEach(() => {

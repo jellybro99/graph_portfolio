@@ -1,6 +1,6 @@
 import { describe, it, beforeEach, afterEach, vi, expect } from "vitest";
 import { Suspense, startTransition, useState } from "react";
-import { render, cleanup, act } from "@testing-library/react";
+import { render, cleanup, act, screen } from "@testing-library/react";
 import Popup from "../../src/components/Popup";
 import { PopupStackProvider } from "../../src/components/PopupStackProvider";
 
@@ -273,5 +273,45 @@ describe("Popup close animation", () => {
     });
 
     expect(document.querySelector(".animate-popin")).not.toBeNull();
+  });
+});
+
+describe("Popup accessibility", () => {
+  function popup(isOpen: boolean) {
+    return (
+      <PopupStackProvider>
+        <Popup isOpen={isOpen} close={vi.fn()} title="Zoom">
+          content
+        </Popup>
+      </PopupStackProvider>
+    );
+  }
+
+  function closeButton() {
+    return screen.getByRole("button", { name: "Close" });
+  }
+
+  it("exposes itself as a modal dialog with a labelled close button", () => {
+    render(popup(true));
+
+    expect(screen.getByRole("dialog").getAttribute("aria-modal")).toBe("true");
+    expect(closeButton()).toBeTruthy();
+  });
+
+  it("moves focus to the close button when it opens", () => {
+    render(popup(true));
+
+    expect(document.activeElement).toBe(closeButton());
+  });
+
+  it("moves focus to the close button when it reopens", () => {
+    // On a reopen the button is not mounted yet on the commit that flips isOpen
+    // back to true, so focus has to land after the render that mounts it.
+    const { rerender } = render(popup(false));
+    expect(document.activeElement).toBe(document.body);
+
+    rerender(popup(true));
+
+    expect(document.activeElement).toBe(closeButton());
   });
 });

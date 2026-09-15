@@ -9,7 +9,7 @@ export default memo(function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   return (
-    <div className="h-full max-w-xl pt-4 flex flex-col items-center justify-around overflow-hidden">
+    <div className="h-full max-w-xl pt-4 flex flex-col items-center justify-around">
       <h1 className="text-center text-2xl">About this project</h1>
       <p className="text-center">
         This project is inspired by obsidian, a note-taking software which lets
@@ -18,6 +18,7 @@ export default memo(function AboutPage() {
       </p>
       <img
         src={obsidianGraph}
+        alt="An Obsidian vault shown as a graph of linked notes"
         onClick={() => setIsPopupOpen(true)}
         className="max-h-96 cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
       />
@@ -46,6 +47,7 @@ export default memo(function AboutPage() {
       >
         <img
           src={obsidianGraph}
+          alt="An Obsidian vault shown as a graph of linked notes"
           onClick={() => setIsPopupOpen(false)}
           className="cursor-zoom-out border-2 border-(--color-text) hover:border-(--color-accent)"
         />

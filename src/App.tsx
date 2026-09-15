@@ -6,7 +6,7 @@ import ProjectList from "@/components/ProjectList";
 import ProjectCard from "@/components/ProjectCard";
 import Popup from "@/components/Popup";
 import AboutPage from "@/components/AboutPage";
-import usePrefersDarkMode from "@/utils/usePrefersDarkMode";
+import useApplyDarkModeClass from "@/utils/useApplyDarkModeClass";
 import resolveHovered from "@/utils/resolveHovered";
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
   const [overGraph, setOverGraph] = useState(false);
   const [overList, setOverList] = useState(false);
   const [popupId, setPopupId] = useState<number>(-1);
-  usePrefersDarkMode();
+  useApplyDarkModeClass();
 
   const hovered = resolveHovered(overGraph, graphHover, overList, listHover);
 
@@ -50,8 +50,8 @@ export default function App() {
         </div>
       </div>
 
-      <div className="h-screen flex flex-col items-center">
-        <div className="max-w-5xl h-full">
+      <div className="min-h-screen flex flex-col items-center">
+        <div className="max-w-5xl min-h-full">
           <AboutPage />
         </div>
       </div>
