@@ -1,136 +1,23 @@
 import { describe, it, beforeEach, afterEach, vi, expect } from "vitest";
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import usePrefersDarkMode from "../../src/utils/usePrefersDarkMode";
 
 describe("usePrefersDarkMode", () => {
-  let originalMatchMedia: MediaQueryList;
+  let originalMatchMedia: typeof window.matchMedia;
 
   beforeEach(() => {
     originalMatchMedia = window.matchMedia;
-    vi.spyOn(document.documentElement, "classList", "get").mockReturnValue({
-      add: vi.fn(),
-      remove: vi.fn(),
-      contains: vi.fn(),
-    });
+    window.matchMedia = vi.fn() as unknown as typeof window.matchMedia;
+    document.documentElement.classList.remove("dark");
   });
 
   afterEach(() => {
     window.matchMedia = originalMatchMedia;
+    document.documentElement.classList.remove("dark");
     vi.clearAllMocks();
   });
 
-  it("initializes correctly when system is on dark mode", async () => {
-    vi.spyOn(globalThis, "matchMedia").mockImplementation(
-      () =>
-        ({
-          matches: true,
-          addEventListener: vi.fn((event, listener) => {
-            // Simulate immediate state
-            if (typeof listener === "function") listener({ matches: true });
-          }),
-        }) as unknown as MediaQueryList,
-    );
-
-    const { unmount } = renderHook(() => usePrefersDarkMode());
-
-    expect(document.documentElement.classList.add).toHaveBeenCalledWith("dark");
-    expect(document.documentElement.classList.add).toHaveBeenCalledTimes(1);
-
-    unmount();
-  });
-
-  it("initializes correctly when system is on light mode", async () => {
-    vi.spyOn(globalThis, "matchMedia").mockImplementation(
-      () =>
-        ({
-          matches: false,
-          addEventListener: vi.fn((event, listener) => {
-            if (typeof listener === "function") listener({ matches: false });
-          }),
-        }) as unknown as MediaQueryList,
-    );
-
-    const { unmount } = renderHook(() => usePrefersDarkMode());
-
-    expect(document.documentElement.classList.remove).toHaveBeenCalledWith(
-      "dark",
-    );
-    expect(document.documentElement.classList.remove).toHaveBeenCalledTimes(1);
-
-    unmount();
-  });
-
-  it("handles theme change to dark mode", async () => {
-    vi.spyOn(globalThis, "matchMedia")
-      .mockImplementation(
-        () =>
-          ({
-            matches: false,
-            addEventListener: vi.fn((event, listener) => {
-              if (typeof listener === "function") {
-                // Trigger dark mode
-                listener({ matches: true });
-              }
-            }),
-          }) as unknown as MediaQueryList,
-      )
-      .mockClear();
-
-    const { unmount } = renderHook(() => usePrefersDarkMode());
-
-    expect(document.documentElement.classList.add).toHaveBeenCalledWith("dark");
-
-    unmount();
-  });
-
-  it("handles theme change to light mode", async () => {
-    vi.spyOn(globalThis, "matchMedia")
-      .mockImplementation(
-        () =>
-          ({
-            matches: true,
-            addEventListener: vi.fn((event, listener) => {
-              if (typeof listener === "function") {
-                // Trigger light mode
-                listener({ matches: false });
-              }
-            }),
-          }) as unknown as MediaQueryList,
-      )
-      .mockClear();
-
-    const { unmount } = renderHook(() => usePrefersDarkMode());
-
-    expect(document.documentElement.classList.remove).toHaveBeenCalledWith(
-      "dark",
-    );
-
-    unmount();
-  });
-
-  it("listens to the correct matchMedia query", async () => {
-    const addEventListenerSpy = vi.spyOn(window, "matchMedia", "get");
-    vi.spyOn(globalThis, "matchMedia")
-      .mockImplementation(
-        () =>
-          ({
-            matches: true,
-            addEventListener: vi.fn(),
-          }) as unknown as MediaQueryList,
-      )
-      .mockClear();
-
-    const { unmount } = renderHook(() => usePrefersDarkMode());
-
-    expect(addEventListenerSpy).toHaveBeenCalledWith(
-      "(prefers-color-scheme: dark)",
-    );
-
-    unmount();
-  });
-
-  it("does not call removeEventListener on unmount", () => {
-    const removeEventListenerSpy = vi.spyOn(window, "matchMedia", "get");
+  it("initializes correctly when system is on dark mode", () => {
     vi.spyOn(globalThis, "matchMedia").mockImplementation(
       () =>
         ({
@@ -142,14 +29,123 @@ describe("usePrefersDarkMode", () => {
 
     const { unmount } = renderHook(() => usePrefersDarkMode());
 
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+
+    unmount();
+  });
+
+  it("initializes correctly when system is on light mode", () => {
+    document.documentElement.classList.add("dark");
+
+    vi.spyOn(globalThis, "matchMedia").mockImplementation(
+      () =>
+        ({
+          matches: false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        }) as unknown as MediaQueryList,
+    );
+
+    const { unmount } = renderHook(() => usePrefersDarkMode());
+
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+
+    unmount();
+  });
+
+  it("handles theme change to dark mode", () => {
+    let changeHandler: (event: MediaQueryListEvent) => void = () => {};
+    vi.spyOn(globalThis, "matchMedia").mockImplementation(
+      () =>
+        ({
+          matches: false,
+          addEventListener: vi.fn((event, listener) => {
+            changeHandler = listener as (event: MediaQueryListEvent) => void;
+          }),
+          removeEventListener: vi.fn(),
+        }) as unknown as MediaQueryList,
+    );
+
+    const { unmount } = renderHook(() => usePrefersDarkMode());
+
+    // Initial light mode must not apply the dark class.
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+
+    act(() => {
+      changeHandler({ matches: true } as MediaQueryListEvent);
+    });
+
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+
+    unmount();
+  });
+
+  it("handles theme change to light mode", () => {
+    let changeHandler: (event: MediaQueryListEvent) => void = () => {};
+    vi.spyOn(globalThis, "matchMedia").mockImplementation(
+      () =>
+        ({
+          matches: true,
+          addEventListener: vi.fn((event, listener) => {
+            changeHandler = listener as (event: MediaQueryListEvent) => void;
+          }),
+          removeEventListener: vi.fn(),
+        }) as unknown as MediaQueryList,
+    );
+
+    const { unmount } = renderHook(() => usePrefersDarkMode());
+
+    // Initial dark mode must apply the dark class.
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+
+    act(() => {
+      changeHandler({ matches: false } as MediaQueryListEvent);
+    });
+
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+
+    unmount();
+  });
+
+  it("listens to the correct matchMedia query", () => {
+    const matchMediaSpy = vi.spyOn(globalThis, "matchMedia").mockImplementation(
+      () =>
+        ({
+          matches: true,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        }) as unknown as MediaQueryList,
+    );
+
+    const { unmount } = renderHook(() => usePrefersDarkMode());
+
+    expect(matchMediaSpy).toHaveBeenCalledWith("(prefers-color-scheme: dark)");
+
+    unmount();
+  });
+
+  it("does not call removeEventListener on unmount", () => {
+    const removeEventListener = vi.fn();
+    vi.spyOn(globalThis, "matchMedia").mockImplementation(
+      () =>
+        ({
+          matches: true,
+          addEventListener: vi.fn(),
+          removeEventListener,
+        }) as unknown as MediaQueryList,
+    );
+
+    const { unmount } = renderHook(() => usePrefersDarkMode());
+
     // Initial addEventListener should be called
-    expect(removeEventListenerSpy).not.toHaveBeenCalled();
+    expect(removeEventListener).not.toHaveBeenCalled();
 
     unmount();
 
     // removeEventListener should be called once on cleanup
-    expect(removeEventListenerSpy).toHaveBeenCalledWith(
-      "(prefers-color-scheme: dark)",
+    expect(removeEventListener).toHaveBeenCalledWith(
+      "change",
+      expect.any(Function),
     );
   });
 });
