@@ -43,7 +43,6 @@ export default function ImageChanger({
         isOpen={fullScreenImage}
         close={() => setFullscreenImage(false)}
         title={title}
-        suppressOnMobile
       >
         <ImageLoader
           image={images[imageIndex]}

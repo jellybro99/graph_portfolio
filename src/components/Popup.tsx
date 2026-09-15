@@ -1,23 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { usePopupStack } from "@/utils/usePopupStack";
-import useIsMobile from "@/utils/useIsMobile";
 
 export default function Popup({
   isOpen,
   close,
   title,
   children,
-  suppressOnMobile = false,
 }: {
   isOpen: boolean;
   close: () => void;
   title?: string;
   children: React.ReactNode;
-  suppressOnMobile?: boolean;
 }) {
-  const isMobile = useIsMobile();
-  const suppressed = suppressOnMobile && isMobile;
-  const open = isOpen && !suppressed;
+  const open = isOpen;
 
   const [shouldRender, setShouldRender] = useState<boolean>(open);
   const [isClosing, setIsClosing] = useState<boolean>(false);
@@ -36,13 +31,6 @@ export default function Popup({
       setRenderedTitle(title);
     }
   }, [open, children, title]);
-
-  // Suppressed mid-open (e.g. viewport crosses the mobile breakpoint) —
-  // force-close through the normal close() path so the caller's state and
-  // the close animation stay in sync.
-  useEffect(() => {
-    if (suppressed && isOpen) closeRef.current();
-  }, [suppressed, isOpen]);
 
   useEffect(() => {
     if (open) {

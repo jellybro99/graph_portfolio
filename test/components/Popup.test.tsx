@@ -144,27 +144,13 @@ describe("Popup close stack", () => {
   });
 });
 
-describe("Popup mobile suppression", () => {
-  it("does not render when suppressOnMobile is true and the viewport is mobile", () => {
+describe("Popup on coarse pointers", () => {
+  it("renders immediately when the viewport is already coarse", () => {
     matches = true;
 
     render(
       <PopupStackProvider>
-        <Popup isOpen close={vi.fn()} title="Zoom" suppressOnMobile>
-          content
-        </Popup>
-      </PopupStackProvider>,
-    );
-
-    expect(document.querySelector(".animate-popin")).toBeNull();
-  });
-
-  it("renders when suppressOnMobile is true but the viewport is not mobile", () => {
-    matches = false;
-
-    render(
-      <PopupStackProvider>
-        <Popup isOpen close={vi.fn()} title="Zoom" suppressOnMobile>
+        <Popup isOpen close={vi.fn()} title="Zoom">
           content
         </Popup>
       </PopupStackProvider>,
@@ -173,22 +159,21 @@ describe("Popup mobile suppression", () => {
     expect(document.querySelector(".animate-popin")).not.toBeNull();
   });
 
-  it("force-closes an open popup when the viewport flips to mobile mid-open", () => {
+  it("stays open when the viewport flips to coarse mid-open", () => {
     const close = vi.fn();
 
     render(
       <PopupStackProvider>
-        <Popup isOpen close={close} title="Zoom" suppressOnMobile>
+        <Popup isOpen close={close} title="Zoom">
           content
         </Popup>
       </PopupStackProvider>,
     );
 
-    expect(close).not.toHaveBeenCalled();
-
     flipMobile(true);
 
-    expect(close).toHaveBeenCalledTimes(1);
+    expect(close).not.toHaveBeenCalled();
+    expect(document.querySelector(".animate-popin")).not.toBeNull();
   });
 });
 

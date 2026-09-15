@@ -40,7 +40,6 @@ export default function AboutPage() {
         title="Obsidian Graph"
         isOpen={isPopupOpen}
         close={() => setIsPopupOpen(false)}
-        suppressOnMobile
       >
         <img
           src={obsidianGraph}
