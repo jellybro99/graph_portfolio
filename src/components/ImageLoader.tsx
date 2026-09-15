@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Image } from "@/assets/types";
 import resolveImage from "@/utils/resolveImage";
 
@@ -13,6 +13,8 @@ export default function ImageLoader({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const aspectRatio = image.width / image.height;
+
+  useEffect(() => setIsLoaded(false), [image]);
 
   return (
     <div className="relative w-full h-full" style={{ aspectRatio }}>
