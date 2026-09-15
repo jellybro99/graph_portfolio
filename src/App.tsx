@@ -7,11 +7,15 @@ import ProjectCard from "@/components/ProjectCard";
 import Popup from "@/components/Popup";
 import AboutPage from "@/components/AboutPage";
 import usePrefersDarkMode from "@/utils/usePrefersDarkMode";
+import resolveHovered from "@/utils/resolveHovered";
 
 export default function App() {
-  const [hovered, setHovered] = useState<number>(-1);
+  const [graphHover, setGraphHover] = useState<number>(-1);
+  const [listHover, setListHover] = useState<number>(-1);
   const [popupId, setPopupId] = useState<number>(-1);
   usePrefersDarkMode();
+
+  const hovered = resolveHovered(graphHover, listHover);
 
   const popupProject = projects.find((project) => project.id === popupId);
 
@@ -25,7 +29,7 @@ export default function App() {
           <div className="inline-block pointer-events-auto">
             <ProjectList
               hovered={hovered}
-              setHovered={setHovered}
+              setHovered={setListHover}
               projects={projects}
               setPopup={(nodeId) => setPopupId(nodeId)}
             />
@@ -41,7 +45,7 @@ export default function App() {
 
       <Graph
         hovered={hovered}
-        setHovered={setHovered}
+        setHovered={setGraphHover}
         setPopup={(nodeId) => setPopupId(nodeId)}
       />
 
