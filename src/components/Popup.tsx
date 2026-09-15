@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useId, useRef } from "react";
 import { usePopupStack } from "@/utils/usePopupStack";
 
 export default function Popup({
@@ -20,6 +20,11 @@ export default function Popup({
 
   const closeRef = useRef(close);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  // Ties role="dialog" to the heading that is actually on screen, so the
+  // dialog's accessible name is the visible title rather than a duplicate
+  // string.
+  const titleId = useId();
 
   // Written in a layout effect, not during render: the popup stack calls
   // whatever closeRef.current holds, and a render that React discards
@@ -68,6 +73,11 @@ export default function Popup({
       className="fixed inset-0 z-50 flex items-center justify-center"
       role="dialog"
       aria-modal="true"
+      // renderedTitle is undefined when the optional title prop is omitted, and
+      // the heading below then renders empty: labelling the dialog with it
+      // would announce a name that is present but blank, which is worse than
+      // no name at all. Such a dialog stays deliberately unnamed.
+      aria-labelledby={renderedTitle ? titleId : undefined}
     >
       <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
@@ -78,7 +88,7 @@ export default function Popup({
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
         >
           <div className="flex justify-between items-center gap-4 h-8">
-            <h2>{renderedTitle}</h2>
+            <h2 id={titleId}>{renderedTitle}</h2>
             <button
               ref={closeButtonRef}
               aria-label="Close"

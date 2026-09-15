@@ -298,6 +298,33 @@ describe("Popup accessibility", () => {
     expect(closeButton()).toBeTruthy();
   });
 
+  it("takes the dialog's accessible name from its visible title", () => {
+    render(popup(true));
+
+    const dialog = screen.getByRole("dialog", { name: "Zoom" });
+    // The name has to come from the heading that is on screen, not from a
+    // duplicate string: aria-labelledby must point at that exact element.
+    const heading = screen.getByRole("heading", { name: "Zoom" });
+    expect(heading.id).not.toBe("");
+    expect(dialog.getAttribute("aria-labelledby")).toBe(heading.id);
+  });
+
+  it("leaves an untitled popup unnamed instead of pointing at the empty heading", () => {
+    render(
+      <PopupStackProvider>
+        <Popup isOpen close={vi.fn()}>
+          content
+        </Popup>
+      </PopupStackProvider>,
+    );
+
+    // The heading still renders (to the empty string), so a blind
+    // aria-labelledby would announce a name that is present but blank.
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.getAttribute("aria-labelledby")).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "" })).toBe(dialog);
+  });
+
   it("moves focus to the close button when it opens", () => {
     render(popup(true));
 
