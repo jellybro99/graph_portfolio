@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useId, useRef } from "react";
+import { createPortal } from "react-dom";
 import { usePopupStack } from "@/utils/usePopupStack";
 
 export default function Popup({
@@ -73,45 +74,48 @@ export default function Popup({
     if (isOpen && shouldRender) dialogRef.current?.focus();
   }, [isOpen, shouldRender]);
 
-  return !shouldRender ? null : (
-    <div
-      ref={dialogRef}
-      // -1: focusable programmatically as the dialog's landing point, while
-      // staying out of the tab order so a Tab from it lands on the first
-      // control inside rather than skipping past the dialog.
-      tabIndex={-1}
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      role="dialog"
-      aria-modal="true"
-      // renderedTitle is undefined when the optional title prop is omitted, and
-      // the heading below then renders empty: labelling the dialog with it
-      // would announce a name that is present but blank, which is worse than
-      // no name at all. A whitespace-only title normalizes to that same blank
-      // name, so the check trims before associating. Such a dialog stays
-      // deliberately unnamed; the heading still renders the raw title.
-      aria-labelledby={renderedTitle?.trim() ? titleId : undefined}
-    >
-      <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
-
-      <div>
+  return !shouldRender
+    ? null
+    : createPortal(
         <div
-          className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm
+          ref={dialogRef}
+          // -1: focusable programmatically as the dialog's landing point, while
+          // staying out of the tab order so a Tab from it lands on the first
+          // control inside rather than skipping past the dialog.
+          tabIndex={-1}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+          // renderedTitle is undefined when the optional title prop is omitted, and
+          // the heading below then renders empty: labelling the dialog with it
+          // would announce a name that is present but blank, which is worse than
+          // no name at all. A whitespace-only title normalizes to that same blank
+          // name, so the check trims before associating. Such a dialog stays
+          // deliberately unnamed; the heading still renders the raw title.
+          aria-labelledby={renderedTitle?.trim() ? titleId : undefined}
+        >
+          <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
+
+          <div>
+            <div
+              className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm
          bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
-        >
-          <div className="flex justify-between items-center gap-4 h-8">
-            <h2 id={titleId}>{renderedTitle}</h2>
-            <button
-              aria-label="Close"
-              onClick={close}
-              className="text-3xl cursor-pointer hover:text-(--color-accent)"
             >
-              x
-            </button>
+              <div className="flex justify-between items-center gap-4 h-8">
+                <h2 id={titleId}>{renderedTitle}</h2>
+                <button
+                  aria-label="Close"
+                  onClick={close}
+                  className="text-3xl cursor-pointer hover:text-(--color-accent)"
+                >
+                  x
+                </button>
+              </div>
+              {renderedChildren}
+            </div>
           </div>
-          {renderedChildren}
-        </div>
-      </div>
-    </div>
-  );
+        </div>,
+        document.body,
+      );
 }
