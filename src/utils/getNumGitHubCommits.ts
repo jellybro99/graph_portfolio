@@ -33,7 +33,17 @@ export async function getNumGitHubCommits(
   repo: string,
 ): Promise<number> {
   const route = `https://api.github.com/repos/${username}/${repo}/commits?per_page=1&page=1`;
-  const response = await fetch(route);
+
+  let response: Response;
+  try {
+    response = await fetch(route);
+  } catch (error) {
+    const cause = error instanceof Error ? error.message : String(error);
+    console.warn(
+      `Could not determine commit count for ${username}/${repo}: the request failed (${cause}). Node size for this project will default to 0.`,
+    );
+    return 0;
+  }
 
   if (!response.ok) {
     console.warn(

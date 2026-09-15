@@ -110,6 +110,19 @@ describe("getNumGitHubCommits", () => {
     expect(warnSpy).toHaveBeenCalledOnce();
   });
 
+  it("warns with the project and the cause and defaults to 0 when the request rejects", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new Error("network down")),
+    );
+
+    await expect(getNumGitHubCommits("x", "y")).resolves.toBe(0);
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(warnSpy.mock.calls[0][0]).toContain("x/y");
+    expect(warnSpy.mock.calls[0][0]).toContain("network down");
+  });
+
   it("warns with the response status and defaults to 0 when the response is not ok", async () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.stubGlobal(
