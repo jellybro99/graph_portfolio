@@ -10,7 +10,7 @@ This is a react app styled with tailwind. It uses the [ForceGraph2d](https://git
 
 ### Adding a project
 
-Projects live in `src/assets/rawProjectsData.json` and are processed with `npm run build`.
+Projects live in `src/assets/rawProjectsData.json` and are processed automatically: both `npm run dev` and `npm run build` regenerate the files below first, so a fresh clone needs no extra step.
 
 - `src/assets/processedProjects.json` adds ids, thumbhash blur placeholder images and their dimensions
 - `src/assets/processedGraphData.json` creates the graphs nodes/edges as well as its sizing from GitHub commit counts
