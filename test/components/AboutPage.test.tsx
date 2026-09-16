@@ -15,8 +15,10 @@ function renderAboutPage() {
 
 describe("AboutPage", () => {
   it("gives both of its images alternative text", () => {
-    const { container } = renderAboutPage();
-    const images = () => Array.from(container.querySelectorAll("img"));
+    renderAboutPage();
+    // The zoom popup portals to document.body rather than nesting under this
+    // component's own container, so the query has to look at the whole body.
+    const images = () => Array.from(document.body.querySelectorAll("img"));
 
     expect(images()).toHaveLength(1);
 

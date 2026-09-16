@@ -44,7 +44,7 @@
 }
 
 .animate-popout {
-  animation: popout 150ms ease-in;
+  animation: popout 150ms ease-in forwards;
 }
 
 *,

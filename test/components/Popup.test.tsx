@@ -167,6 +167,81 @@ describe("Popup close stack", () => {
   });
 });
 
+describe("Popup DOM placement", () => {
+  it("renders the dialog as a child of document.body, not of whatever element nests <Popup> in JSX", () => {
+    function AnimatedAncestor({ children }: { children: React.ReactNode }) {
+      // Stands in for the outer project popup's animated wrapper div, which
+      // applies a CSS transform via animate-popin/animate-popout. A fixed-
+      // position descendant left under an ancestor like this is confined to
+      // that ancestor's box instead of the viewport while the transform is
+      // active - the layout bug behind the reported flash.
+      return (
+        <div
+          data-testid="animated-ancestor"
+          style={{ transform: "scale(0.9)" }}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    render(
+      <PopupStackProvider>
+        <AnimatedAncestor>
+          <Popup isOpen close={vi.fn()} title="Zoomed image">
+            zoomed image
+          </Popup>
+        </AnimatedAncestor>
+      </PopupStackProvider>,
+    );
+
+    const dialog = screen.getByRole("dialog");
+    const ancestor = screen.getByTestId("animated-ancestor");
+
+    expect(ancestor.contains(dialog)).toBe(false);
+    expect(dialog.parentElement).toBe(document.body);
+  });
+
+  it("portals nested popups (outer project popup + inner fullscreen popup) each directly under document.body", () => {
+    function Nested({ innerOpen }: { innerOpen: boolean }) {
+      return (
+        <PopupStackProvider>
+          <Popup isOpen close={vi.fn()} title="Project">
+            <div>
+              project card content
+              <Popup isOpen={innerOpen} close={vi.fn()} title="Zoomed image">
+                zoomed image
+              </Popup>
+            </div>
+          </Popup>
+        </PopupStackProvider>
+      );
+    }
+
+    render(<Nested innerOpen={true} />);
+
+    const dialogs = screen.getAllByRole("dialog");
+    expect(dialogs).toHaveLength(2);
+    for (const dialog of dialogs) {
+      expect(dialog.parentElement).toBe(document.body);
+    }
+  });
+
+  it("carries its own text color class, since portalling to document.body means it can no longer inherit color from an app-level wrapper", () => {
+    render(
+      <PopupStackProvider>
+        <Popup isOpen close={vi.fn()} title="Zoom">
+          content
+        </Popup>
+      </PopupStackProvider>,
+    );
+
+    expect(screen.getByRole("dialog").className).toContain(
+      "text-(--color-text)",
+    );
+  });
+});
+
 describe("Popup content", () => {
   beforeEach(() => {
     vi.useFakeTimers();
