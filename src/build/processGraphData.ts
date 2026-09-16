@@ -7,14 +7,14 @@ export async function processGraphData(
   const nodes = createNodes(projects);
   const categories = createCategories(projects);
   const links = createLinks(categories);
-  //potentially change this to using a seperate node to represent categories
-  //
 
+  // Unauthenticated GitHub requests are capped at 60/hr.
+  // Need an auth token to avoid failing if more than 60 projects.
   const commits = await Promise.all(
     projects.map((project) => getNumGitHubCommitsFromURL(project.github)),
   );
 
-  await sizeNodes(commits, nodes);
+  sizeNodes(commits, nodes);
 
   return { nodes, links };
 }
@@ -66,7 +66,7 @@ export function createLinks(categories: Map<string, number[]>): Link[] {
   return links;
 }
 
-async function sizeNodes(rawSizes: number[], nodes: Node[]): Promise<void> {
+function sizeNodes(rawSizes: number[], nodes: Node[]): void {
   const maxNodeSize = 5;
   const maxCommits = Math.max(1, ...rawSizes);
   const scalar = maxNodeSize / maxCommits;

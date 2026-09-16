@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 
+function applyDarkClass(isDark: boolean): void {
+  document.documentElement.classList.toggle("dark", isDark);
+}
+
 export default function useApplyDarkModeClass(): void {
   useEffect(() => {
     const matcher = window.matchMedia("(prefers-color-scheme: dark)");
-
-    if (matcher.matches) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
+    applyDarkClass(matcher.matches);
 
     const themeHandler = (event: MediaQueryListEvent) => {
-      if (event.matches) document.documentElement.classList.add("dark");
-      else document.documentElement.classList.remove("dark");
+      applyDarkClass(event.matches);
     };
 
     matcher.addEventListener("change", themeHandler);
