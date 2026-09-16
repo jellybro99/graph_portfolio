@@ -196,9 +196,7 @@ describe("Popup DOM placement", () => {
     );
 
     const dialog = screen.getByRole("dialog");
-    const ancestor = screen.getByTestId("animated-ancestor");
 
-    expect(ancestor.contains(dialog)).toBe(false);
     expect(dialog.parentElement).toBe(document.body);
   });
 
