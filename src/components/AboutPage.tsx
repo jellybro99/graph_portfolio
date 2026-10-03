@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import obsidianGraph from "@/assets/images/obsidian-graph.png";
 import Popup from "@/components/Popup";
+import ZoomTrigger from "@/components/ZoomTrigger";
 
 // App re-renders on every graph and list hover change and renders the about
 // section unconditionally; nothing it renders depends on that hover state, so
@@ -25,19 +26,16 @@ export default memo(function AboutPage() {
           my beloved:
         </p>
       </div>
-      {/* A button so the zoom is reachable from the keyboard; its accessible
-          name comes from the image's alt text. */}
-      <button
-        type="button"
+      <ZoomTrigger
         onClick={() => setIsPopupOpen(true)}
-        className="justify-self-center self-center cursor-zoom-in md:col-start-2 md:row-start-2 md:row-span-2"
+        className="justify-self-center self-center md:col-start-2 md:row-start-2 md:row-span-2"
       >
         <img
           src={obsidianGraph}
           alt="An Obsidian vault shown as a graph of linked notes"
           className="max-h-96 border-2 border-(--color-text) hover:border-(--color-accent)"
         />
-      </button>
+      </ZoomTrigger>
       <div className="md:self-start">
         <p>This project includes:</p>
         <ul className="list-disc pl-4">

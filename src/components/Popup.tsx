@@ -106,11 +106,12 @@ export default function Popup({
               <div className="flex justify-between items-center gap-4 h-8">
                 <h2 id={titleId}>{renderedTitle}</h2>
                 <button
+                  type="button"
                   aria-label="Close"
                   onClick={close}
                   className="cursor-pointer hover:text-(--color-accent)"
                 >
-                  <CloseIcon size={20} />
+                  <CloseIcon />
                 </button>
               </div>
               {renderedChildren}

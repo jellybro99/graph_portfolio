@@ -6,15 +6,23 @@ const THEME_COLOR_VARS = {
   link: "--color-link",
 } as const;
 
-type GraphThemeColors = Record<keyof typeof THEME_COLOR_VARS, string>;
+type ThemeColorKey = keyof typeof THEME_COLOR_VARS;
+type GraphThemeColors = Record<ThemeColorKey, string>;
+
+const THEME_COLOR_KEYS = Object.keys(THEME_COLOR_VARS) as ThemeColorKey[];
 
 function resolveThemeColors(): GraphThemeColors {
   const style = getComputedStyle(document.documentElement);
-  return {
-    node: style.getPropertyValue(THEME_COLOR_VARS.node).trim(),
-    nodeHover: style.getPropertyValue(THEME_COLOR_VARS.nodeHover).trim(),
-    link: style.getPropertyValue(THEME_COLOR_VARS.link).trim(),
-  };
+  return Object.fromEntries(
+    THEME_COLOR_KEYS.map((key) => [
+      key,
+      style.getPropertyValue(THEME_COLOR_VARS[key]).trim(),
+    ]),
+  ) as GraphThemeColors;
+}
+
+function sameColors(a: GraphThemeColors, b: GraphThemeColors): boolean {
+  return THEME_COLOR_KEYS.every((key) => a[key] === b[key]);
 }
 
 export default function useGraphThemeColors(): GraphThemeColors {
@@ -38,11 +46,7 @@ export default function useGraphThemeColors(): GraphThemeColors {
     // re-render.
     const current = resolveThemeColors();
     setColors((previous) =>
-      previous.node === current.node &&
-      previous.nodeHover === current.nodeHover &&
-      previous.link === current.link
-        ? previous
-        : current,
+      sameColors(previous, current) ? previous : current,
     );
 
     return () => observer.disconnect();
