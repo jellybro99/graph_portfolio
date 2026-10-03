@@ -17,7 +17,7 @@ export default function ProjectList({
 }) {
   return (
     <ul
-      className="inline-block opacity-50"
+      className="inline-block text-(--color-text-muted)"
       onMouseEnter={() => setOverList(true)}
       onMouseLeave={() => setOverList(false)}
     >

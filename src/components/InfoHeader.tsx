@@ -5,8 +5,8 @@ import { memo } from "react";
 export default memo(function InfoHeader() {
   return (
     <div className="flex justify-center md:justify-start items-center gap-4 text-2xl">
-      <h1 className="hover:text-(--color-accent)">My Portfolio</h1>
-      <nav>
+      <h1>Ben Galles</h1>
+      <nav className="pointer-events-auto">
         <ul className="flex items-center gap-4">
           <li>
             <a

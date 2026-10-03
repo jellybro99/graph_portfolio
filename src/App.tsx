@@ -40,26 +40,30 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full min-w-80 p-4 overflow-hidden bg-(--color-background) text-(--color-text)">
-      <div className="h-screen relative flex flex-col items-center">
-        <header className="max-w-5xl w-full z-10">
-          <InfoHeader />
-        </header>
-        <div className="max-w-5xl w-full absolute top-10 text-center md:text-left z-10 pointer-events-none">
-          <div className="inline-block pointer-events-auto">
-            <ProjectList
-              hovered={hovered}
-              setHovered={setListHover}
-              setOverList={setOverList}
-              projects={projects}
-              setPopup={openPopup}
-              setFocusHover={setFocusHover}
-            />
+      <div className="min-h-[100dvh] relative flex flex-col items-center">
+        {/* The graph fills the viewport behind this column, so only the
+            controls take pointer events; empty space and text pass through. */}
+        <div className="max-w-5xl w-full flex flex-col gap-4 text-center md:text-left z-10 pointer-events-none">
+          <header>
+            <InfoHeader />
+          </header>
+          <div>
+            <div className="inline-block pointer-events-auto">
+              <ProjectList
+                hovered={hovered}
+                setHovered={setListHover}
+                setOverList={setOverList}
+                projects={projects}
+                setPopup={openPopup}
+                setFocusHover={setFocusHover}
+              />
+            </div>
           </div>
         </div>
       </div>
 
       <div className="min-h-screen flex flex-col items-center">
-        <div className="max-w-5xl min-h-full">
+        <div className="max-w-5xl w-full min-h-full">
           <AboutPage />
         </div>
       </div>

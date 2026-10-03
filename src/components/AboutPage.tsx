@@ -9,21 +9,30 @@ export default memo(function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   return (
-    <div className="min-h-full max-w-xl pt-4 flex flex-col items-center justify-around">
-      <h1 className="text-center text-2xl">About this project</h1>
-      <p className="text-center">
-        This project is inspired by obsidian, a note-taking software which lets
-        you link related notes and view them together as a graph. Here is my
-        beloved:
-      </p>
+    // From md up the heading spans both columns, with text on the left and
+    // the image on the right. Below md the source order holds, so "Here is my
+    // beloved:" sits directly above the image.
+    <div className="min-h-full pt-4 grid gap-6 md:grid-cols-2 md:gap-x-12">
+      <h2 className="text-2xl md:col-span-2">About this project</h2>
+      <div className="flex flex-col gap-6 md:self-end">
+        <p>
+          The graph above shows my projects. Click a node or a project name to
+          see more.
+        </p>
+        <p>
+          This project is inspired by Obsidian, a note-taking software which
+          lets you link related notes and view them together as a graph. Here is
+          my beloved:
+        </p>
+      </div>
       <img
         src={obsidianGraph}
         alt="An Obsidian vault shown as a graph of linked notes"
         onClick={() => setIsPopupOpen(true)}
-        className="max-h-96 cursor-zoom-in border-2 border-(--color-text) hover:border-(--color-accent)"
+        className="justify-self-center self-center max-h-96 cursor-zoom-in md:col-start-2 md:row-start-2 md:row-span-2 border-2 border-(--color-text) hover:border-(--color-accent)"
       />
-      <div>
-        <p className="text-center">This project includes:</p>
+      <div className="md:self-start">
+        <p>This project includes:</p>
         <ul className="list-disc pl-4">
           <li>
             A prebuild step for creating blurred base64 images and processing
