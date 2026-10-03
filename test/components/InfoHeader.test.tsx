@@ -20,7 +20,7 @@ describe("InfoHeader", () => {
   it("keeps the heading out of the icon list and the icons in a nav landmark", () => {
     render(<InfoHeader />);
 
-    const heading = screen.getByRole("heading", { name: "My Portfolio" });
+    const heading = screen.getByRole("heading", { name: "Ben Galles" });
     // Only li elements may be children of a ul, so the h1 must not sit in it.
     expect(heading.closest("ul")).toBeNull();
 

@@ -1,13 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import type { GraphData, Node, Project, RawProject } from "@/assets/types";
 
-// build.ts is the build entry point: importing it reads
-// src/assets/rawProjectsData.json, stamps ids onto it, runs both processors and
-// writes both processed assets. This file imports it for real, stubbing only
-// what a test must not touch: the JSON input (fixtures below), the writes (fs),
-// and the commit lookups (the network). The ids the written assets carry are
-// therefore the ids build.ts assigned, and the assertions read the real
-// pipeline's output rather than a mock's echo.
+// Runs the real build.ts, stubbing only its JSON input, the fs writes, and the
+// commit lookups (network), so assertions read the ids build.ts assigned.
 const build = vi.hoisted(() => ({
   rawProjectsData: [] as unknown[],
   writeFileSync: vi.fn<(target: string, contents: string) => void>(),
@@ -96,8 +91,8 @@ describe("build.ts project ids", () => {
     await runBuild([alpha, beta, inserted, gamma, delta]);
     const after = idsByTitle(writtenProjects());
 
-    // The property worth documenting: ids are array positions, not stable keys
-    // for a project, so a mid-file insert shifts everything after it.
+    // Ids are array positions, not stable keys, so a mid-file insert shifts
+    // everything after it.
     expect(before.get("Gamma")).toBe(2);
     expect(before.get("Delta")).toBe(3);
     expect(after.get("Gamma")).toBe(3);

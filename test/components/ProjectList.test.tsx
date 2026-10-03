@@ -86,8 +86,6 @@ describe("ProjectList", () => {
   });
 
   it("shows the pointer cursor on every row, hovered or not", () => {
-    // The cursor used to be conditional on the hover class, so a row gave no
-    // click affordance until the pointer was already on it.
     const { getByText } = renderList(5);
 
     expect(getByText("Three").className).toContain("cursor-pointer");
@@ -139,13 +137,8 @@ describe("ProjectList", () => {
     await user.tab();
     await user.keyboard(" ");
 
-    // jsdom has no layout and never scrolls (window.scrollTo is a
-    // not-implemented stub and no event scrolls the document), so the "Space
-    // did not scroll the page" half of ticket 30 cannot be observed here: an
-    // assertion on window.scrollY passes for any implementation. What is
-    // observable - and what a hand-rolled keydown handler gets wrong - is that
-    // Space activates the row at all: user-event fires this click only for a
-    // real <button>. The scroll itself is left to the operator check.
+    // jsdom never scrolls, so only activation is observable here: user-event
+    // fires this click on Space only for a real <button>.
     expect(setPopup).toHaveBeenLastCalledWith(3);
   });
 

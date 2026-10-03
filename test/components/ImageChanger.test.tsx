@@ -85,9 +85,6 @@ function realImage(container: HTMLElement): HTMLImageElement {
   return img;
 }
 
-// With no popup open the two arrows are the only buttons in the tree, and the
-// zoom popup contributes no button until it is open - which none of these
-// cases do.
 function renderChanger(imagesToShow: Image[]) {
   const utils = render(
     <PopupStackProvider>
@@ -97,8 +94,10 @@ function renderChanger(imagesToShow: Image[]) {
 
   return {
     ...utils,
-    next: () => fireEvent.click(screen.getByRole("button", { name: ">" })),
-    prev: () => fireEvent.click(screen.getByRole("button", { name: "<" })),
+    next: () =>
+      fireEvent.click(screen.getByRole("button", { name: "Next image" })),
+    prev: () =>
+      fireEvent.click(screen.getByRole("button", { name: "Previous image" })),
     shown: () => realImage(utils.container).src,
   };
 }
@@ -123,6 +122,26 @@ describe("ImageChanger zoom", () => {
     fireEvent.click(realImage(container));
 
     expect(document.querySelector(".animate-popin")).not.toBeNull();
+  });
+});
+
+describe("ImageChanger zoom trigger", () => {
+  it("is a button named by the screenshot's alt text", () => {
+    renderChanger(images);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Screenshot of Project" }),
+    );
+
+    expect(document.querySelector(".animate-popin")).not.toBeNull();
+  });
+
+  it("numbers the alt text when there is more than one image", () => {
+    renderChanger(gallery);
+
+    expect(
+      screen.getByRole("button", { name: "Screenshot of Project (1 of 3)" }),
+    ).toBeTruthy();
   });
 });
 
@@ -157,8 +176,8 @@ describe("ImageChanger navigation", () => {
   it("hides both arrows when there is only one image to show", () => {
     renderChanger(images);
 
-    expect(screen.queryByRole("button", { name: ">" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "<" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Next image" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Previous image" })).toBeNull();
   });
 
   // imageIndex is component state: replacing the images array under a mounted
@@ -180,18 +199,10 @@ describe("ImageChanger navigation", () => {
     expect(shown()).toContain(swapped[2].original);
   });
 
-  // The failure this guards: with the index read as images[imageIndex] and the
-  // array replaced by a shorter one, ImageLoader receives undefined and
-  // resolveImage(image.original) throws "Cannot read properties of undefined
-  // (reading 'original')" from src/components/ImageLoader.tsx:14.
-  //
-  // Reachability, so the guard is not read as a live user-facing bug: the only
-  // place ImageChanger is mounted is inside the project popup, and Popup
-  // replaces its content during its 150ms popout while its own fixed inset-0
-  // overlay still covers the list and the graph, so no real pointer can swap a
-  // shorter array in under a mounted changer today. The swap itself is proven,
-  // not hypothesised: reopening the popup within the popout window reuses the
-  // instance and keeps its index.
+  // Guards the read-time clamp: without it a shorter array hands ImageLoader
+  // undefined. A real pointer can't reach this today (Popup's overlay covers
+  // the page during the swap), but reopening within the exit animation does
+  // reuse the instance and its index.
   it("shows an image from the new array when it shrinks below the selected position", () => {
     const { next, shown, rerender } = renderChanger(gallery);
 

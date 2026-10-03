@@ -11,7 +11,7 @@
     "title": "WikiThee",
     "link": "",
     "github": "",
-    "description": "This is my senior project from college. My group created a wikipedia themed social media. It was build with NextJS, React/TS, and MongDB",
+    "description": "This is my senior project from college. My group created a Wikipedia-themed social media site. It was built with Next.js, React/TS, and MongoDB.",
     "tags": ["nextjs", "react", "mongo", "bootstrap"],
     "images": []
   },
@@ -35,15 +35,15 @@
     "title": "Musical Zettelkasten",
     "link": "https://jellybro99.github.io/musical_zettelkasten",
     "github": "https://github.com/jellybro99/musical_zettelkasten",
-    "description": "Web-based DAW inspired by the Zettelkasten note taking method. Built with React and Typescript.",
+    "description": "Web-based DAW inspired by the Zettelkasten note-taking method. Built with React and TypeScript.",
     "tags": ["react", "typescript", "claude"],
     "images": ["musical-zettelkasten.png"]
   },
   {
-    "title": "Sha256 CLI",
+    "title": "SHA-256 CLI",
     "link": "",
     "github": "https://github.com/jellybro99/sha",
-    "description": "Go implementation of sha256 with a CLI. Made to help me learn go.",
+    "description": "Go implementation of SHA-256 with a CLI. Made to help me learn Go.",
     "tags": ["go", "cli"],
     "images": ["sha256_cli.png"]
   }

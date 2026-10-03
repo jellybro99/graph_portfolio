@@ -3,11 +3,8 @@ import { render, cleanup, act } from "@testing-library/react";
 import type { ForceGraphProps } from "react-force-graph-2d";
 import Graph from "../../src/components/Graph";
 
-// Same reasoning as Graph.test.tsx: jsdom has no canvas 2D context, so
-// force-graph cannot mount. Mock the module, never the component under test -
-// the real Graph still owns its element tree and its hooks - and capture the
-// props it hands the mocked module so this file can drive the callbacks and
-// read the values force-graph would receive.
+// As in Graph.test.tsx: force-graph is mocked, never Graph itself, and the
+// props Graph hands it are captured.
 const forceGraph = vi.hoisted(() => ({
   props: undefined as ForceGraphProps | undefined,
 }));

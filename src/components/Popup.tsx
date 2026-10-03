@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePopupStack } from "@/utils/usePopupStack";
+import { CloseIcon } from "@/components/icons";
 
 export default function Popup({
   isOpen,
@@ -22,15 +23,11 @@ export default function Popup({
   const closeRef = useRef(close);
   const dialogRef = useRef<HTMLDivElement | null>(null);
 
-  // Ties role="dialog" to the heading that is actually on screen, so the
-  // dialog's accessible name is the visible title rather than a duplicate
-  // string.
   const titleId = useId();
 
-  // Written in a layout effect, not during render: the popup stack calls
-  // whatever closeRef.current holds, and a render that React discards
-  // (StrictMode's double render, a suspended transition) would otherwise
-  // leave the stack pointing at a callback that was never committed.
+  // Updated in a layout effect, not during render: a render React discards
+  // would leave the popup stack holding a close callback that was never
+  // committed.
   useLayoutEffect(() => {
     closeRef.current = close;
   }, [close]);
@@ -61,15 +58,9 @@ export default function Popup({
     return () => unregister(closeRef);
   }, [isOpen, register, unregister]);
 
-  // Initial focus on open, so a keyboard user lands inside the dialog instead
-  // of tabbing through the page behind it. It goes to the dialog container, not
-  // the close button: no interactive control receives focus on open, so none
-  // can show a focus ring however the user agent classifies a programmatic
-  // focus, and the container's aria-labelledby makes a screen reader announce
-  // the dialog's name. Close is one Tab away. shouldRender is a dependency
-  // because on a reopen the container is not mounted yet when the isOpen effect
-  // runs: only the commit that mounts it can focus it. A full focus trap is out
-  // of scope.
+  // Focus the dialog container on open, not the close button, so keyboard users
+  // land inside the dialog without a ring on a control. Depends on shouldRender
+  // because on a reopen the container mounts one render after isOpen flips.
   useEffect(() => {
     if (isOpen && shouldRender) dialogRef.current?.focus();
   }, [isOpen, shouldRender]);
@@ -79,37 +70,31 @@ export default function Popup({
     : createPortal(
         <div
           ref={dialogRef}
-          // -1: focusable programmatically as the dialog's landing point, while
-          // staying out of the tab order so a Tab from it lands on the first
-          // control inside rather than skipping past the dialog.
           tabIndex={-1}
           className="fixed inset-0 z-50 flex items-center justify-center text-(--color-text)"
           role="dialog"
           aria-modal="true"
-          // renderedTitle is undefined when the optional title prop is omitted, and
-          // the heading below then renders empty: labelling the dialog with it
-          // would announce a name that is present but blank, which is worse than
-          // no name at all. A whitespace-only title normalizes to that same blank
-          // name, so the check trims before associating. Such a dialog stays
-          // deliberately unnamed; the heading still renders the raw title.
+          // A missing or whitespace-only title leaves the dialog unnamed rather
+          // than announcing a blank name.
           aria-labelledby={renderedTitle?.trim() ? titleId : undefined}
         >
           <div className="absolute inset-0 backdrop-blur-xs" onClick={close} />
 
           <div>
             <div
-              className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm
+              className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2
          bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
             >
               <div className="flex justify-between items-center gap-4 h-8">
                 <h2 id={titleId}>{renderedTitle}</h2>
                 <button
+                  type="button"
                   aria-label="Close"
                   onClick={close}
-                  className="text-3xl cursor-pointer hover:text-(--color-accent)"
+                  className="cursor-pointer hover:text-(--color-accent)"
                 >
-                  x
+                  <CloseIcon />
                 </button>
               </div>
               {renderedChildren}

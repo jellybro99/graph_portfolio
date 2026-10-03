@@ -38,13 +38,8 @@ export default function Graph({
   useTooltipSuppression(containerRef, hovered);
 
   return (
-    // This container is absolute inset-0 with no positioned ancestor, so it
-    // covers the whole first viewport. mouseenter is transition-based and does
-    // not fire when the pointer is already inside at mount - the normal case -
-    // which left containment stuck false and every node hover resolving to -1.
-    // Movement inside the container proves containment, and force-graph cannot
-    // report a node hover until a pointermove reaches its canvas, so movement
-    // is always observed before a hover needs it.
+    // The pointer is usually already inside this full-viewport container at
+    // mount, when no mouseenter fires, so movement reports containment too.
     <div
       ref={containerRef}
       className="absolute inset-0"

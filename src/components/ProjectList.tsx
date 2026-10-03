@@ -17,18 +17,15 @@ export default function ProjectList({
 }) {
   return (
     <ul
-      className="inline-block opacity-50"
+      className="inline-block text-(--color-text-muted)"
       onMouseEnter={() => setOverList(true)}
       onMouseLeave={() => setOverList(false)}
     >
       {projects.map((project) => (
         <li key={project.id}>
-          {/* A real button rather than an ARIA-patched <li>: it is focusable,
-              and the browser activates it on Enter and on Space without a
-              keydown handler having to suppress the page scroll Space
-              otherwise performs. w-full and text-left keep the row-wide
-              pointer target and the left alignment the plain <li> had, since a
-              button is inline-block and centres its text. */}
+          {/* A real button: focusable, and Enter/Space activate it without
+              the page scrolling. w-full and text-left keep the full-row
+              target and alignment. */}
           <button
             type="button"
             className={

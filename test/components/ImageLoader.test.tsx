@@ -57,7 +57,7 @@ function CachedImageLoader({ image }: { image: Image }) {
 
   return (
     <div ref={wrapper}>
-      <ImageLoader image={image} onClick={() => {}} />
+      <ImageLoader image={image} alt="" onClick={() => {}} />
     </div>
   );
 }
@@ -65,7 +65,7 @@ function CachedImageLoader({ image }: { image: Image }) {
 describe("ImageLoader", () => {
   it("fades in the real image and fades out the placeholder once it loads", () => {
     const { container } = render(
-      <ImageLoader image={firstImage} onClick={() => {}} />,
+      <ImageLoader image={firstImage} alt="" onClick={() => {}} />,
     );
 
     expect(placeholderImage(container).className).toContain("opacity-100");
@@ -79,13 +79,13 @@ describe("ImageLoader", () => {
 
   it("shows the placeholder again when the image prop changes", () => {
     const { container, rerender } = render(
-      <ImageLoader image={firstImage} onClick={() => {}} />,
+      <ImageLoader image={firstImage} alt="" onClick={() => {}} />,
     );
 
     fireEvent.load(realImage(container));
     expect(realImage(container).className).toContain("opacity-100");
 
-    rerender(<ImageLoader image={secondImage} onClick={() => {}} />);
+    rerender(<ImageLoader image={secondImage} alt="" onClick={() => {}} />);
 
     expect(placeholderImage(container).className).toContain("opacity-100");
     expect(realImage(container).className).toContain("opacity-0");
@@ -97,7 +97,7 @@ describe("ImageLoader", () => {
   // state-resetting effect can correct it.
   it("restores the placeholder in the commit that swaps the image, then reveals the new image on load", () => {
     const { container, rerender } = render(
-      <ImageLoader image={firstImage} onClick={() => {}} />,
+      <ImageLoader image={firstImage} alt="" onClick={() => {}} />,
     );
 
     fireEvent.load(realImage(container));
@@ -105,7 +105,7 @@ describe("ImageLoader", () => {
 
     act(() => {
       flushSync(() => {
-        rerender(<ImageLoader image={secondImage} onClick={() => {}} />);
+        rerender(<ImageLoader image={secondImage} alt="" onClick={() => {}} />);
       });
 
       expect(realImage(container).src).toContain(secondImage.original);

@@ -43,6 +43,26 @@ describe("useGraphThemeColors", () => {
     unmount();
   });
 
+  // A class change between render and observe() must still be picked up. In the
+  // browser StrictMode causes this; jsdom keeps records across disconnect, so
+  // the change is made in that window directly.
+  it("resolves colors again once observing, catching changes since render", () => {
+    let changed = false;
+    const { result, unmount } = renderHook(() => {
+      const colors = useGraphThemeColors();
+      if (!changed) {
+        changed = true;
+        document.documentElement.style.setProperty("--color-node", "#999999");
+        document.documentElement.classList.add("dark");
+      }
+      return colors;
+    });
+
+    expect(result.current.node).toBe("#999999");
+
+    unmount();
+  });
+
   it("does not re-resolve for unrelated attribute changes", async () => {
     const { result, unmount } = renderHook(() => useGraphThemeColors());
     const initial = result.current;

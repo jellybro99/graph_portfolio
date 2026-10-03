@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { render, cleanup, fireEvent } from "@testing-library/react";
+import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import AboutPage from "../../src/components/AboutPage";
 import { PopupStackProvider } from "../../src/components/PopupStackProvider";
 
@@ -31,11 +31,21 @@ describe("AboutPage", () => {
     }
   });
 
+  it("opens the zoom popup from a button named by the image", () => {
+    renderAboutPage();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "An Obsidian vault shown as a graph of linked notes",
+      }),
+    );
+
+    expect(screen.getByRole("dialog", { name: "Obsidian Graph" })).toBeTruthy();
+  });
+
   it("does not clip its own contents", () => {
-    // jsdom has no layout, so this pins the class contract rather than the
-    // rendered overflow: overflow-hidden on this box is what cut the bullet
-    // list off inside the fixed-height section. Reachability by scrolling still
-    // has to be checked in a browser.
+    // jsdom has no layout, so this checks the class: overflow-hidden here clips
+    // the bullet list.
     const { container } = renderAboutPage();
 
     expect(container.firstElementChild?.className).not.toContain(

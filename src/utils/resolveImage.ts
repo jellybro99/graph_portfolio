@@ -5,9 +5,8 @@ const imageModules = import.meta.glob("../assets/images/*", {
 export default function resolveImage(fileName: string): string {
   const image = imageModules[`../assets/images/${fileName}`];
 
-  // imageModules is keyed by path, so a name no asset matches is undefined and
-  // reading .default off it throws a bare "Cannot read properties of
-  // undefined" with nothing in it naming the file the caller asked for.
+  // Fail with the missing file's name rather than a bare undefined-property
+  // error.
   if (!image) {
     throw new Error(
       `resolveImage: no asset named "${fileName}" in src/assets/images`,
