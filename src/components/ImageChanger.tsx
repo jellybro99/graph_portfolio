@@ -14,11 +14,8 @@ export default function ImageChanger({
 }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [fullScreenImage, setFullscreenImage] = useState<boolean>(false);
-  // imageIndex is not reset when the images prop is replaced under a mounted
-  // ImageChanger (Popup swaps its content during its 150ms popout, and React
-  // reuses this instance), so the index can point past the end of the new
-  // array. Guard at read time - the alternative, syncing state to the prop,
-  // loops or fights React.
+  // imageIndex survives the images prop being replaced (Popup swaps content
+  // during its exit animation), so clamp it on read.
   const shownIndex = Math.min(imageIndex, images.length - 1);
   const image = images[shownIndex];
   const alt =

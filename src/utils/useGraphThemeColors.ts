@@ -38,12 +38,9 @@ export default function useGraphThemeColors(): GraphThemeColors {
       attributeFilter: ["class"],
     });
 
-    // The observer only reports changes made after observe(). A class change
-    // between the initial render and here - App's dark-class effect under
-    // StrictMode, whose record is discarded when StrictMode disconnects the
-    // first observer - would otherwise leave the graph on stale colors. Keep
-    // the existing object when nothing changed, so a normal mount does not
-    // re-render.
+    // The observer misses class changes made before observe(), e.g. App's dark
+    // class under StrictMode, whose record is dropped when the first observer
+    // is disconnected. Re-read once observing.
     const current = resolveThemeColors();
     setColors((previous) =>
       sameColors(previous, current) ? previous : current,

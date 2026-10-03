@@ -88,10 +88,8 @@ describe("Popup close stack", () => {
   });
 
   it("calls the close prop that was committed, not one from a render React discarded", async () => {
-    // A transition render that suspends is thrown away without being committed.
-    // Popup registers a ref holding its close callback, so writing that ref
-    // during render would leave the stack pointing at a callback from the
-    // discarded render - Escape would then call a close nobody committed to.
+    // A suspended transition render is discarded; Escape must call the close
+    // from the committed render.
     const committedClose = vi.fn();
     const discardedClose = vi.fn();
     let requestSuspend: ((suspend: boolean) => void) | null = null;
@@ -170,11 +168,8 @@ describe("Popup close stack", () => {
 describe("Popup DOM placement", () => {
   it("renders the dialog as a child of document.body, not of whatever element nests <Popup> in JSX", () => {
     function AnimatedAncestor({ children }: { children: React.ReactNode }) {
-      // Stands in for the outer project popup's animated wrapper div, which
-      // applies a CSS transform via animate-popin/animate-popout. A fixed-
-      // position descendant left under an ancestor like this is confined to
-      // that ancestor's box instead of the viewport while the transform is
-      // active - the layout bug behind the reported flash.
+      // Stands in for the project popup's animated wrapper: while its transform
+      // is active, fixed-position descendants are confined to its box.
       return (
         <div
           data-testid="animated-ancestor"
@@ -376,8 +371,7 @@ describe("Popup accessibility", () => {
     render(popup(true));
 
     const dialog = screen.getByRole("dialog", { name: "Zoom" });
-    // The name has to come from the heading that is on screen, not from a
-    // duplicate string: aria-labelledby must point at that exact element.
+    // Named by the on-screen heading, not by a duplicate string.
     const heading = screen.getByRole("heading", { name: "Zoom" });
     expect(heading.id).not.toBe("");
     expect(dialog.getAttribute("aria-labelledby")).toBe(heading.id);
@@ -408,13 +402,9 @@ describe("Popup accessibility", () => {
       </PopupStackProvider>,
     );
 
-    // The heading keeps rendering the raw title, whose accessible name
-    // normalizes to "": associating the dialog with it would announce a name
-    // that is present but blank, which is what the untitled case avoids too.
-    // The attribute is the only thing that can tell the two apart here: a
-    // dialog takes its name from aria-labelledby and never from its contents,
-    // so getByRole("dialog", { name: "" }) resolves whether or not the blank
-    // heading is associated and cannot fail.
+    // A whitespace-only title would give a blank name. getByRole can't tell the
+    // difference (a dialog never takes its name from content), so check the
+    // attribute.
     const dialog = screen.getByRole("dialog");
     expect(dialog.getAttribute("aria-labelledby")).toBeNull();
     expect(screen.getByRole("heading").textContent).toBe("   ");
@@ -423,20 +413,14 @@ describe("Popup accessibility", () => {
   it("moves focus to the dialog itself when it opens, not to a control", () => {
     render(popup(true));
 
-    // The container, not the close button: a control that receives focus on
-    // open is ringed whenever the user agent calls the programmatic focus
-    // keyboard-initiated, which is exactly what Chromium does here. jsdom
-    // cannot settle whether a ring is painted, so this pins the only thing
-    // that is under our control - which element ends up focused. It fails
-    // under the previous behaviour, which focused the close button.
+    // The container, not the close button, so no control is ringed on open.
+    // jsdom can't paint rings, so this checks which element holds focus.
     expect(document.activeElement).toBe(screen.getByRole("dialog"));
   });
 
   it("moves focus to the dialog itself when it reopens", () => {
-    // On a reopen the container is not mounted yet on the commit that flips
-    // isOpen back to true, so focus has to land after the render that mounts
-    // it. The identity check fails both under the old close-button target and
-    // if the focus move is dropped entirely, which leaves body focused.
+    // On a reopen the container mounts one render after isOpen flips, so focus
+    // must follow that render.
     const { rerender } = render(popup(false));
     expect(document.activeElement).toBe(document.body);
 
@@ -452,12 +436,8 @@ describe("Popup accessibility", () => {
 
     await user.tab();
 
-    // Pins the tab order the initial focus relies on: a Tab from the container
-    // enters the dialog's own controls rather than continuing behind it, and
-    // Close is the first of them. Fails if a focusable element is added inside
-    // the dialog ahead of the close button. The starting assertion above is
-    // what keeps this test honest: from body, a Tab would reach the close
-    // button too.
+    // A Tab from the container reaches Close first. Starting from the dialog is
+    // what makes this meaningful: from body, a Tab would reach Close too.
     expect(document.activeElement).toBe(closeButton());
   });
 });

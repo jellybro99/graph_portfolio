@@ -68,7 +68,6 @@ describe("useApplyDarkModeClass", () => {
 
     const { unmount } = renderHook(() => useApplyDarkModeClass());
 
-    // Initial light mode must not apply the dark class.
     expect(document.documentElement.classList.contains("dark")).toBe(false);
 
     act(() => {
@@ -95,7 +94,6 @@ describe("useApplyDarkModeClass", () => {
 
     const { unmount } = renderHook(() => useApplyDarkModeClass());
 
-    // Initial dark mode must apply the dark class.
     expect(document.documentElement.classList.contains("dark")).toBe(true);
 
     act(() => {
@@ -137,12 +135,10 @@ describe("useApplyDarkModeClass", () => {
 
     const { unmount } = renderHook(() => useApplyDarkModeClass());
 
-    // Initial addEventListener should be called
     expect(removeEventListener).not.toHaveBeenCalled();
 
     unmount();
 
-    // removeEventListener should be called once on cleanup
     expect(removeEventListener).toHaveBeenCalledWith(
       "change",
       expect.any(Function),

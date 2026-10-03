@@ -44,10 +44,8 @@ describe("AboutPage", () => {
   });
 
   it("does not clip its own contents", () => {
-    // jsdom has no layout, so this pins the class contract rather than the
-    // rendered overflow: overflow-hidden on this box is what cut the bullet
-    // list off inside the fixed-height section. Reachability by scrolling still
-    // has to be checked in a browser.
+    // jsdom has no layout, so this checks the class: overflow-hidden here clips
+    // the bullet list.
     const { container } = renderAboutPage();
 
     expect(container.firstElementChild?.className).not.toContain(

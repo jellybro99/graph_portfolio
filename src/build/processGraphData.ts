@@ -8,8 +8,8 @@ export async function processGraphData(
   const categories = createCategories(projects);
   const links = createLinks(categories);
 
-  // Unauthenticated GitHub requests are capped at 60/hr.
-  // Need an auth token to avoid failing if more than 60 projects.
+  // Unauthenticated GitHub requests are capped at 60/hr, so more than 60
+  // projects would need an auth token.
   const commits = await Promise.all(
     projects.map((project) => getNumGitHubCommitsFromURL(project.github)),
   );
@@ -40,10 +40,8 @@ function createCategories(projects: RawProject[]): Map<string, number[]> {
   return map;
 }
 
-// A Set of the pair key, not of the Link objects: Set compares objects by
-// reference, so `new Set<Link>()` would keep every duplicate. Ids arrive in
-// tag-encounter order and a pair can be visited once per shared tag, so the key
-// is canonical for the unordered pair and the emitted direction matches it.
+// Dedupe on a string key, since a Set of Link objects compares by reference.
+// A pair is visited once per shared tag; min/max makes the key order-free.
 export function createLinks(categories: Map<string, number[]>): Link[] {
   const links: Link[] = [];
   const seenPairs = new Set<string>();

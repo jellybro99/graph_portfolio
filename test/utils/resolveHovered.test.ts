@@ -29,8 +29,8 @@ const truthTable: [
   [false, 3, false, -1, -1, -1],
   [false, -1, false, 5, -1, -1],
   [false, -1, false, -1, -1, -1],
-  // Ticket 30: a row holds keyboard focus (focusHover = 7). It only wins where
-  // the pointer sources above returned -1.
+  // A row holds keyboard focus (focusHover = 7). It only wins where the pointer
+  // sources above returned -1.
   [true, 3, true, 5, 7, 5],
   [true, 3, false, -1, 7, 3],
   [true, -1, false, -1, 7, -1],
@@ -51,30 +51,26 @@ describe("resolveHovered", () => {
   );
 
   it("highlights the hovered list row while the graph's id is stale", () => {
-    // Regression from ticket 08: the pointer crossed onto the list, so
-    // force-graph never cleared `graphHover`; last-writer precedence let it
-    // shadow `listHover` and a different row never highlighted.
+    // The pointer crossed onto the list, so force-graph never cleared
+    // `graphHover`; it must not shadow `listHover`.
     expect(resolveHovered(true, 3, true, 5, -1)).toBe(5);
   });
 
   it("clears the highlight when the pointer leaves the list for a non-canvas area", () => {
-    // Regression from ticket 08: with no containment signal the stale
-    // `graphHover` stranded the highlight after the pointer left the list.
+    // Without a containment signal the stale `graphHover` would strand the
+    // highlight after the pointer left the list.
     expect(resolveHovered(false, 3, false, -1, -1)).toBe(-1);
   });
 
   it("keeps the graph hover after the list clears its own", () => {
-    // Ticket 08's original bug: the list's mouse-leave cleared the shared
-    // hover while the pointer was still on the node, and force-graph does not
-    // re-fire `onNodeHover` for a node it never saw the pointer leave, so
-    // nothing restored the highlight.
+    // force-graph does not re-fire `onNodeHover` for a node it never saw the
+    // pointer leave, so the list clearing its own hover must not clear the
+    // graph's.
     expect(resolveHovered(true, 3, false, -1, -1)).toBe(3);
   });
 
   it("highlights the focused row while no pointer containment is active", () => {
-    // Ticket 30: a keyboard user tabs to a row and neither containment flag is
-    // set, so without the focus source the derivation discarded the focused id
-    // and the row and its node never highlighted.
+    // A keyboard user tabs to a row while neither containment flag is set.
     expect(resolveHovered(false, -1, false, -1, 7)).toBe(7);
   });
 

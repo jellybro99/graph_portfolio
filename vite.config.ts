@@ -4,7 +4,6 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
 
-// https://vite.dev/config/
 export default defineConfig({
   base: "./",
   resolve: {
@@ -19,12 +18,8 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     alias: [
-      // src/assets/processedProjects.json and processedGraphData.json are
-      // gitignored prebuild artifacts, so a test that imports App (and, through
-      // App, Graph) cannot resolve them on a fresh checkout: Vite fails the
-      // transform before vi.mock can substitute anything. Resolve the two
-      // specifiers to checked-in fixtures for tests only. They must precede
-      // the "@" entry to win.
+      // The processed JSON assets are gitignored build output, so tests resolve
+      // them to checked-in fixtures. These entries must come before "@".
       {
         find: "@/assets/processedProjects.json",
         replacement: fileURLToPath(

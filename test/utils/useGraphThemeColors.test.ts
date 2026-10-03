@@ -43,12 +43,9 @@ describe("useGraphThemeColors", () => {
     unmount();
   });
 
-  // In the browser under StrictMode, App's effect adds the dark class while
-  // the first observer is connected, StrictMode disconnects that observer
-  // (discarding the queued mutation record) and the reconnected one sees no
-  // further change. The general gap: a class change that lands after the
-  // initial render but before observe() is never seen. jsdom delivers records
-  // across disconnect, so the change is made in that window directly.
+  // A class change between render and observe() must still be picked up. In the
+  // browser StrictMode causes this; jsdom keeps records across disconnect, so
+  // the change is made in that window directly.
   it("resolves colors again once observing, catching changes since render", () => {
     let changed = false;
     const { result, unmount } = renderHook(() => {

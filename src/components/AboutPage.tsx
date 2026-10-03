@@ -3,16 +3,13 @@ import obsidianGraph from "@/assets/images/obsidian-graph.png";
 import Popup from "@/components/Popup";
 import ZoomTrigger from "@/components/ZoomTrigger";
 
-// App re-renders on every graph and list hover change and renders the about
-// section unconditionally; nothing it renders depends on that hover state, so
-// memo keeps the graph's overlay popup out of those renders.
+// memo: App re-renders on every hover change and nothing here depends on it.
 export default memo(function AboutPage() {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   return (
-    // From md up the heading spans both columns, with text on the left and
-    // the image on the right. Below md the source order holds, so "Here is my
-    // beloved:" sits directly above the image.
+    // Below md, source order keeps "Here is my beloved:" directly above the
+    // image.
     <div className="min-h-full pt-4 grid gap-6 md:grid-cols-2 md:gap-x-12">
       <h2 className="text-2xl md:col-span-2">About this project</h2>
       <div className="flex flex-col gap-6 md:self-end">

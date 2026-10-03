@@ -25,19 +25,10 @@ type PopupProps = {
   children: ReactNode;
 };
 
-// App re-renders on every hover change, so the question this file answers is how
-// far that render reaches. Each probe below watches a child of App that the
-// hover state does not feed: if its count holds still across a hover sweep, the
-// render stopped at the component that needed the value.
-//
-// Counting renders needs a hook inside the component's own render path, and a
-// memo() wrapper hides it: React reads `.type` off the wrapper when the element
-// mounts, and bails out of the wrapper while its props stay shallow-equal -
-// which, for a component that takes no props, is every parent re-render. So a
-// memo-wrapped export gets its inner function swapped for a counting
-// passthrough (counts renders inside the memo boundary), while a plain export is
-// wrapped outright (its wrapper runs once per parent render, which without a
-// memo boundary is the same thing).
+// App re-renders on every hover change. Each probe counts renders of a child
+// that doesn't use hover state; a count that holds still means the re-render
+// stopped above it. memo() exports get their inner function swapped for a
+// counter, since wrapping the memo itself would also count skipped renders.
 const probes = vi.hoisted(() => {
   const counts = { infoHeader: 0, aboutPage: 0, projectCard: 0 };
 

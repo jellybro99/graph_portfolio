@@ -1,9 +1,7 @@
 import { useEffect, useState, type RefObject } from "react";
 
-// react-hooks/exhaustive-deps cannot tell that a ref passed across a hook
-// boundary is stable, so the ref is listed as a dependency. Ref identity is
-// stable by React's contract: the observer still attaches once on mount and
-// disconnects on unmount, exactly as with an empty array.
+// containerRef is stable; effects list it only because exhaustive-deps can't
+// tell that a ref passed into a hook is.
 export default function useGraphDimensions(
   containerRef: RefObject<HTMLDivElement | null>,
 ) {

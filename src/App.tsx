@@ -28,9 +28,8 @@ export default function App() {
 
   const popupProject = projects.find((project) => project.id === popupId);
 
-  // Hover changes re-render App many times a second, and anything rebuilt on
-  // those renders re-renders with it. Keep the handlers and the popup's child
-  // element stable so the churn stops at the list that highlights from it.
+  // Hover re-renders App many times a second; stable handlers and popup content
+  // keep those renders from spreading to children that don't use hover.
   const openPopup = useCallback((nodeId: number) => setPopupId(nodeId), []);
   const closePopup = useCallback(() => setPopupId(-1), []);
   const popupContent = useMemo(

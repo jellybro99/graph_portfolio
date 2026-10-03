@@ -85,8 +85,6 @@ function realImage(container: HTMLElement): HTMLImageElement {
   return img;
 }
 
-// The arrows are found by their accessible names; the zoom trigger is also a
-// button, named by the image's alt text.
 function renderChanger(imagesToShow: Image[]) {
   const utils = render(
     <PopupStackProvider>
@@ -201,18 +199,10 @@ describe("ImageChanger navigation", () => {
     expect(shown()).toContain(swapped[2].original);
   });
 
-  // The failure this guards: with the index read as images[imageIndex] and the
-  // array replaced by a shorter one, ImageLoader receives undefined and
-  // resolveImage(image.original) throws "Cannot read properties of undefined
-  // (reading 'original')" from src/components/ImageLoader.tsx:14.
-  //
-  // Reachability, so the guard is not read as a live user-facing bug: the only
-  // place ImageChanger is mounted is inside the project popup, and Popup
-  // replaces its content during its 150ms popout while its own fixed inset-0
-  // overlay still covers the list and the graph, so no real pointer can swap a
-  // shorter array in under a mounted changer today. The swap itself is proven,
-  // not hypothesised: reopening the popup within the popout window reuses the
-  // instance and keeps its index.
+  // Guards the read-time clamp: without it a shorter array hands ImageLoader
+  // undefined. A real pointer can't reach this today (Popup's overlay covers
+  // the page during the swap), but reopening within the exit animation does
+  // reuse the instance and its index.
   it("shows an image from the new array when it shrinks below the selected position", () => {
     const { next, shown, rerender } = renderChanger(gallery);
 

@@ -3,10 +3,9 @@ import { createRef, type ReactNode, type RefObject } from "react";
 import { render, cleanup } from "@testing-library/react";
 import useTooltipSuppression from "../../src/utils/useTooltipSuppression";
 
-// The hook reads containerRef.current inside its effect, so the container has
-// to come from a real render: only React assigns the ref before effects run.
-// jsdom creates a canvas *element* fine - it only has no 2D context, and this
-// hook only touches style, so nothing here needs a canvas mock.
+// The hook reads containerRef.current in its effect, so the container must come
+// from a real render. jsdom's canvas has no 2D context, but the hook only
+// touches style.
 function Harness({
   hovered,
   containerRef,
