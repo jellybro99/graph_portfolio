@@ -2,13 +2,13 @@
 
 /* The light accent is darker than the dark one because #67d061 is only
    1.95:1 on white. text-muted and accent clear WCAG AA (4.5:1) on their
-   background; link is decorative and deliberately faint. */
+   background. link colours the graph's edges, not hyperlinks. */
 :root {
   --color-background: white;
   --color-text: #272727;
   --color-text-muted: #6b6a62;
   --color-accent: #2b7f27;
-  --color-link: #a8a79c;
+  --color-link: #8a8a8a;
   --color-node: #087d97;
   --color-node-hover: #4bb346;
 }
@@ -18,7 +18,7 @@
   --color-text: #e3e2d2;
   --color-text-muted: #a8a79c;
   --color-accent: #67d061;
-  --color-link: #5e5d56;
+  --color-link: #c2c1b4;
   --color-node-hover: #308542;
 }
 

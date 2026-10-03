@@ -40,7 +40,7 @@
     "images": ["musical-zettelkasten.png"]
   },
   {
-    "title": "Sha256 CLI",
+    "title": "SHA-256 CLI",
     "link": "",
     "github": "https://github.com/jellybro99/sha",
     "description": "Go implementation of SHA-256 with a CLI. Made to help me learn Go.",
