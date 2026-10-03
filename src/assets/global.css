@@ -59,7 +59,7 @@
 }
 * {
   margin: 0;
-  font-family: monospace, "Comic Sans MS", "Comic Sans", cursive;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
 }
 body {
   line-height: 1.5;
