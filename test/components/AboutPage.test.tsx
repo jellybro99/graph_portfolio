@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { render, cleanup, fireEvent } from "@testing-library/react";
+import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import AboutPage from "../../src/components/AboutPage";
 import { PopupStackProvider } from "../../src/components/PopupStackProvider";
 
@@ -29,6 +29,18 @@ describe("AboutPage", () => {
     for (const image of images()) {
       expect(image.getAttribute("alt")?.trim()).toBeTruthy();
     }
+  });
+
+  it("opens the zoom popup from a button named by the image", () => {
+    renderAboutPage();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "An Obsidian vault shown as a graph of linked notes",
+      }),
+    );
+
+    expect(screen.getByRole("dialog", { name: "Obsidian Graph" })).toBeTruthy();
   });
 
   it("does not clip its own contents", () => {

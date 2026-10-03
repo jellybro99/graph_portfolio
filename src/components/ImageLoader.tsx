@@ -4,11 +4,13 @@ import resolveImage from "@/utils/resolveImage";
 
 export default function ImageLoader({
   image,
+  alt,
   onClick,
   className,
 }: {
   image: Image;
-  onClick: () => void;
+  alt: string;
+  onClick?: () => void;
   className?: string;
 }) {
   const src = resolveImage(image.original);
@@ -30,6 +32,7 @@ export default function ImageLoader({
 
       <img
         src={src}
+        alt={alt}
         onClick={onClick}
         onLoad={() => setLoadedSrc(src)}
         className={

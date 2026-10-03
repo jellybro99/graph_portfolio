@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePopupStack } from "@/utils/usePopupStack";
+import { CloseIcon } from "@/components/icons";
 
 export default function Popup({
   isOpen,
@@ -98,7 +99,7 @@ export default function Popup({
 
           <div>
             <div
-              className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2 rounded-sm
+              className={`flex flex-col relative z-10 pb-2 px-2 border-(--color-text) border-2
          bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)]
          max-w-[95vw] max-h-[90vh] overflow-auto ${isClosing ? "animate-popout" : "animate-popin"}`}
             >
@@ -107,9 +108,9 @@ export default function Popup({
                 <button
                   aria-label="Close"
                   onClick={close}
-                  className="text-3xl cursor-pointer hover:text-(--color-accent)"
+                  className="cursor-pointer hover:text-(--color-accent)"
                 >
-                  x
+                  <CloseIcon size={20} />
                 </button>
               </div>
               {renderedChildren}

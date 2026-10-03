@@ -25,12 +25,19 @@ export default memo(function AboutPage() {
           my beloved:
         </p>
       </div>
-      <img
-        src={obsidianGraph}
-        alt="An Obsidian vault shown as a graph of linked notes"
+      {/* A button so the zoom is reachable from the keyboard; its accessible
+          name comes from the image's alt text. */}
+      <button
+        type="button"
         onClick={() => setIsPopupOpen(true)}
-        className="justify-self-center self-center max-h-96 cursor-zoom-in md:col-start-2 md:row-start-2 md:row-span-2 border-2 border-(--color-text) hover:border-(--color-accent)"
-      />
+        className="justify-self-center self-center cursor-zoom-in md:col-start-2 md:row-start-2 md:row-span-2"
+      >
+        <img
+          src={obsidianGraph}
+          alt="An Obsidian vault shown as a graph of linked notes"
+          className="max-h-96 border-2 border-(--color-text) hover:border-(--color-accent)"
+        />
+      </button>
       <div className="md:self-start">
         <p>This project includes:</p>
         <ul className="list-disc pl-4">

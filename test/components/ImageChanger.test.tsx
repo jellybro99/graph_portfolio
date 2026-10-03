@@ -85,9 +85,8 @@ function realImage(container: HTMLElement): HTMLImageElement {
   return img;
 }
 
-// With no popup open the two arrows are the only buttons in the tree, and the
-// zoom popup contributes no button until it is open - which none of these
-// cases do.
+// The arrows are found by their accessible names; the zoom trigger is also a
+// button, named by the image's alt text.
 function renderChanger(imagesToShow: Image[]) {
   const utils = render(
     <PopupStackProvider>
@@ -97,8 +96,10 @@ function renderChanger(imagesToShow: Image[]) {
 
   return {
     ...utils,
-    next: () => fireEvent.click(screen.getByRole("button", { name: ">" })),
-    prev: () => fireEvent.click(screen.getByRole("button", { name: "<" })),
+    next: () =>
+      fireEvent.click(screen.getByRole("button", { name: "Next image" })),
+    prev: () =>
+      fireEvent.click(screen.getByRole("button", { name: "Previous image" })),
     shown: () => realImage(utils.container).src,
   };
 }
@@ -123,6 +124,26 @@ describe("ImageChanger zoom", () => {
     fireEvent.click(realImage(container));
 
     expect(document.querySelector(".animate-popin")).not.toBeNull();
+  });
+});
+
+describe("ImageChanger zoom trigger", () => {
+  it("is a button named by the screenshot's alt text", () => {
+    renderChanger(images);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Screenshot of Project" }),
+    );
+
+    expect(document.querySelector(".animate-popin")).not.toBeNull();
+  });
+
+  it("numbers the alt text when there is more than one image", () => {
+    renderChanger(gallery);
+
+    expect(
+      screen.getByRole("button", { name: "Screenshot of Project (1 of 3)" }),
+    ).toBeTruthy();
   });
 });
 
@@ -157,8 +178,8 @@ describe("ImageChanger navigation", () => {
   it("hides both arrows when there is only one image to show", () => {
     renderChanger(images);
 
-    expect(screen.queryByRole("button", { name: ">" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "<" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Next image" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Previous image" })).toBeNull();
   });
 
   // imageIndex is component state: replacing the images array under a mounted
